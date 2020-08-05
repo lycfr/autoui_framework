@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import time
 
-import driver
-from driver import appdriver
+from atf import driver
+from atf.driver import appdriver
 
 
 def appProfile():

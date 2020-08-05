@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 from concurrent import futures
 
-from project import Project
+from atf.project import Project
 
 if __name__ == '__main__':
 
