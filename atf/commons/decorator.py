@@ -30,11 +30,9 @@ def therading(func):
         th.get = get
         th.start()
         return th
-        print("th-----",th)
     return start
 
 def keywords(func, *args, **kwds):
-    print("keywords----decorator:")
     def wrapper(*args, **kwds):
         result = None
         exception_flag = False
@@ -49,11 +47,8 @@ def keywords(func, *args, **kwds):
         action_step = args[-2].step
         action_tag = args[-2].tag
         style = args[-1]
-        print("action_step---",action_step)
-        print("action_tag---",action_tag)
         try:
             if args or kwds:
-                print(args,kwds,"-=-=-=keywords-=54")
                 result = func(*args, **kwds)
             else:
                 result = func()
@@ -66,10 +61,14 @@ def keywords(func, *args, **kwds):
                     cv2.imwrite(file, Var.ocrimg)
                     Var.ocrimg = None
                 else:
-                    print("decorator---file::::",file)
-                    if Var.webinstance != None:
+                    list_file = file.split("/")
+                    print("list_file:::", list_file[2])
+
+                    if 'web' == list_file[2]:
+                        print("进行web截图")
                         Var.webinstance.save_screenshot(file)
-                    if Var.appinstance != None:
+                    if 'app' == list_file[2]:
+                        print("进行app截图")
                         Var.appinstance.save_screenshot(file)
                 stop_time = time.time()
                 duration = str('%.1f' % (stop_time - start_time))

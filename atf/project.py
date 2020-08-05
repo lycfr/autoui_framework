@@ -28,7 +28,6 @@ class Project(object):
         self.__init_config()
         self.__init_logging()
         self.__analytical_testcase_file()
-        # self.__analytical_common_file()
         self.__init_data()
         self.__init_keywords()
         self.__init_images()
@@ -38,18 +37,22 @@ class Project(object):
 
         for path in [path  for path in inspect.stack() if str(path[1]).endswith("runtest.py")]:
             self.__ROOT = os.path.dirname(path[1])
+            self.__config = analytical_file(os.path.join(self.__ROOT, 'config.yaml'))
             sys.path.append(self.__ROOT)
             sys.path.append(os.path.join(self.__ROOT, 'Scripts'))
             Var.ROOT = self.__ROOT
-            print(" Var.ROOT:::", Var.ROOT)
             Var.global_var = {} # 全局变量
             Var.extensions_var = {} # 扩展数据变量
             Var.common_var = {} # common临时变量，call执行完后重置
 
     def __init_config(self):
 
-        self.__config = analytical_file(os.path.join(self.__ROOT, 'config.yaml'))
+        # self.__config = analytical_file(os.path.join(self.__ROOT, 'config.yaml'))
         print("config::::",self.__config)
+        print(type(self.__config))
+
+
+
 
         for configK, configV in self.__config.items():
             if configK == 'desiredcaps':
@@ -68,9 +71,14 @@ class Project(object):
                 Var[configK] = configV
         print('============Var.desired_caps', Var.desired_caps)
         print('Var.prefs',Var.prefs)
+        print('configK:::',self.__config.keys())
 
-        AppDriverBase.init()
-        WebDriverBase.init()
+        if "appdriver" in self.__config.keys():
+            print("appdriver初始化")
+            AppDriverBase.init()
+        if "web_driver" in self.__config.keys():
+            print("web_driver初始化")
+            WebDriverBase.init()
 
 
     def __init_data(self):
@@ -113,16 +121,28 @@ class Project(object):
             log_info('image path: {}'.format(Var.extensions_var['images_file']))
 
     def __init_logging(self):
-        devices = DevicesUtils(Var.platformName, Var.udid)
-        Var.udid, deviceinfo = devices.device_info()
-        report_time = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
-        report_child = "{}_{}".format(deviceinfo, report_time)#Netease_MuMu_20200718155040
-        #生成报告地址
-        Var.report = os.path.join(Var.ROOT, "Report", report_child)#/Users/gaijinfeng/PycharmProjects/autoui_base/Report/Netease_MuMu_20200718155137
-        if not os.path.exists(Var.report):
-            os.makedirs(Var.report)
-            os.makedirs(os.path.join(Var.report, 'resource'))
-        log_init(Var.report)
+        if Var.platformName != None:
+
+            devices = DevicesUtils(Var.platformName, Var.udid)
+            Var.udid, deviceinfo = devices.device_info()
+            report_time = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
+            report_child = "{}_{}".format(deviceinfo, report_time)#Netease_MuMu_20200718155040
+            #生成报告地址
+            Var.report = os.path.join(Var.ROOT, "Report", report_child)#/Users/gaijinfeng/PycharmProjects/autoui_base/Report/Netease_MuMu_20200718155137
+            if not os.path.exists(Var.report):
+                os.makedirs(Var.report)
+                os.makedirs(os.path.join(Var.report, 'resource'))
+            log_init(Var.report)
+        else:
+            report_time = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
+            report_child = "{}_{}".format(Var.web_driver.lower(), report_time)  # Netease_MuMu_20200718155040
+            # 生成报告地址
+            Var.report = os.path.join(Var.ROOT, "Report",
+                                      report_child)  # /Users/gaijinfeng/PycharmProjects/autoui_base/Report/Netease_MuMu_20200718155137
+            if not os.path.exists(Var.report):
+                os.makedirs(Var.report)
+                os.makedirs(os.path.join(Var.report, 'resource'))
+            log_init(Var.report)
 
 
     def __analytical_testcase_file(self):
@@ -199,16 +219,20 @@ class Project(object):
 
     def start(self):
         log_info('******************* analytical desired capabilities *******************')
-        web_driver = WebServerUtils(Var.web_driver,Var.path)
-        Var.webinstance = web_driver.web_start_server(Var.prefs)
-        Var.webinstance.get(Var.url)
-        Var.webinstance.maximize_window()
-        log_info('******************* web open {}*******************'.format(Var.url))
+        if Var.web_driver != None:
 
-        appserver = AppServerUtils(Var.appdriver, Var.caps, Var.desired_caps)
-        appserver.start_server()
-        Var.appinstance = appserver.start_connect()
-        log_info('******************* app open *******************')
+            web_driver = WebServerUtils(Var.web_driver,Var.path)
+            Var.webinstance = web_driver.web_start_server(Var.prefs)
+            Var.webinstance.get(Var.url)
+            Var.webinstance.maximize_window()
+            log_info('******************* web open {}*******************'.format(Var.url))
+        if Var.appdriver != None:
+
+            appserver = AppServerUtils(Var.appdriver, Var.caps, Var.desired_caps)
+            appserver.start_server()
+            Var.appinstance = appserver.start_connect()
+            log_info('******************* app open *******************')
+
         suite = unittest.TestSuite(tuple(self.__suite))
         print("suite;;;",suite)
         runner = TestRunner()

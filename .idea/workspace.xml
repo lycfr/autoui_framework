@@ -11,8 +11,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11c66a80-49e2-457f-a6fe-4019e3ef017d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/project.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/atf/commons/decorator.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/commons/decorator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/atf/project.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/project.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/ppt-1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/tianmao.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/runtest.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testcase/appTestcase/AppInClass.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testcase/appTestcase/AppProfile.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testcase/webTestcase/TeacherEntryRoom.yaml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,14 +72,14 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/atf" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/atf" />
       <recent name="$PROJECT_DIR$/atf/common" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/atf" />
     </key>
   </component>
   <component name="RunManager">
@@ -114,6 +124,8 @@
       <workItem from="1595905153440" duration="26000" />
       <workItem from="1595905220772" duration="727000" />
       <workItem from="1596618892466" duration="2204000" />
+      <workItem from="1596625928389" duration="90000" />
+      <workItem from="1596626090362" duration="2503000" />
     </task>
     <servers />
   </component>
@@ -136,10 +148,11 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="634" y="286" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1596619166079">
-      <screen x="0" y="23" width="1792" height="1019" />
+    <state x="2471" y="296" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1596626206712">
+      <screen x="1792" y="23" width="1920" height="1057" />
     </state>
     <state x="634" y="286" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1792.1019/1792.23.1920.1057@0.23.1792.1019" timestamp="1596619166079" />
+    <state x="2471" y="296" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1792.1019/1792.23.1920.1057@1792.23.1920.1057" timestamp="1596626206712" />
     <state x="100" y="123" width="1592" height="819" key="DiffContextDialog" timestamp="1596619533658">
       <screen x="0" y="23" width="1792" height="1019" />
     </state>
