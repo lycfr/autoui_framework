@@ -11,53 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11c66a80-49e2-457f-a6fe-4019e3ef017d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/autoui_framework.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/autoui_framework.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common/Android/common.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common/iOS/common.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common/main.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Report/Netease_MuMu_20200805164544/project.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/commons/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/test_keyword.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/common/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/common/decorator.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/commons/decorator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/common/dict.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/common/logging.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/commons/logging.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/common/variable_global.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/commons/variable_global.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/driver.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/driver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/drivers/app_driver_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/drivers/app_driver_base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/drivers/appium/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/drivers/appium/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/drivers/appium/driver_appium.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/drivers/appium/driver_appium.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/drivers/chrome/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/drivers/chrome/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/drivers/chrome/driver_chrome.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/drivers/chrome/driver_chrome.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/drivers/web_driver_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/drivers/web_driver_base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/keywords/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/project.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/project.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/result/test_result.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/result/test_result.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/runner/action_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/runner/action_analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/runner/action_executor.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/runner/action_executor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/runner/case_analysis——fuzhi.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/runner/resource/keywords.json" beforeDir="false" afterPath="$PROJECT_DIR$/atf/runner/resource/keywords.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/runner/run_case.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/runner/run_case.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/runner/test_case.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/runner/test_case.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/servers/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/utils/app_server_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/utils/app_server_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/utils/devices_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/utils/devices_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/utils/opcv_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/utils/opcv_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/utils/testcase_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/utils/testcase_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/utils/web_server_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/utils/web_server_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atf/utils/yaml_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/atf/utils/yaml_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/runtest.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testcase/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testcase/appTestcase/AppInClass.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testcase/appTestcase/AppProfile.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testcase/appTestcase/AppProfileB.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testcase/appTestcase/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testcase/webTestcase/TeacherEntryRoom.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testcase/webTestcase/__init__.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,14 +36,24 @@
     </replaceStrings>
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1fIUZ2L1apWVa5JxDApSXgHI1TE" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -148,7 +113,7 @@
       <updated>1595905151595</updated>
       <workItem from="1595905153440" duration="26000" />
       <workItem from="1595905220772" duration="727000" />
-      <workItem from="1596618892466" duration="1323000" />
+      <workItem from="1596618892466" duration="2204000" />
     </task>
     <servers />
   </component>
@@ -167,6 +132,9 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="634" y="286" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1596619166079">
       <screen x="0" y="23" width="1792" height="1019" />
@@ -176,5 +144,9 @@
       <screen x="0" y="23" width="1792" height="1019" />
     </state>
     <state x="100" y="123" width="1592" height="819" key="DiffContextDialog/0.23.1792.1019/1792.23.1920.1057@0.23.1792.1019" timestamp="1596619533658" />
+    <state x="2352" y="291" key="Vcs.Push.Dialog.v2" timestamp="1596625887075">
+      <screen x="1792" y="23" width="1920" height="1057" />
+    </state>
+    <state x="2352" y="291" key="Vcs.Push.Dialog.v2/0.23.1792.1019/1792.23.1920.1057@1792.23.1920.1057" timestamp="1596625887075" />
   </component>
 </project>
