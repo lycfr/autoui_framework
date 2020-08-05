@@ -4,8 +4,8 @@ import os
 import time
 import unittest
 
-from atf.common.logging import *
-from atf.common.variable_global import Var
+from atf.commons.logging import *
+from atf.commons.variable_global import Var
 
 
 def testcase_name(test_method):

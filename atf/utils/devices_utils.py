@@ -3,8 +3,9 @@
 import os
 import re
 import platform
+import subprocess
 
-from atf.common.logging import log_info
+from atf.commons.logging import log_info
 
 
 class DevicesUtils(object):
@@ -16,9 +17,10 @@ class DevicesUtils(object):
 
 
     def device_info(self):
-
         if self.__platformName.lower() == 'android':
             devices = self.get_devices()
+            cmd = "adb kill-server and start-server"
+            subprocess.call(cmd, shell=True)
             if self.__udid and (self.__udid not in devices):
                 raise Exception("device '{}' not found!".format(self.__udid))
             elif not self.__udid and devices:
@@ -26,6 +28,8 @@ class DevicesUtils(object):
                 log_info('使用的设备为：{}'.format(self.__udid))
             elif not self.__udid:
                 raise Exception("Can‘t find device!")
+
+
 
             if platform.system() == "Windows":
                 pipe = os.popen("adb -s {} shell getprop | findstr product".format(self.__udid))

@@ -5,11 +5,13 @@ import subprocess
 from appium.webdriver.common.touch_action import TouchAction
 from selenium.webdriver.support.wait import WebDriverWait
 
-from atf.common.logging import *
-from atf.common.variable_global import Var
+from atf.commons.logging import *
+from atf.commons.variable_global import Var
 
 
 class AndroidDriver(object):
+    _current_context = "NATIVE_APP"
+
 
     @staticmethod
     def adb_shell(cmd):
@@ -83,6 +85,18 @@ class AndroidDriver(object):
                 Var.appinstance.close_app()
             else:
                 AndroidDriver.adb_shell('shell am force-stop {}'.format(package_info))
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def get_screenshot_as_file(image_name):
+        '''
+        app端进行截图
+        :param image_name:
+        :return:
+        '''
+        try:
+            Var.appinstance.get_screenshot_as_file(image_name)
         except Exception as e:
             raise e
 
@@ -275,6 +289,24 @@ class AndroidDriver(object):
             raise e
 
     @staticmethod
+    def get_texts(elements):
+        '''
+        android
+        :param element:
+        :return:
+        '''
+        texts = list()
+        print("texts:", texts)
+        try:
+            for ele in elements:
+                text = ele.text
+                texts.append(text)
+            print("texts:return", texts)
+            return texts
+        except Exception as e:
+            raise e
+
+    @staticmethod
     def get_page_source():
         try:
             page_source = Var.appinstance.page_source
@@ -357,6 +389,19 @@ class AndroidDriver(object):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 class iOSDriver(object):
 
     @staticmethod
@@ -410,6 +455,18 @@ class iOSDriver(object):
                 Var.appinstance.close_app()
             else:
                 pass # todo 待补充
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def get_screenshot_as_file(image_name):
+        '''
+        app端进行截图
+        :param image_name:
+        :return:
+        '''
+        try:
+            Var.appinstance.get_screenshot_as_file(image_name)
         except Exception as e:
             raise e
 
@@ -600,6 +657,23 @@ class iOSDriver(object):
         except Exception as e:
             raise e
 
+    # @staticmethod
+    # def get_texts(elements):
+    #     '''
+    #     :param element:
+    #     :return:
+    #     '''
+    #     texts = list()
+    #     print("texts:ios",texts)
+    #     try:
+    #         for ele in elements:
+    #             text = ele.text
+    #             texts.append(text)
+    #         print("texts:returnios", texts)
+    #         return texts
+    #     except Exception as e:
+    #         raise e
+
     @staticmethod
     def clear():
         '''
@@ -672,3 +746,17 @@ class iOSDriver(object):
             raise e
 
 
+    @staticmethod
+    def save_context(self):
+        _current_context = Var.appinstance.context
+        if "WEBVIEW" in _current_context:
+            _current_window = Var.appinstance.current_window_handle
+
+    @staticmethod
+    def restore_context(self):
+        if self._current_context != Var.appinstance.context:
+            Var.appinstance.switch_to.context(self._current_context)
+
+        if "WEBVIEW" in self._current_context:
+            Var.appinstance.switch_to.window(self._current_window)
+            logging.info(Var.appinstance.page_source)

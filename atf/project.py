@@ -7,7 +7,7 @@ import json
 import inspect
 import unittest
 
-from atf.common.logging import *
+from atf.commons.logging import *
 from atf.drivers.app_driver_base import AppDriverBase
 from atf.drivers.web_driver_base import WebDriverBase
 from atf.result.test_runner import TestRunner
@@ -17,7 +17,7 @@ from atf.utils.devices_utils import DevicesUtils
 from atf.utils.testcase_utils import TestCaseUtils
 from atf.utils.web_server_utils import WebServerUtils
 from atf.utils.yaml_utils import analytical_file, Dict
-from atf.common.variable_global import Var
+from atf.commons.variable_global import Var
 
 
 class Project(object):
@@ -28,7 +28,7 @@ class Project(object):
         self.__init_config()
         self.__init_logging()
         self.__analytical_testcase_file()
-        self.__analytical_common_file()
+        # self.__analytical_common_file()
         self.__init_data()
         self.__init_keywords()
         self.__init_images()
@@ -36,16 +36,15 @@ class Project(object):
 
     def __init_project(self):
 
-
         for path in [path  for path in inspect.stack() if str(path[1]).endswith("runtest.py")]:
             self.__ROOT = os.path.dirname(path[1])
             sys.path.append(self.__ROOT)
             sys.path.append(os.path.join(self.__ROOT, 'Scripts'))
             Var.ROOT = self.__ROOT
+            print(" Var.ROOT:::", Var.ROOT)
             Var.global_var = {} # 全局变量
             Var.extensions_var = {} # 扩展数据变量
             Var.common_var = {} # common临时变量，call执行完后重置
-            elifresults = []
 
     def __init_config(self):
 
@@ -84,6 +83,7 @@ class Project(object):
                 for extensionsK, extensionsV in dict.items():
                     log_info('{}: {}'.format(extensionsK, extensionsV))
                     Var.extensions_var[extensionsK] = extensionsV
+
 
     def __init_keywords(self):
 
@@ -144,6 +144,13 @@ class Project(object):
         common_dir = os.path.join(Var.ROOT, "Common")
         print("common_dir:",common_dir)
         for rt, dirs, files in os.walk(common_dir):
+            print(rt,"===", dirs,"----", files)
+            '''
+            Common === ['iOS', 'Android'] ---- ['main.yaml']
+            Common/iOS === [] ---- ['common.yaml']
+            Common/Android === [] ---- ['TestInClass.yaml', 'AppProfile.yaml', 'common.yaml', 'AppProfileB.yaml']
+
+            '''
             if rt == common_dir:
                 self.__load_common_func(rt, files)
             elif rt.split(os.sep)[-1].lower() == Var.platformName.lower():
@@ -160,6 +167,12 @@ class Project(object):
                 continue
             for commonK, commonV in analytical_file(os.path.join(rt, f)).items():
                 Var.common_func[commonK] = commonV
+                print(commonK,"******",Var.common_func[commonK])
+                '''
+                module ****** APPmain
+                skip ****** False
+                methods ****** {'CheckProfile': {'description': 'CheckProfile,查看对应的用户资料信息', 'steps': ["click('头像')"]}}
+                '''
 
 
 
@@ -189,6 +202,7 @@ class Project(object):
         web_driver = WebServerUtils(Var.web_driver,Var.path)
         Var.webinstance = web_driver.web_start_server(Var.prefs)
         Var.webinstance.get(Var.url)
+        Var.webinstance.maximize_window()
         log_info('******************* web open {}*******************'.format(Var.url))
 
         appserver = AppServerUtils(Var.appdriver, Var.caps, Var.desired_caps)
@@ -198,14 +212,5 @@ class Project(object):
         suite = unittest.TestSuite(tuple(self.__suite))
         print("suite;;;",suite)
         runner = TestRunner()
-
-
-
-
         runner.run(suite)
         # server.stop_server()
-
-
-
-
-

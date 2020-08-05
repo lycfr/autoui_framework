@@ -5,7 +5,7 @@ import platform
 import subprocess
 from selenium import webdriver
 
-from atf.common.logging import *
+from atf.commons.logging import *
 from atf.driver import web_driver
 
 
@@ -70,10 +70,10 @@ class WebServerUtils(object):
         try:
             log_info('Start the web_driver')
             if self.web_driver == 'chrome':
+
                 from selenium import webdriver
                 option = webdriver.ChromeOptions()
                 option.add_experimental_option('prefs', prefs)
-
                 self.webinstance = webdriver.Chrome(executable_path=self.chromepath, chrome_options=option)
                 self.webinstance.implicitly_wait(10)
             else:

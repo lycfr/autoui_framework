@@ -7,10 +7,12 @@
 @Date   ：2020/7/18 4:38 下午
 @Desc   ：
 =================================================='''
+import os
 import re
+import time
 
-from atf.common.logging import log_info, log_error
-from atf.common.variable_global import Var
+from atf.commons.logging import *
+from atf.commons.variable_global import Var
 
 
 class WebDriverBase(object):
@@ -22,7 +24,16 @@ class WebDriverBase(object):
             global web_driver
             print('Var.web_driver',Var.web_driver)
             if Var.web_driver.lower() == 'chrome':
-                from atf.drivers.chrome import Chrome_Driver
+                from atf.drivers.chrome.driver_chrome import Chrome_Driver
+
+                #删除Chrome进程
+                log_info('========> 杀死chrome进程')
+                info = os.popen("pgrep -l Chrome")
+                _processes = info.readlines()
+                for pid in _processes:
+                    values = pid.split()[0]
+                    os.system("kill -9 " + values)
+
                 web_driver = Chrome_Driver
 
             else:
@@ -30,8 +41,6 @@ class WebDriverBase(object):
                 print("else==")
         except Exception as e:
             raise e
-
-
 
     @staticmethod
     def launch_web(package_info):
@@ -42,6 +51,25 @@ class WebDriverBase(object):
         '''
         print("web_driverBase--launch_web",package_info)
         web_driver.launch_web(package_info)
+
+    @staticmethod
+    def getAttribute(key1, key2,name, timeout=10, interval=1, index=0):
+        '''
+
+        :param key1:
+        :param key2:
+        :param timeout:
+        :param interval:
+        :param index:
+        :return:
+        '''
+        element = WebDriverBase.find_elements_by_key(key1=key1, key2=key2, timeout=timeout, interval=interval,
+                                                     index=index)
+        if not element:
+            raise Exception("Can't find element {}".format(key1, key2))
+        element.get_attribute(name)
+
+
 
     @staticmethod
     def click(key1, key2, timeout=10, interval=1, index=0):
@@ -56,6 +84,8 @@ class WebDriverBase(object):
         if not element:
             raise Exception("Can't find element {}".format(key1,key2))
         element.click()
+        time.sleep(2)
+
 
     @staticmethod
     def input(key1, key2, text='', timeout=10, interval=1, index=0, clear=True):
@@ -71,6 +101,7 @@ class WebDriverBase(object):
         if not element:
             raise Exception("webCan't find element {}".format(key1,key2))
         web_driver.input(element, text)
+        time.sleep(2)
 
 
 

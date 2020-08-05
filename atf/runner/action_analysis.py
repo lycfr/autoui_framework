@@ -4,10 +4,10 @@ import os
 import re
 import json
 
-from atf.common.decorator import keywords
-from atf.common.variable_global import Var
+from atf.commons.decorator import keywords
+from atf.commons.variable_global import Var
 from atf.runner.action_executor import ActionExecutor, log_info
-from atf.common import Var, Dict, log_info
+from atf.utils.yaml_utils import Dict
 
 
 class ActionAnalysis(object):
@@ -82,18 +82,19 @@ class ActionAnalysis(object):
 
     def __get_replace_string(self, content):
         '''
-
         :param content:
         :return:
         '''
-        print("__get_replace_string---",content)
+        print("__get_replace_string---",content)#com.dedao.juvenile:id/ivAudioClose,ew
 
         pattern_content = re.compile(r'(\${\w+}+)')
         while True:
             if isinstance(content, str):
                 search_contains = re.search(pattern_content, content)
+                print("search_contains = re.search(pattern_content, content)",search_contains)
                 if search_contains:
                     search_name = self.__get_variables(search_contains.group())
+                    print("search_name::",search_name)
                     if search_name is None:
                         search_name = 'None'
                     elif isinstance(search_name, str):
@@ -106,12 +107,13 @@ class ActionAnalysis(object):
                     else:
                         search_name = str(search_name)
                     content = content[0:search_contains.span()[0]] + search_name + content[search_contains.span()[1]:]
+                    print("content[0:search_contains.span()[0]] + search_name + content[search_contains.span()[1]:]---",content)
                 else:
                     break
             else:
                 content = str(content)
                 break
-        print("content:::----",content)
+        print("content:::----",content,"content_type",type(content))
         return content
 
     def __get_params_type(self, param):
@@ -247,7 +249,7 @@ class ActionAnalysis(object):
             key =  var_value.split('(', 1)[0]
             print("key----0000000",key)
             parms = self.__get_replace_string(var_value.split(key, 1)[-1][1:-1])
-            print("parms---0000-",parms)
+            print("parms---0000-",parms,"params",type(parms))
 
         else:
             key = None
@@ -290,12 +292,13 @@ class ActionAnalysis(object):
             'step': f'{key} {parms}'
         })
         print("action_data0-0-0-09090-__analysis_other_keywords:",action_data)
-
+        #{'key': 'assert', 'parms': 'isContain(登录/注册)', 'tag': 'other', 'step': 'assert isContain(登录/注册)'}
         return action_data
-
+        
     def __match_keywords(self, step, style):
-        print("__match_keywords",step,'style:::',style)#step: check('com.dedao.juvenile:id/itemTitle', 1)
+        print("__match_keywords",step,'style:::',style)#step: check('com.dedao.juvenile:id/itemTitle', 1)；    swipe('down'）
         if re.match(' ', step):
+            print(re.match(' ', step))
             raise SyntaxError(f'"{step}"')
         step = step.strip()
 
@@ -310,7 +313,6 @@ class ActionAnalysis(object):
         elif re.match(r'call \w+\(.*\)', step):
             return self.__analysis_common_keywords(step, style)
         elif re.match(r'if |elif |else |while |assert .+', step):
-
             return self.__analysis_other_keywords(step)
         else:
             raise SyntaxError(f'"{step}"')
@@ -346,7 +348,7 @@ class ActionAnalysis(object):
         log_info('action_analysis::::==={}'.format(action_dict))
         log_info('action_analysis::::===9999{}'.format(self.common_var))
 
-
+        #{'key': 'assert', 'parms': 'isContain(登录/注册)', 'tag': 'other', 'step': 'assert isContain(登录/注册)'}
         result = self.executor_keywords(action_dict, style)
         print("result::::action_analysis",result)
         return result

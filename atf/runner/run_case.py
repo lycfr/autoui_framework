@@ -1,4 +1,4 @@
-from atf.common.variable_global import Var
+from atf.commons.variable_global import Var
 from atf.drivers.app_driver_base import AppDriverBase
 from atf.drivers.web_driver_base import WebDriverBase
 from atf.runner.case_analysis import CaseAnalysis

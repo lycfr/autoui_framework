@@ -39,6 +39,14 @@ def log_info(message):
     except:
         print(message)
 
+
+def log_warning(message):
+    try:
+        logger.warning(message)
+    except:
+        print(message)
+
+
 def log_error(message,exit=True):
     try:
         logger.error(message)

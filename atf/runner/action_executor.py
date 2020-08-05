@@ -4,11 +4,11 @@ import os
 import sys
 import time
 
-from atf.common.logging import *
-from atf.common.variable_global import Var
+from atf.commons.logging import *
+from atf.commons.variable_global import Var
 from atf.drivers.app_driver_base import AppDriverBase
 from atf.drivers.web_driver_base import WebDriverBase
-from atf.utils.opcv_utils import OpencvUtils
+from atf.utils.opcv_utils import OpencvUtils, CompareImage
 
 
 class ActionExecutor(object):
@@ -142,6 +142,8 @@ class ActionExecutor(object):
         :return:
         """
         parms = action.parms
+        print(parms)
+        # list_params = parms.split(',')
         if parms is None:
             raise TypeError('swipe missing 4 required positional argument: from_x, from_y, to_x, to_y')
         if parms[0] == 'up':
@@ -154,7 +156,7 @@ class ActionExecutor(object):
             AppDriverBase.swipe_right()
         elif len(parms) == 4:
             AppDriverBase.swipe(float(action.parms[0]), float (action.parms[1]), float(action.parms[2]), float(action.parms[3]))
-        elif len(action.parms) == 5:
+        elif len(parms) == 5:
             AppDriverBase.swipe(float(action.parms[0]), float(action.parms[1]), float(action.parms[2]), float(action.parms[3]), int(action.parms[4]))
         else:
             raise TypeError('swipe takes 1 positional argument but {} were giver'.format(len(action.action)))
@@ -173,6 +175,8 @@ class ActionExecutor(object):
         else:
             raise TypeError('getText missing 1 required positional argument: element')
         return text
+
+
 
 
     def __action_click(self, action):
@@ -207,30 +211,32 @@ class ActionExecutor(object):
         :return:
         """
         parms = action.parms
-        print("parms:::",parms)
-        print(len(parms))
-        if len(parms):
+        list_params = parms.split(',')
 
+        if len(list_params):
 
-            img_info = self.__ocr_analysis(action.action, parms[0], True)
+            img_info = self.__ocr_analysis(action.action, list_params[0], True)
             if not isinstance(img_info, bool):
                 if img_info is not None:
                     Var.ocrimg = img_info['ocrimg']
                     check = True
                 else:
                     check = False
-            elif len(parms) == 1:
-                check = AppDriverBase.check(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0)
-            elif len(parms) == 2:
-                check = AppDriverBase.check(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1])
+            elif len(list_params) == 1:
+                check = AppDriverBase.check(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=0)
+            elif len(list_params) == 2:
+                check = AppDriverBase.check(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=list_params[1])
             else:
-                raise TypeError('check takes 2 positional arguments but {} was given'.format(len(parms)))
+                raise TypeError('check takes 2 positional arguments but {} was given'.format(len(list_params)))
 
             if not check:
-                raise Exception("Can't find element {}".format(parms[0]))
+                log_info("Can't find element {}".format(list_params[0]))
+                return False
             return check
         else:
             raise TypeError('click missing 1 required positional argument: element')
+
+
 
     def __action_input(self, action):
         """
@@ -250,8 +256,8 @@ class ActionExecutor(object):
 
     def __action_isContain(self,action):
         pagesource = AppDriverBase.get_page_source()
-        print("action.parms的类型：",type(action.parms[0]),action.parms[0])
-        if action.parms[0] in pagesource:
+
+        if action.parms in pagesource:
             return True
         else:
             return False
@@ -265,20 +271,24 @@ class ActionExecutor(object):
         :return:
         """
         parms = action.parms
-        if len(parms):
-            img_info = self.__ocr_analysis(action.action, parms[0], True)
+        list_params = parms.split(',')
+        if len(list_params):
+            img_info = self.__ocr_analysis(action.action, list_params[0], True)
             if not isinstance(img_info, bool):
                 if img_info is not None:
                     Var.ocrimg = img_info['ocrimg']
                     check = True
                 else:
                     check = False
-            elif len(parms) == 1:
-                check = AppDriverBase.check(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0)
-            elif len(parms) == 2:
-                check = AppDriverBase.check(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1])
+            elif len(list_params) == 1:
+                print("len(list_params) == 1check")
+                check = AppDriverBase.check(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=0)
+            elif len(list_params) == 2:
+                print("len(list_params) == 2check")
+
+                check = AppDriverBase.check(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=list_params[1])
             else:
-                raise TypeError('check takes 2 positional arguments but {} was given'.format(len(parms)))
+                raise TypeError('check takes 2 positional arguments but {} was given'.format(len(list_params)))
 
             return check
         else:
@@ -331,10 +341,12 @@ class ActionExecutor(object):
         orcimg = OpencvUtils(action, img_file)
         orcimg.save_screenshot()
         img_info = orcimg.extract_minutiae()
+        print("img_info:::",img_info)
         if img_info:
             return img_info
         else:
             if israise:
+                print("israise")
                 raise Exception("Can't find element {}".format(element))
             else:
                 return None
@@ -346,12 +358,22 @@ class ActionExecutor(object):
         if action.key == '$.getText':
             print("进入text")
             result = self.__action_getText(action)
+
         elif action.key == '$.id':
             print("进入id")
             result = eval(action.parms)
         elif action.key == 'isContain':
             result = self.__action_isContain(action)
             print("isContain:result:",result)
+
+        elif action.key == 'compare_image':
+            result = self.__action_compare_image(action)
+            print(":result:",result)
+
+        elif action.key == 'check':
+            result = self.__action_check(action)
+            print("check:result:",result)
+
         elif action.key == '$.getVar':
             print("进入getvar")
             if Var.global_var:
@@ -364,13 +386,13 @@ class ActionExecutor(object):
             print("getVar:result:",result)
         elif action.key:
             list = self.__from_scripts_file()
-            print(list,"这事一个list")
+            print(list,"这是一个list")
             for l in list:
                 exec(l)
             func = f'{action.key}({action.parms})'
-            print("func：：：",func)
+            print("func：：：",func)  # ifcheck(com.dedao.juvenile:id/ivAudioClose)
             result = eval(func)
-            print("action.key:result:",result)
+            print("action.key:result:",result)  # ifcheck(com.dedao.juvenile:id/ivAudioClose)
 
         else:
            result = action.parms[0]
@@ -406,7 +428,7 @@ class ActionExecutor(object):
         print("ActionExecutor：__action_call：common_var:",common_var,"Var.common_func[key].input:",Var.common_func[key].input, "parms:",parms)
 
         try:
-            from atf.runner import CaseAnalysis
+            from runner.case_analysis import CaseAnalysis
             case = CaseAnalysis()
             print("ActionExecutor：__action_call： case = CaseAnalysis()")
             print(Var.common_func[key].steps,"00000:", f'{action.style}  ', "ppppp",common_var)
@@ -417,7 +439,99 @@ class ActionExecutor(object):
             raise e
         return
 
+    def __action_replace(self,action):
+        """
 
+        :param action:                 replace(${split_ppt}, 0, "P", "")
+        :return:
+        """
+        parms = action.parms
+        print('replace,parms::::', parms)
+        print(len(parms))
+        if len(parms):
+            if len(parms) == 4:
+                listname = parms[0]
+                now = listname[parms[1]].replace(parms[2],parms[3])
+        else:
+            log_info('没有对应参数：{}'.format(action.parms))
+        return now
+
+    def __action_log(self,action):
+        """
+        打印对应日志信息
+        :param action:
+        :return:
+        """
+        parms = action.parms
+        print('split,parms::::', parms)
+        print(len(parms))
+        log_info(action.parms[0])
+
+    def __action_compare_image(self, action):
+        """
+        图片比较
+        :param action:
+        :return:
+        """
+        print("action:",action)
+        parms = action.parms
+        print("parms",parms)
+        compare_image = CompareImage()
+        # 截图
+        file2 = AppDriverBase.screenshot()
+        print("Var.extensions_var['images_file']:",Var.extensions_var['images_file'])
+        print(type(Var.extensions_var['images_file']))
+        print("parms[0]:",parms)
+        print(type(parms))
+        print("file1:",Var.extensions_var['images_file'][parms])
+        if parms in Var.extensions_var['images_file']:
+            file1 = Var.extensions_var['images_file'][parms]
+            result = compare_image.compare_image(file1,file2)
+            return float(result)
+
+        else:
+            raise KeyError('The {} keyword is undefined!'.format(action.step))
+
+
+
+    def __action_split(self,action):
+        """
+        进行字段切割：        split(${list_ppt}, "(")
+        :param action:
+        :return:
+        """
+        parms = action.parms
+        print('split,parms::::', parms)
+        print(len(parms))
+        if len(parms):
+            if len(parms) == 1:
+                splits = parms[0].split()
+            elif len(parms) == 2:
+                splits = parms[0].split(parms[1])
+        else:
+            log_info('没有对应参数：{}'.format(action.parms))
+
+        return splits
+
+
+
+
+
+    def __action_web_getAttribute(self, action):
+        """
+        行为执行，获取属性对应值
+        :param action:
+        :return:
+        """
+        parms = action.parms
+        print('web,parms::::', parms)
+        print(len(parms))
+        if len(parms):
+            if len(parms) == 2:
+                WebDriverBase.getAttribute(key1=parms[0], key2=parms[1], name=parms[2], timeout=Var.timeout, interval=Var.interval, index=0)
+            elif len(parms) == 3:
+                WebDriverBase.getAttribute(key1=parms[0], key2=parms[1], name=parms[2], timeout=Var.timeout, interval=Var.interval,
+                                    index=parms[2])
 
 
 
@@ -470,8 +584,9 @@ class ActionExecutor(object):
         '''
         :return:
         '''
-        key = action.key
-        parms = action.parms
+        #action----- other ---------- assert
+        key = action.key          #assert
+        parms = action.parms     #isContain(登录/注册)
         try:
             result = eval(parms)
             print("__action_other:result",result,"action.key:",key)
@@ -484,12 +599,13 @@ class ActionExecutor(object):
                 ifresult = result
                 print("ifresult---", ifresult)
                 self.elifresults.append(ifresult)
-            print("elifresults----", self.elifresults)
+            # print("elifresults----", self.elifresults)
 
 
 
             if key == 'assert':
                 assert result
+
             return result
         except Exception as e:
             raise e
@@ -513,6 +629,7 @@ class ActionExecutor(object):
         :param action:
         :return:
         """
+        #action----- other ---------- assert
         print("action-----",action.tag,'----------',action.key)
         # 声明一个全局变量的list，在elif\else调用的时候使用，如果list中False为奇数，那就执行else;如果list
 
@@ -561,6 +678,7 @@ class ActionExecutor(object):
         elif action.key == 'click':
             result = self.__action_click(action)
 
+
         elif action.key == 'check':
             result = self.__action_check(action)
 
@@ -599,11 +717,30 @@ class ActionExecutor(object):
             print(action,"这是一个action;",action.parms)
             result = self.__action_isContain(action)
             print("结果为：",result)
+
         elif action.key == 'webInput':
             result = self.__action_web_input(action)
 
         elif action.key == 'webClick':
             result = self.__action_web_click(action)
+
+        elif action.key == 'webGetAttribute':
+            result = self.__action_web_getAttribute(action)
+
+        elif action.key == 'split':
+            result = self.__action_split(action)
+
+        elif action.key == 'replace':
+            result = self.__action_replace(action)
+
+        elif action.key == 'log':
+            result = self.__action_log(action)
+            print("结果为：",result)
+        elif action.key == 'compare_image':
+            result = self.__action_compare_image(action)
+            print("compare_image结果为：",result)
+            print("compare_image,type",type(result))
+
         else:
             raise KeyError('The {} keyword is undefined!'.format(action.key))
 

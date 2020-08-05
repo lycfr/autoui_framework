@@ -29,6 +29,11 @@
         "ifAndroid",
         "assert",
         "webInput",
-        "webClick"
+        "webClick",
+        "webGetAttribute",
+        "split",
+        "replace",
+        "log",
+        "compare_image"
     ]
 }

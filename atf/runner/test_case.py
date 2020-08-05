@@ -5,8 +5,8 @@ import re
 import unittest
 import traceback
 
-from atf.common.logging import log_info
-from atf.common.variable_global import Var
+from atf.commons.logging import log_info
+from atf.commons.variable_global import Var
 
 
 class TestCase(unittest.TestCase):
@@ -22,8 +22,11 @@ class TestCase(unittest.TestCase):
         super(TestCase, self).__init__(methodName)
         if not Var.testcase:
             raise NameError("name 'testcase' is not defined")
+        print("Var.testcase:",Var.testcase)
         for key, value in Var.testcase.items():
             setattr(self, key, value)
+            print(key, value)
+        print("=-=-=-=-=-=-",Var.report, self.module, self.testcase_path.split(os.sep)[-1].split(".")[0])
         self.snapshot_dir = os.path.join(Var.report, self.module, self.testcase_path.split(os.sep)[-1].split(".")[0])
         print('self.snapshot_dir:::',self.snapshot_dir)
 

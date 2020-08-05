@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import re
+import time
 from concurrent import futures
 
-from atf.common.logging import log_info, log_error
-from atf.common.variable_global import Var
+from atf.commons.logging import *
+from atf.commons.variable_global import Var
+
 
 
 class AppDriverBase(object):
@@ -17,7 +19,8 @@ class AppDriverBase(object):
             global appdriver
             print(Var.appdriver)
             if Var.appdriver.lower() == 'appium':
-                from atf.drivers.appium import AndroidDriver, iOSDriver
+                from atf.drivers.appium.driver_appium import AndroidDriver, iOSDriver
+
             else:
                 # from drivers.macaca import AndroidDriver, iOSDriver
                 print("else==")
@@ -86,6 +89,21 @@ class AppDriverBase(object):
         '''
         print("DriverBase--closeapp")
         appdriver.close_app(package_info)
+
+    @staticmethod
+    def screenshot():
+        '''
+        only appium
+        :return:
+        '''
+        print('进入截图',Var.snapshot_dir)
+        tempimage = "temp_pic_{}.png".format(int(time.time()))
+        print(tempimage)
+        image_name = os.path.join(Var.snapshot_dir, tempimage)
+        # image_name = Var.ROOT + '/temp/pic_{}.png'.format(int(time.time()))
+        print('截图路径 ==> {}',image_name)
+        appdriver.get_screenshot_as_file(image_name)
+        return image_name
 
     @staticmethod
     def background_app():
@@ -185,6 +203,7 @@ class AppDriverBase(object):
         '''
         appdriver.move_to(x, y)
 
+
     @staticmethod
     def click(key, timeout=10, interval=1, index=0):
         '''
@@ -194,6 +213,7 @@ class AppDriverBase(object):
         :param index:
         :return:
         '''
+        print("click:",key)
         element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index)
         print("click----element",element)
         if not element:
@@ -213,6 +233,7 @@ class AppDriverBase(object):
         if not element:
             return False
         return True
+
 
     @staticmethod
     def input(key, text='', timeout=10, interval=1, index=0, clear=True):
@@ -243,6 +264,22 @@ class AppDriverBase(object):
             raise Exception("Can't find element {}".format(key))
         text = appdriver.get_text(element)
         return text
+
+    @staticmethod
+    def get_texts(key, timeout=10, interval=1):
+        '''
+        :param key:
+        :param timeout:
+        :param interval:
+        :param index:
+        :return:
+        '''
+        elements = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval)
+        if not elements:
+            raise Exception("Can't find element {}".format(key))
+        print("elements--热土人结果：",elements)
+        textlist = appdriver.get_texts(elements)
+        return textlist
 
     @staticmethod
     def get_page_source():
@@ -300,6 +337,7 @@ class AppDriverBase(object):
                 dict['element_type'] = 'name'
             print("dict^^^5555^^^^element_type", dict['element_type'])
 
+
         return AppDriverBase.wait_for_elements_by_key(dict)
 
     @staticmethod
@@ -322,6 +360,7 @@ class AppDriverBase(object):
         elif element_type == 'id':
             elements = appdriver.wait_for_elements_by_id(id=element, timeout=timeout, interval=interval)
         elif element_type == 'xpath':
+
             elements = appdriver.wait_for_elements_by_xpath(xpath=element, timeout=timeout, interval=interval)
         elif element_type == 'classname':
             elements = appdriver.wait_for_elements_by_classname(classname=element, timeout=timeout, interval=interval)
@@ -334,4 +373,6 @@ class AppDriverBase(object):
                 log_error('elements exists, but cannot find index({}) position'.format(index), False)
                 raise Exception('list index out of range, index:{}'.format(index))
             return elements[index]
-        return None
+        else:
+            print("meiyou elements")
+            return None

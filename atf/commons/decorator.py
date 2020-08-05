@@ -7,8 +7,8 @@ import time
 import traceback
 import threading
 
-from atf.common.logging import log_error
-from atf.common.variable_global import Var
+from atf.commons.logging import log_error
+from atf.commons.variable_global import Var
 
 
 def therading(func):
@@ -67,7 +67,10 @@ def keywords(func, *args, **kwds):
                     Var.ocrimg = None
                 else:
                     print("decorator---file::::",file)
-                    # Var.appinstance.save_screenshot(file)
+                    if Var.webinstance != None:
+                        Var.webinstance.save_screenshot(file)
+                    if Var.appinstance != None:
+                        Var.appinstance.save_screenshot(file)
                 stop_time = time.time()
                 duration = str('%.1f' % (stop_time - start_time))
 

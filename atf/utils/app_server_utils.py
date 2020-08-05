@@ -7,7 +7,7 @@ import platform
 import threading
 import subprocess
 
-from atf.common.logging import *
+from atf.commons.logging import *
 
 
 class AppServerUtils(object):
@@ -144,15 +144,20 @@ class AppServerUtils(object):
         try:
             log_info('Connect to server')
             if self.appdriver == 'appium':
-                from appium import webdriver
-                self.appinstance = webdriver.Remote(command_executor='{}:{}/wd/hub'.format(self.url, self.port),
-                                                 desired_capabilities=self.desired_capabilities)
+                if self.appinstance is None:
+                    from appium import webdriver
+                    self.appinstance = webdriver.Remote(command_executor='{}:{}/wd/hub'.format(self.url, self.port),
+                                                     desired_capabilities=self.desired_capabilities)
 
-                if self.timeout:
-                    self.appinstance.implicitly_wait(int(self.timeout))
+                    if self.timeout:
+                        self.appinstance.implicitly_wait(int(self.timeout))
+                    else:
+                        self.appinstance.implicitly_wait(10)
+                    time.sleep(10)
                 else:
-                    self.appinstance.implicitly_wait(10)
-                time.sleep(10)
+                    print(self._driver)
+                    # todo:
+                    self.appinstance.start_activity(self.desired_capabilities["appPackage"], self.desired_capabilities["appActivity"])
             else:
                 # from macaca import Webdriver
                 # self.appinstance = Webdriver(url='{}:{}/wd/hub'.format(self.url, self.port),

@@ -9,7 +9,6 @@
 =================================================='''
 
 from atf.drivers.appium.driver_appium import AndroidDriver, iOSDriver
-from atf.drivers.chrome.driver_chrome import Chrome_Driver
 
 
-__all__ = ['AndroidDriver','iOSDriver','Chrome_Driver']
+__all__ = ['AndroidDriver','iOSDriver']
