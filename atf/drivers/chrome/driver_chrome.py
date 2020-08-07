@@ -32,7 +32,6 @@ class Chrome_Driver(object):
 
         :return:
         '''
-        print("WebDriverBase--launch_web")
         # Var.webinstance.launch_web()
 
     @staticmethod

@@ -22,13 +22,9 @@ class TestCase(unittest.TestCase):
         super(TestCase, self).__init__(methodName)
         if not Var.testcase:
             raise NameError("name 'testcase' is not defined")
-        print("Var.testcase:",Var.testcase)
         for key, value in Var.testcase.items():
             setattr(self, key, value)
-            print(key, value)
-        print("=-=-=-=-=-=-",Var.report, self.module, self.testcase_path.split(os.sep)[-1].split(".")[0])
         self.snapshot_dir = os.path.join(Var.report, self.module, self.testcase_path.split(os.sep)[-1].split(".")[0])
-        print('self.snapshot_dir:::',self.snapshot_dir)
 
     def run(self, result=None):
 
@@ -43,16 +39,13 @@ class TestCase(unittest.TestCase):
             log_info("******************* TestCase {} Start *******************".format(self.description))
             with open(self.testcase_path, 'r') as r:
                 s = r.readlines()
-                print('s::::',s)
                 index = s.index('steps:\n')
 
                 for step in s[index+1:]:
-                    print('step:-----',step)
                     if not (step.lstrip().startswith('#') or re.match('#', step.lstrip().lstrip('-').lstrip())):
                         if step != '\n':
                             Var.testcase_steps.append(step)
 
-                print("test-casess;Var.testcase_steps:::",Var.testcase_steps)
             unittest.TestCase.run(self, result)
             Var.testcase_steps = []
             log_info("******************* Total: {}, Pass: {}, Failed: {}, Error: {}, Skipped: {} ********************\n"

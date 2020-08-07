@@ -23,7 +23,6 @@ from atf.commons.variable_global import Var
 class Project(object):
 
     def __init__(self):
-
         self.__init_project()
         self.__init_config()
         self.__init_logging()
@@ -46,14 +45,6 @@ class Project(object):
             Var.common_var = {} # common临时变量，call执行完后重置
 
     def __init_config(self):
-
-        # self.__config = analytical_file(os.path.join(self.__ROOT, 'config.yaml'))
-        print("config::::",self.__config)
-        print(type(self.__config))
-
-
-
-
         for configK, configV in self.__config.items():
             if configK == 'desiredcaps':
                 Var.desired_caps = configV[0]
@@ -69,20 +60,13 @@ class Project(object):
                     Var[profileK] = profileV
             else:
                 Var[configK] = configV
-        print('============Var.desired_caps', Var.desired_caps)
-        print('Var.prefs',Var.prefs)
-        print('configK:::',self.__config.keys())
-
         if "appdriver" in self.__config.keys():
-            print("appdriver初始化")
             AppDriverBase.init()
         if "web_driver" in self.__config.keys():
-            print("web_driver初始化")
             WebDriverBase.init()
 
 
     def __init_data(self):
-
         if os.path.exists(os.path.join(Var.ROOT, 'data.json')):
             with open(os.path.join(Var.ROOT, 'data.json'), 'r', encoding='utf-8') as f:
                 dict = Dict(json.load(fp=f))
@@ -94,7 +78,6 @@ class Project(object):
 
 
     def __init_keywords(self):
-
         default_keywords_path = os.path.join(__file__.split('project.py')[0], 'runner', 'resource', 'keywords.json')
         if os.path.exists(default_keywords_path):
             with open(default_keywords_path, 'r', encoding='utf-8') as f:
@@ -122,27 +105,19 @@ class Project(object):
 
     def __init_logging(self):
         if Var.platformName != None:
-
             devices = DevicesUtils(Var.platformName, Var.udid)
             Var.udid, deviceinfo = devices.device_info()
             report_time = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
-            report_child = "{}_{}".format(deviceinfo, report_time)#Netease_MuMu_20200718155040
-            #生成报告地址
-            Var.report = os.path.join(Var.ROOT, "Report", report_child)#/Users/gaijinfeng/PycharmProjects/autoui_base/Report/Netease_MuMu_20200718155137
-            if not os.path.exists(Var.report):
-                os.makedirs(Var.report)
-                os.makedirs(os.path.join(Var.report, 'resource'))
-            log_init(Var.report)
+            report_child = "{}_{}".format(deviceinfo, report_time)
         else:
             report_time = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
-            report_child = "{}_{}".format(Var.web_driver.lower(), report_time)  # Netease_MuMu_20200718155040
-            # 生成报告地址
-            Var.report = os.path.join(Var.ROOT, "Report",
-                                      report_child)  # /Users/gaijinfeng/PycharmProjects/autoui_base/Report/Netease_MuMu_20200718155137
-            if not os.path.exists(Var.report):
-                os.makedirs(Var.report)
-                os.makedirs(os.path.join(Var.report, 'resource'))
-            log_init(Var.report)
+            report_child = "{}_{}".format(Var.web_driver.lower(), report_time)
+
+        Var.report = os.path.join(Var.ROOT, "Report",report_child)
+        if not os.path.exists(Var.report):
+            os.makedirs(Var.report)
+            os.makedirs(os.path.join(Var.report, 'resource'))
+        log_init(Var.report)
 
 
     def __analytical_testcase_file(self):
@@ -151,26 +126,15 @@ class Project(object):
             log_info('{}: {}'.format(configK, configV))
         log_info('******************* analytical testcase *******************')
         testcase = TestCaseUtils()
-        print('testcase------',Var.ROOT,'     ',testcase)
         self.__testcase = testcase.testcase_path(Var.ROOT, Var.testcase)
         log_info('testcase:{}'.format(self.__testcase))
 
 
-
     def __analytical_common_file(self):
-
         log_info('******************* analytical common *******************')
         Var.common_func = Dict()
         common_dir = os.path.join(Var.ROOT, "Common")
-        print("common_dir:",common_dir)
         for rt, dirs, files in os.walk(common_dir):
-            print(rt,"===", dirs,"----", files)
-            '''
-            Common === ['iOS', 'Android'] ---- ['main.yaml']
-            Common/iOS === [] ---- ['common.yaml']
-            Common/Android === [] ---- ['TestInClass.yaml', 'AppProfile.yaml', 'common.yaml', 'AppProfileB.yaml']
-
-            '''
             if rt == common_dir:
                 self.__load_common_func(rt, files)
             elif rt.split(os.sep)[-1].lower() == Var.platformName.lower():
@@ -178,63 +142,41 @@ class Project(object):
         log_info('common: {}'.format(Var.common_func.keys()))
 
 
-
-
     def __load_common_func(self,rt ,files):
-
         for f in files:
             if not f.endswith('yaml'):
                 continue
             for commonK, commonV in analytical_file(os.path.join(rt, f)).items():
                 Var.common_func[commonK] = commonV
-                print(commonK,"******",Var.common_func[commonK])
-                '''
-                module ****** APPmain
-                skip ****** False
-                methods ****** {'CheckProfile': {'description': 'CheckProfile,查看对应的用户资料信息', 'steps': ["click('头像')"]}}
-                '''
-
 
 
     def __init_testcase_suite(self):
-
         self.__suite = []
         for case_path in self.__testcase:
             testcase = analytical_file(case_path)
             testcase['testcase_path'] = case_path
             Var.testcase = testcase
-            print('testcase::::',testcase)
-            #testcase:::: {'module': 'OpenUrl', 'skip': False, 'description': '打开淘宝', 'steps': ["openUrl('https://www.taobao.com/')"], 'testcase_path': '/Users/gaijinfeng/PycharmProjects/autoui_base/webTestcase/TeacherEntryRoom.yaml'}
-            #testCaseClass必须是TestCase的子类（或孙类也行）
             subsuite = unittest.TestLoader().loadTestsFromTestCase(RunCase)
-            print("subsuite;;;;",subsuite)
             self.__suite.append(subsuite)
             Var.testcase = None
-
-
-
-
 
 
 
     def start(self):
         log_info('******************* analytical desired capabilities *******************')
         if Var.web_driver != None:
-
             web_driver = WebServerUtils(Var.web_driver,Var.path)
             Var.webinstance = web_driver.web_start_server(Var.prefs)
             Var.webinstance.get(Var.url)
             Var.webinstance.maximize_window()
             log_info('******************* web open {}*******************'.format(Var.url))
         if Var.appdriver != None:
-
             appserver = AppServerUtils(Var.appdriver, Var.caps, Var.desired_caps)
             appserver.start_server()
             Var.appinstance = appserver.start_connect()
             log_info('******************* app open *******************')
 
         suite = unittest.TestSuite(tuple(self.__suite))
-        print("suite;;;",suite)
         runner = TestRunner()
         runner.run(suite)
         # server.stop_server()

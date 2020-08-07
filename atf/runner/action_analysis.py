@@ -23,7 +23,6 @@ class ActionAnalysis(object):
         :param name:
         :return:
         '''
-        print('ActionAnalysis,__get_variables',name)
         if not re.match(r'^\${(\w+)}$', name):
             raise SyntaxError(name)
         name = name[2:-1]
@@ -46,8 +45,6 @@ class ActionAnalysis(object):
         :param join:
         :return:
         '''
-        print("__join_value---",contents,"----",join)
-
         content_str = None
         if contents:
             for content in contents:
@@ -57,7 +54,6 @@ class ActionAnalysis(object):
                     content_str = self.__replace_string(content)
         else:
             content_str = ''
-        print("content_str:::",content_str)
         return content_str
 
     def __replace_string(self, content):
@@ -66,8 +62,6 @@ class ActionAnalysis(object):
         :param content:
         :return:
         """
-        print("__replace_string---",content)
-
         if isinstance(content, str):
             if re.match(r"^'(.*)'$", content):
                 content = '"{}"'.format(content)
@@ -77,7 +71,6 @@ class ActionAnalysis(object):
                 content = '\'{}\''.format(content)
         else:
             content = str(content)
-        print("__replace_string::content::",content)
         return content
 
     def __get_replace_string(self, content):
@@ -85,16 +78,12 @@ class ActionAnalysis(object):
         :param content:
         :return:
         '''
-        print("__get_replace_string---",content)#com.dedao.juvenile:id/ivAudioClose,ew
-
         pattern_content = re.compile(r'(\${\w+}+)')
         while True:
             if isinstance(content, str):
                 search_contains = re.search(pattern_content, content)
-                print("search_contains = re.search(pattern_content, content)",search_contains)
                 if search_contains:
                     search_name = self.__get_variables(search_contains.group())
-                    print("search_name::",search_name)
                     if search_name is None:
                         search_name = 'None'
                     elif isinstance(search_name, str):
@@ -107,13 +96,11 @@ class ActionAnalysis(object):
                     else:
                         search_name = str(search_name)
                     content = content[0:search_contains.span()[0]] + search_name + content[search_contains.span()[1]:]
-                    print("content[0:search_contains.span()[0]] + search_name + content[search_contains.span()[1]:]---",content)
                 else:
                     break
             else:
                 content = str(content)
                 break
-        print("content:::----",content,"content_type",type(content))
         return content
 
     def __get_params_type(self, param):
@@ -122,8 +109,6 @@ class ActionAnalysis(object):
         :param param:
         :return:
         '''
-        print("__get_params_type---",param)
-
         if re.match(r"^'$", param):
             param = param.strip("'")
         elif re.match(r'^"$', param):
@@ -135,7 +120,6 @@ class ActionAnalysis(object):
                 param = eval(param)
             except:
                 param = param
-        print("param:::--=-=-=",param)
         return param
 
     def __get_parms(self, parms):
@@ -144,8 +128,6 @@ class ActionAnalysis(object):
         :param parms:
         :return:
         '''
-        print("__get_parms---",parms)
-
         parms = parms.strip()
         if re.match('^\(.*\)$', parms):
             params = []
@@ -155,7 +137,6 @@ class ActionAnalysis(object):
             for param in find_content:
                 var_content = self.__get_params_type(param)
                 params.append(var_content)
-            print("params__get_parms:",params)
             return params
         else:
             raise SyntaxError(parms)
@@ -166,38 +147,25 @@ class ActionAnalysis(object):
         :param params_str:
         :return:
         '''
-        print("__get_parm---",content)
-
         pattern_content = re.compile(r'(\'.*?\'|".*?"|\S+)')
         content_split = re.findall(pattern_content, content)
         contents = []
         for c in content_split:
             var_content = self.__get_params_type(c)
             contents.append(var_content)
-        print("params-contents",contents)
         return contents
 
     def __analysis_exist_parms_keywords(self, step):
-        print("__analysis_exist_parms_keywords:",step)# check('com.dedao.juvenile:id/itemTitle', 1)
         key = step.split('(', 1)[0].strip()
-        print("key:::__analysis_exist_parms_keywords:",key)# check
         parms = self.__get_parms(step.lstrip(key))
-        print("parms:::__analysis_exist_parms_keywords:",parms)# com.dedao.juvenile:id/itemTitle
-
         action_data = Dict({
             'key': key,
             'parms': parms,
             'step': step
         })
-        print('action_data::-----',action_data)
-        #{'key': 'check', 'parms': ['com.dedao.juvenile:id/itemTitle', 1], 'step': "check('com.dedao.juvenile:id/itemTitle', 1)"}
-
-        #action_data::----- {'key': 'click', 'parms': ['xpath', "//*[@resource-id='com.dedao.juvenile:id/notificationBtn']"], 'step': 'click("xpath","//*[@resource-id=\'com.dedao.juvenile:id/notificationBtn\']")'}
         return action_data
 
     def __analysis_not_exist_parms_keywords(self, step):
-        print("__analysis_not_exist_parms_keywords---",step)
-
         key = step
         parms = None
         action_data = Dict({
@@ -205,12 +173,9 @@ class ActionAnalysis(object):
             'parms': parms,
             'step': step
         })
-        print("action_data====",action_data)
         return action_data
 
     def __analysis_setVar_keywords(self, step):
-        print("__analysis_setVar_keywords---",step)
-
         key = '$.setVar'
         parms = self.__get_parms(step.lstrip('$.setVar'))
         if len(parms) != 2:
@@ -223,13 +188,10 @@ class ActionAnalysis(object):
             'tag': 'setVar',
             'step': step
         })
-        print("====---action_data",action_data)
         return action_data
 
     def __analysis_variable_keywords(self, step):
-        print("__analysis_variable_keywords---",step)
         step_split = step.split('=', 1)
-        print("step_split====",step_split)
         if len(step_split) != 2:
             raise SyntaxError(f'"{step}"')
         elif not step_split[-1].strip():
@@ -244,17 +206,12 @@ class ActionAnalysis(object):
                 parms = self.__get_replace_string(var_value.split(key, 1)[-1][1:-1])
             else:
                 parms = self.__get_parms(var_value.split(key, 1)[-1])
-            print("parms----",parms)
         elif re.match(r'(\w)+\(.*\)', var_value):
             key =  var_value.split('(', 1)[0]
-            print("key----0000000",key)
             parms = self.__get_replace_string(var_value.split(key, 1)[-1][1:-1])
-            print("parms---0000-",parms,"params",type(parms))
-
         else:
             key = None
             parms = self.__get_parm(var_value)
-            print("parms-99---",parms)
 
         action_data = Dict({
             'key': key,
@@ -266,8 +223,6 @@ class ActionAnalysis(object):
         return action_data
 
     def __analysis_common_keywords(self, step, style):
-        print("__analysis_common_keywords",step,"style:",style)
-
         key = step.split('call', 1)[-1].strip().split('(', 1)[0].strip()
         parms = step.split('call', 1)[-1].strip().split(key, 1)[-1]
         parms = self.__get_parms(parms)
@@ -278,11 +233,9 @@ class ActionAnalysis(object):
             'style': style,
             'step': step
         })
-        print("action_data0-0-0-0-",action_data)
         return action_data
 
     def __analysis_other_keywords(self, step):
-        print("__analysis_other_keywords",step)
         key = step.split(' ', 1)[0].strip()
         parms = self.__get_replace_string(step.lstrip(key).strip())
         action_data = Dict({
@@ -291,12 +244,9 @@ class ActionAnalysis(object):
             'tag': 'other',
             'step': f'{key} {parms}'
         })
-        print("action_data0-0-0-09090-__analysis_other_keywords:",action_data)
-        #{'key': 'assert', 'parms': 'isContain(登录/注册)', 'tag': 'other', 'step': 'assert isContain(登录/注册)'}
         return action_data
         
     def __match_keywords(self, step, style):
-        print("__match_keywords",step,'style:::',style)#step: check('com.dedao.juvenile:id/itemTitle', 1)；    swipe('down'）
         if re.match(' ', step):
             print(re.match(' ', step))
             raise SyntaxError(f'"{step}"')
@@ -319,9 +269,6 @@ class ActionAnalysis(object):
 
     @keywords
     def executor_keywords(self, action, style):
-        print("action_analysis----executor_keywords",action,'style:::',style)
-        #action:{'key': 'click', 'parms': ['id', 'notificationBtn'], 'step': "click('id','notificationBtn')"}
-
         try:
             if action.tag in ['setVar', 'getVar', 'call', 'other']:
                 result = self.action_executor.action_executor(action)
@@ -342,15 +289,9 @@ class ActionAnalysis(object):
             raise e
 
     def action_analysis(self, step, style, common):
-        log_info('action_analysis::::{}'.format(step))
         self.common_var = common
         action_dict = self.__match_keywords(step, style)
-        log_info('action_analysis::::==={}'.format(action_dict))
-        log_info('action_analysis::::===9999{}'.format(self.common_var))
-
-        #{'key': 'assert', 'parms': 'isContain(登录/注册)', 'tag': 'other', 'step': 'assert isContain(登录/注册)'}
         result = self.executor_keywords(action_dict, style)
-        print("result::::action_analysis",result)
         return result
 
 if __name__ == '__main__':

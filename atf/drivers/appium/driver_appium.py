@@ -101,6 +101,29 @@ class AndroidDriver(object):
             raise e
 
     @staticmethod
+    def black_for_elements(by, ele):
+        '''
+        :param name:
+        :return:
+        '''
+        print(by)
+        print(ele)
+        print(type(by))
+        print(type(ele))
+        if by == 'name':
+            elements = Var.appinstance.find_elements_by_accessibility_id(ele)
+        elif by == 'id':
+            elements = Var.appinstance.find_elements_by_id(ele)
+        elif by == 'xpath':
+            elements = Var.appinstance.find_elements_by_xpath(ele)
+        elif by == 'classname':
+            elements = Var.appinstance.find_elements_by_class_name(ele)
+        else:
+            elements = None
+        return elements
+
+
+    @staticmethod
     def background_app():
         '''
         only appium
@@ -457,6 +480,28 @@ class iOSDriver(object):
                 pass # todo 待补充
         except Exception as e:
             raise e
+
+    @staticmethod
+    def black_for_elements(by, ele):
+        '''
+        :param name:
+        :return:
+        '''
+        print(by)
+        print(ele)
+        print(type(by))
+        print(type(ele))
+        if by == 'name':
+            elements = Var.appinstance.find_elements_by_accessibility_id(ele)
+        elif by == 'id':
+            elements = Var.appinstance.find_elements_by_id(ele)
+        elif by == 'xpath':
+            elements = Var.appinstance.find_elements_by_xpath(ele)
+        elif by == 'classname':
+            elements = Var.appinstance.find_elements_by_class_name(ele)
+        else:
+            elements = None
+        return elements
 
     @staticmethod
     def get_screenshot_as_file(image_name):

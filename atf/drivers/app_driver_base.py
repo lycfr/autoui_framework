@@ -14,18 +14,14 @@ class AppDriverBase(object):
 
     @staticmethod
     def init():
-        print("AppDriverBase--init")
         try:
             global appdriver
-            print(Var.appdriver)
             if Var.appdriver.lower() == 'appium':
                 from atf.drivers.appium.driver_appium import AndroidDriver, iOSDriver
 
             else:
                 # from drivers.macaca import AndroidDriver, iOSDriver
                 print("else==")
-            print(Var.platformName)
-
             if Var.platformName.lower() == "ios":
                 appdriver = iOSDriver
             elif Var.platformName.lower() == "android":
@@ -44,8 +40,6 @@ class AppDriverBase(object):
         Returns:
             None
         """
-        print("DriverBase--adbshell")
-
         appdriver.adb_shell(cmd)
 
     @staticmethod
@@ -55,8 +49,6 @@ class AppDriverBase(object):
         :param app_path:
         :return:
         '''
-        print("DriverBase--installapp")
-
         appdriver.install_app(app_path)
 
     @staticmethod
@@ -66,8 +58,6 @@ class AppDriverBase(object):
         :param package_info: Android(package) or iOS(bundleId)
         :return:
         '''
-        print("DriverBase--uninstallapp")
-
         appdriver.uninstall_app(package_info)
 
     @staticmethod
@@ -77,7 +67,6 @@ class AppDriverBase(object):
         :param package_info: Android(package/activity) or iOS(bundleId)
         :return:
         '''
-        print("AppDriverBase--lauchapp",package_info)
         appdriver.launch_app(package_info)
 
     @staticmethod
@@ -87,7 +76,6 @@ class AppDriverBase(object):
         :param package_info: Android(package) or iOS(bundleId)
         :return:
         '''
-        print("DriverBase--closeapp")
         appdriver.close_app(package_info)
 
     @staticmethod
@@ -96,12 +84,9 @@ class AppDriverBase(object):
         only appium
         :return:
         '''
-        print('进入截图',Var.snapshot_dir)
         tempimage = "temp_pic_{}.png".format(int(time.time()))
-        print(tempimage)
         image_name = os.path.join(Var.snapshot_dir, tempimage)
         # image_name = Var.ROOT + '/temp/pic_{}.png'.format(int(time.time()))
-        print('截图路径 ==> {}',image_name)
         appdriver.get_screenshot_as_file(image_name)
         return image_name
 
@@ -213,9 +198,7 @@ class AppDriverBase(object):
         :param index:
         :return:
         '''
-        print("click:",key)
         element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index)
-        print("click----element",element)
         if not element:
             raise Exception("Can't find element {}".format(key))
         element.click()
@@ -277,7 +260,6 @@ class AppDriverBase(object):
         elements = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval)
         if not elements:
             raise Exception("Can't find element {}".format(key))
-        print("elements--热土人结果：",elements)
         textlist = appdriver.get_texts(elements)
         return textlist
 
@@ -296,7 +278,6 @@ class AppDriverBase(object):
 
     @staticmethod
     def find_elements_by_key(key, timeout=10, interval=1, index=0):
-        print("find_elements_by_key-----",key)
         '''
         :param key:
         :param timeout:
@@ -314,7 +295,6 @@ class AppDriverBase(object):
             'interval': interval,
             'index': index
         }
-        print("dict^^^^^^^",dict)
         if Var.platformName.lower() == 'android':
             if re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.\w]+:id/\S+', key):
                 dict['element_type'] = 'id'
@@ -324,8 +304,6 @@ class AppDriverBase(object):
                 dict['element_type'] = 'xpath'
             else:
                 dict['element_type'] = 'name'
-            print("dict^^^^^^^element_type", dict['element_type'])
-
         else:
             if re.match(r'XCUIElementType', key):
                 dict['element_type'] = 'classname'
@@ -335,9 +313,6 @@ class AppDriverBase(object):
                 dict['element_type'] = 'xpath'
             else:
                 dict['element_type'] = 'name'
-            print("dict^^^5555^^^^element_type", dict['element_type'])
-
-
         return AppDriverBase.wait_for_elements_by_key(dict)
 
     @staticmethod
@@ -346,15 +321,13 @@ class AppDriverBase(object):
         :param elements_info:
         :return:
         '''
-        print("wait_for_elements_by_key")
-        print("elements_info:::",elements_info)
+        _error_max = 10
+        _error_count = 0
         element_type = elements_info['element_type']
         element = elements_info['element']
         timeout = elements_info['timeout']
         interval = elements_info['interval']
         index = elements_info['index']
-        # 2020-07-20 19:18:32,488 INFO :find elements: Body: {'using': 'id', 'value': 'com.dedao.juvenile:id/notificationBtn', 'index': 0}
-        log_info("find elements: Body: {'using': '%s', 'value': '%s', 'index': %s}" % (element_type, element, index))
         if element_type == 'name':
             elements = appdriver.wait_for_elements_by_name(name=element, timeout=timeout, interval=interval)
         elif element_type == 'id':
@@ -366,13 +339,36 @@ class AppDriverBase(object):
             elements = appdriver.wait_for_elements_by_classname(classname=element, timeout=timeout, interval=interval)
         else:
             elements = None
-
         log_info('return elements: {}'.format(elements))
-        if elements:
-            if len(elements) <= int(index):
-                log_error('elements exists, but cannot find index({}) position'.format(index), False)
-                raise Exception('list index out of range, index:{}'.format(index))
+        # if elements:
+        #     if len(elements) <= int(index):
+        #         log_error('elements exists, but cannot find index({}) position'.format(index), False)
+        #         raise Exception('list index out of range, index:{}'.format(index))
+        #     return elements[index]
+        # else:
+        #     return None
+        try:
+            # 如果成功，清空错误计数
+            _error_count = 0
             return elements[index]
-        else:
-            print("meiyou elements")
+        # else:
+        except Exception as e:
+            # 如果次数太多，就退出异常逻辑，直接报错
+            if _error_count > _error_max:
+                raise e
+            # 记录一直异常的次数
+            _error_count += 1
+            # 对黑名单里的弹框进行处理
+            for i in Var.black_list:
+                w = re.split('[(,)]', i)
+                log_info(i)
+                elements = appdriver.black_for_elements(w[1], w[2])
+                if len(elements) > 0:
+                    elements[0].click()
+                    if len(w) == 5:
+                        time.sleep(int(w[3]))
+                    # 继续寻找原来的正常控件
+                    return AppDriverBase.wait_for_elements_by_key(elements_info)
+            # 如果黑名单也没有，就报错
+            log_info("black list no one found")
             return None

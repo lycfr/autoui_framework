@@ -49,7 +49,6 @@ class WebDriverBase(object):
         :param package_info: Android(package/activity) or iOS(bundleId)
         :return:
         '''
-        print("web_driverBase--launch_web",package_info)
         web_driver.launch_web(package_info)
 
     @staticmethod
@@ -107,7 +106,6 @@ class WebDriverBase(object):
 
     @staticmethod
     def  find_elements_by_key(key1, key2, timeout=10, interval=1, index=0):
-        print("find_elements_by_key--web---",key1,key2)
         '''
         :param key1:
         :param key2:
@@ -127,11 +125,7 @@ class WebDriverBase(object):
             'interval': interval,
             'index': index
         }
-        print("dict^^^^^^^",dict)
         dict['element_type'] = dict['by']
-
-        print("dict^^^5555^^^^element_type", dict['element_type'])
-
         return WebDriverBase.wait_for_elements_by_key(dict)
 
 
@@ -141,26 +135,11 @@ class WebDriverBase(object):
         :param elements_info:
         :return:
         '''
-        print("wait_for_elements_by_key")
-        print("elements_info:::",elements_info)
         element_type = elements_info['element_type']
         element = elements_info['element']
         timeout = elements_info['timeout']
         interval = elements_info['interval']
         index = elements_info['index']
-        # 2020-07-20 19:18:32,488 INFO :find elements: Body: {'using': 'id', 'value': 'com.dedao.juvenile:id/notificationBtn', 'index': 0}
-        log_info("find elements: Body: {'using': '%s', 'value': '%s', 'index': %s}" % (element_type, element, index))
-
-        '''
-        ID = "id"
-        XPATH = "xpath"
-        LINK_TEXT = "link text"
-        PARTIAL_LINK_TEXT = "partial link text"
-        NAME = "name"
-        TAG_NAME = "tag_name"
-        CLASS_NAME = "class name"
-        CSS_SELECTOR = "css selector"
-        '''
 
         if element_type == 'id':
             elements = web_driver.wait_for_elements_by_id(id=element, timeout=timeout, interval=interval)

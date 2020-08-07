@@ -16,7 +16,6 @@ class CaseAnalysis(object):
         :param common: call 调用时需要的参数
         :return:
         '''
-        print("CaseAnalysis---iteration:steps:",steps,"style:",style,"common:",common)
         if isinstance(steps, list):
             for step in steps:
                 if isinstance(step, str):
@@ -28,31 +27,21 @@ class CaseAnalysis(object):
                     if result:
                         return True
         elif isinstance(steps, dict):
-            print("isinstance(steps, dict)")
             for key, values in steps.items():
-                print("isinstance:key, values:",key, values)
                 if key.startswith('while'):
                     while self.case_executor(key, style, common):
                         result = self.iteration(values, f'{style}  ', common)
                         if result:
                             break
                 elif key.startswith('if') or key.startswith('elif') or key.startswith('else'):
-
-                    print(key,"keystart else")
-                    print("self.case_executor(key, style, common):", key, "style:",style,"common:", common)
                     if self.case_executor(key, style, common):
-                        print("self.case_executor(key, style, common):sss",key,"style:",style,"common:", common)
                         result = self.iteration(values, f'{style}  ', common)
-                        print("self.case_executor(key, style, common):result：",result)
                         if result:
-
                             return True
-
                         break
                 else:
                     raise SyntaxError('- {}:'.format(key))
 
     def case_executor(self, step, style, common):
         result = self.action_nalysis.action_analysis(step, style, common)
-        print("case_executor:",result)
         return result

@@ -13,7 +13,6 @@ from atf.commons.variable_global import Var
 
 def therading(func):
     def start(*args, **kwds):
-        print("therading----start")
         def run():
             try:
                 th.ret = func(*args, **kwds)
@@ -62,13 +61,9 @@ def keywords(func, *args, **kwds):
                     Var.ocrimg = None
                 else:
                     list_file = file.split("/")
-                    print("list_file:::", list_file[2])
-
                     if 'web' == list_file[2]:
-                        print("进行web截图")
                         Var.webinstance.save_screenshot(file)
                     if 'app' == list_file[2]:
-                        print("进行app截图")
                         Var.appinstance.save_screenshot(file)
                 stop_time = time.time()
                 duration = str('%.1f' % (stop_time - start_time))
@@ -101,5 +96,4 @@ def keywords(func, *args, **kwds):
             if exception_flag:
                 raise exception
         return result
-    print("wrapper::::22222",wrapper)
     return wrapper

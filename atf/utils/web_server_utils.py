@@ -6,21 +6,17 @@ import subprocess
 from selenium import webdriver
 
 from atf.commons.logging import *
-from atf.driver import web_driver
 
 
 class WebServerUtils(object):
 
     def __getattr__(self, item):
-        print("WebUtils--__getattr__")
         try:
             return self.__getattribute__(item)
         except:
             return None
 
     def __init__(self, web_driver,path):
-        print("WebUtils--__init__")
-
         if web_driver.lower() in ['chrome', 'fix']:
             self.web_driver = web_driver.lower()
         else:
@@ -40,7 +36,6 @@ class WebServerUtils(object):
         self.webinstance = None
 
     def __check_port_is_used(self,port):
-        print("ServerUtils--__check_port_is_used")
         p = platform.system()
         if p == 'Windows':
             sys_command = "netstat -ano|findstr %s" % port
@@ -65,8 +60,6 @@ class WebServerUtils(object):
 
 
     def web_start_server(self,prefs):
-        print("WebUtils--web_start_server")
-
         try:
             log_info('Start the web_driver')
             if self.web_driver == 'chrome':
