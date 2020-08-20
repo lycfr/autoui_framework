@@ -15,12 +15,9 @@ class DevicesUtils(object):
         self.__udid = udid
 
 
-
     def device_info(self):
         if self.__platformName.lower() == 'android':
             devices = self.get_devices()
-            cmd = "adb kill-server and start-server"
-            subprocess.call(cmd, shell=True)
             if self.__udid and (self.__udid not in devices):
                 raise Exception("device '{}' not found!".format(self.__udid))
             elif not self.__udid and devices:
@@ -28,8 +25,6 @@ class DevicesUtils(object):
                 log_info('使用的设备为：{}'.format(self.__udid))
             elif not self.__udid:
                 raise Exception("Can‘t find device!")
-
-
 
             if platform.system() == "Windows":
                 pipe = os.popen("adb -s {} shell getprop | findstr product".format(self.__udid))
@@ -69,6 +64,7 @@ class DevicesUtils(object):
         if self.__platformName.lower() == 'android':
             pipe = os.popen("adb devices")
             deviceinfo = pipe.read()
+            print(deviceinfo)
             devices = deviceinfo.replace('\tdevice', "").split('\n')
             devices.pop(0)
             while "" in devices:

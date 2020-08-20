@@ -43,5 +43,4 @@ def analytical_file(path):
         if yaml_data:
             for key, value in yaml_data.items():
                 yaml_dict[key] = value
-    print("yaml_dict:",yaml_dict)
     return yaml_dict

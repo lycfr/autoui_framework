@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import traceback
 import subprocess
+
+import cv2
 from appium.webdriver.common.touch_action import TouchAction
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -23,6 +25,7 @@ class AndroidDriver(object):
             log_info('adb: {}'.format(cmd))
             if cmd.startswith('shell'):
                 cmd = ["adb", "-s", Var.udid, "shell", "{}".format(cmd.lstrip('shell').strip())]
+                print(cmd)
                 pipe = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE)
                 out = pipe.communicate()
@@ -31,6 +34,8 @@ class AndroidDriver(object):
                 os.system(' '.join(cmd))
         except:
             raise Exception(traceback.format_exc())
+
+
 
     @staticmethod
     def install_app(app_path):
@@ -89,6 +94,27 @@ class AndroidDriver(object):
             raise e
 
     @staticmethod
+    def black_for_elements(by, ele):
+        '''
+        :param name:
+        :return:
+        '''
+        if by == 'name':
+            elements = Var.appinstance.find_elements_by_accessibility_id(ele)
+
+        elif by == 'id':
+            elements = Var.appinstance.find_elements_by_id(ele)
+        elif by == 'xpath':
+            elements = Var.appinstance.find_elements_by_xpath(ele)
+        elif by == 'classname':
+            elements = Var.appinstance.find_elements_by_class_name(ele)
+        else:
+            elements = None
+        return elements
+
+
+
+    @staticmethod
     def get_screenshot_as_file(image_name):
         '''
         app端进行截图
@@ -101,26 +127,48 @@ class AndroidDriver(object):
             raise e
 
     @staticmethod
-    def black_for_elements(by, ele):
-        '''
-        :param name:
-        :return:
-        '''
-        print(by)
-        print(ele)
-        print(type(by))
-        print(type(ele))
-        if by == 'name':
-            elements = Var.appinstance.find_elements_by_accessibility_id(ele)
-        elif by == 'id':
-            elements = Var.appinstance.find_elements_by_id(ele)
-        elif by == 'xpath':
-            elements = Var.appinstance.find_elements_by_xpath(ele)
-        elif by == 'classname':
-            elements = Var.appinstance.find_elements_by_class_name(ele)
-        else:
-            elements = None
-        return elements
+    def seekBar(index = ''):
+        try:
+            e = Var.appinstance.find_element_by_android_uiautomator('new UiSelector().className("android.widget.SeekBar")')  # 使用uiautomator搭配class属性方法定位控制条
+            ex = e.location.get('x')  # 获取元素初始横坐标
+            ey = e.location.get('y')  # 获取元素初始纵坐标
+            if index == '':
+                Var.appinstance.tap([(ex,ey)],500)         #用tap方法点击拖动按钮的最左侧起始位置
+            elif 'x' in index:
+                # Var.appinstance.tap([(ex+400,ey)],500)      #用tap方法横向点击某按钮，ex+400,ey不变
+                Var.appinstance.tap([(index,ey)],500)      #用tap方法横向点击某按钮，ex+400,ey不变
+            elif 'y' in index:
+                # driver.swipe(ex, ey, ex + 400, ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
+                Var.appinstance.swipe(ex, ey, ex + 400, ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
+
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def tapSeekBar(index=''):
+        try:
+            e = Var.appinstance.find_element_by_android_uiautomator(
+                'new UiSelector().className("android.widget.SeekBar")')  # 使用uiautomator搭配class属性方法定位控制条
+            ex = e.location.get('x')  # 获取元素初始横坐标
+            ey = e.location.get('y')  # 获取元素初始纵坐标
+
+            # Var.appinstance.tap([(ex+400,ey)],500)      #用tap方法横向点击某按钮，ex+400,ey不变
+            Var.appinstance.tap([(ex+int(index), ey)], 500)  # 用tap方法横向点击某按钮，ex+400,ey不变
+
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def swipeSeekBar(index=''):
+        try:
+            e = Var.appinstance.find_element_by_android_uiautomator(
+                'new UiSelector().className("android.widget.SeekBar")')  # 使用uiautomator搭配class属性方法定位控制条
+            ex = e.location.get('x')  # 获取元素初始横坐标
+            ey = e.location.get('y')  # 获取元素初始纵坐标
+            # driver.swipe(ex, ey, ex + 400, ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
+            Var.appinstance.swipe(ex, ey, ex + int(index), ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
+        except Exception as e:
+            raise e
 
 
     @staticmethod
@@ -278,6 +326,11 @@ class AndroidDriver(object):
                 to_y = to_y * height
             AndroidDriver.adb_shell(
                 'shell input swipe {} {} {} {} {}'.format(from_x, from_y, to_x, to_y, duration * 100))
+            if Var.ocrimg is not None:
+                cv2.imwrite(Var.file, Var.ocrimg)
+                Var.ocrimg = None
+            else:
+                return Var.appinstance.save_screenshot(Var.file)
         except Exception as e:
             raise e
 
@@ -319,12 +372,10 @@ class AndroidDriver(object):
         :return:
         '''
         texts = list()
-        print("texts:", texts)
         try:
             for ele in elements:
                 text = ele.text
                 texts.append(text)
-            print("texts:return", texts)
             return texts
         except Exception as e:
             raise e
@@ -411,20 +462,6 @@ class AndroidDriver(object):
             raise e
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class iOSDriver(object):
 
     @staticmethod
@@ -480,28 +517,6 @@ class iOSDriver(object):
                 pass # todo 待补充
         except Exception as e:
             raise e
-
-    @staticmethod
-    def black_for_elements(by, ele):
-        '''
-        :param name:
-        :return:
-        '''
-        print(by)
-        print(ele)
-        print(type(by))
-        print(type(ele))
-        if by == 'name':
-            elements = Var.appinstance.find_elements_by_accessibility_id(ele)
-        elif by == 'id':
-            elements = Var.appinstance.find_elements_by_id(ele)
-        elif by == 'xpath':
-            elements = Var.appinstance.find_elements_by_xpath(ele)
-        elif by == 'classname':
-            elements = Var.appinstance.find_elements_by_class_name(ele)
-        else:
-            elements = None
-        return elements
 
     @staticmethod
     def get_screenshot_as_file(image_name):
@@ -668,6 +683,13 @@ class iOSDriver(object):
             if to_y <= 1.0:
                 to_y = to_y * height
             Var.appinstance.swipe(int(from_x), int(from_y), int(to_x), int(to_y), duration)
+
+            if Var.ocrimg is not None:
+                cv2.imwrite(Var.file, Var.ocrimg)
+                Var.ocrimg = None
+            else:
+                return Var.appinstance.save_screenshot(Var.file)
+
         except Exception as e:
             raise e
 
@@ -701,23 +723,6 @@ class iOSDriver(object):
             return text
         except Exception as e:
             raise e
-
-    # @staticmethod
-    # def get_texts(elements):
-    #     '''
-    #     :param element:
-    #     :return:
-    #     '''
-    #     texts = list()
-    #     print("texts:ios",texts)
-    #     try:
-    #         for ele in elements:
-    #             text = ele.text
-    #             texts.append(text)
-    #         print("texts:returnios", texts)
-    #         return texts
-    #     except Exception as e:
-    #         raise e
 
     @staticmethod
     def clear():
@@ -757,14 +762,29 @@ class iOSDriver(object):
         :param name:
         :return:
         '''
-        print("wait_for_elements_by_name---------------",name)
-
         try:
             elements = Var.appinstance.find_elements_by_accessibility_id(name)
-            print("elements:::",elements)
             return elements
         except Exception as e:
             raise e
+
+    @staticmethod
+    def black_for_elements(by,ele):
+        '''
+        :param name:
+        :return:
+        '''
+        if by == 'name':
+            elements = Var.appinstance.find_elements_by_accessibility_id(ele)
+        elif by == 'id':
+            elements = Var.appinstance.find_elements_by_id(ele)
+        elif by == 'xpath':
+            elements = Var.appinstance.find_elements_by_xpath(ele)
+        elif by == 'classname':
+            elements = Var.appinstance.find_elements_by_class_name(ele)
+        else:
+            elements = None
+        return elements
 
     @staticmethod
     def wait_for_elements_by_xpath(xpath, timeout=10, interval=1):

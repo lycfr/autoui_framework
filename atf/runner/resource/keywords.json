@@ -8,15 +8,16 @@
         "doubleTap",
         "press",
         "goBack",
+        "keyCode",
         "adb",
         "swipe",
         "click",
         "check",
-        "isContain",
         "input",
         "sleep",
         "break",
         "$.getText",
+        "$.getTexts",
         "$.id",
         "$.getVar",
         "$.setVar",
@@ -34,6 +35,14 @@
         "split",
         "replace",
         "log",
-        "compare_image"
+        "compare_image",
+        "seekBar",
+        "goTime",
+        "compareTime",
+        "addlist",
+        "listlen",
+        "findallNum",
+        "random",
+        "$.findIndex"
     ]
 }

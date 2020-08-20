@@ -3,6 +3,7 @@
 import os
 import cv2
 
+from atf.commons.logging import log_info
 from atf.commons.variable_global import Var
 
 
@@ -14,24 +15,20 @@ class OpencvUtils(object):
         self.baseimage = None
         self.matchimage = matchimage
         self.iszoom = False
-        print("OpencvUtils---action:",action,",matchimage:",matchimage)
 
     def save_screenshot(self):
         """
         截图
         :return:
         """
-        print("save_screenshot")
         try:
             ocrimg = os.path.join(Var.ROOT, 'OcrImg')
             if not os.path.exists(ocrimg):
                 os.makedirs(ocrimg)
             imgname = self.matchimage.split(os.sep)[-1]
             file_path = os.path.join(ocrimg, '{}_{}'.format(self.action, imgname))
-            print("file_path",file_path)
             Var.appinstance.save_screenshot(file_path)
             self.baseimage = file_path
-            print('self.baseimage ',self.baseimage)
             return self.baseimage
         except Exception as e:
             raise e
@@ -41,7 +38,6 @@ class OpencvUtils(object):
         提取特征点
         :return:
         """
-        print("extract_minutiae提取特征点")
         if os.path.exists(self.matchimage):
             self.baseimage = cv2.imread(self.baseimage)
             # self.baseimage = cv2.resize(self.baseimage, dsize=(int(self.baseimage.shape[1] / 2), int(self.baseimage.shape[0] / 2)))
@@ -175,5 +171,5 @@ class CompareImage():
 
         pre = round((sub_data / (x * y)), 6)
         # print(str(pre * 100) + '%')
-        print('Compare the image result is: ' + str(pre))
+        log_info('Compare the image result is:{} ' .format(str(pre)))
         return pre

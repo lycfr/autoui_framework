@@ -6,7 +6,6 @@ import time
 import json
 import inspect
 import unittest
-
 from atf.commons.logging import *
 from atf.drivers.app_driver_base import AppDriverBase
 from atf.drivers.web_driver_base import WebDriverBase
@@ -19,14 +18,18 @@ from atf.utils.web_server_utils import WebServerUtils
 from atf.utils.yaml_utils import analytical_file, Dict
 from atf.commons.variable_global import Var
 
+from atf.commons.logging import log_info
+
 
 class Project(object):
 
     def __init__(self):
+
         self.__init_project()
         self.__init_config()
         self.__init_logging()
         self.__analytical_testcase_file()
+        self.__analytical_pages_file()
         self.__init_data()
         self.__init_keywords()
         self.__init_images()
@@ -43,8 +46,12 @@ class Project(object):
             Var.global_var = {} # 全局变量
             Var.extensions_var = {} # 扩展数据变量
             Var.common_var = {} # common临时变量，call执行完后重置
+            Var.cases_var = {}
+            Var.black_list = list()
 
     def __init_config(self):
+
+        # self.__config = analytical_file(os.path.join(self.__ROOT, 'config.yaml'))
         for configK, configV in self.__config.items():
             if configK == 'desiredcaps':
                 Var.desired_caps = configV[0]
@@ -58,15 +65,22 @@ class Project(object):
                 Var.prefs = configV[0]
                 for profileK, profileV in Var.prefs.items():
                     Var[profileK] = profileV
+            elif configK == 'black_list':
+                Var.black_list = configV
             else:
                 Var[configK] = configV
+
         if "appdriver" in self.__config.keys():
+            log_info("******************* appdriver 初始化 *******************")
             AppDriverBase.init()
         if "web_driver" in self.__config.keys():
+            log_info("******************* web_driver 初始化 *******************")
             WebDriverBase.init()
 
 
+
     def __init_data(self):
+
         if os.path.exists(os.path.join(Var.ROOT, 'data.json')):
             with open(os.path.join(Var.ROOT, 'data.json'), 'r', encoding='utf-8') as f:
                 dict = Dict(json.load(fp=f))
@@ -78,6 +92,7 @@ class Project(object):
 
 
     def __init_keywords(self):
+
         default_keywords_path = os.path.join(__file__.split('project.py')[0], 'runner', 'resource', 'keywords.json')
         if os.path.exists(default_keywords_path):
             with open(default_keywords_path, 'r', encoding='utf-8') as f:
@@ -104,6 +119,7 @@ class Project(object):
             log_info('image path: {}'.format(Var.extensions_var['images_file']))
 
     def __init_logging(self):
+        log_info('******************* __init_logging *******************')
         if Var.platformName != None:
             devices = DevicesUtils(Var.platformName, Var.udid)
             Var.udid, deviceinfo = devices.device_info()
@@ -113,7 +129,8 @@ class Project(object):
             report_time = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
             report_child = "{}_{}".format(Var.web_driver.lower(), report_time)
 
-        Var.report = os.path.join(Var.ROOT, "Report",report_child)
+        # 生成报告地址
+        Var.report = os.path.join(Var.ROOT, "Report", report_child)
         if not os.path.exists(Var.report):
             os.makedirs(Var.report)
             os.makedirs(os.path.join(Var.report, 'resource'))
@@ -127,19 +144,18 @@ class Project(object):
         log_info('******************* analytical testcase *******************')
         testcase = TestCaseUtils()
         self.__testcase = testcase.testcase_path(Var.ROOT, Var.testcase)
-        log_info('testcase:{}'.format(self.__testcase))
+        Var.cases_var = self.__testcase
 
 
-    def __analytical_common_file(self):
-        log_info('******************* analytical common *******************')
-        Var.common_func = Dict()
-        common_dir = os.path.join(Var.ROOT, "Common")
-        for rt, dirs, files in os.walk(common_dir):
-            if rt == common_dir:
+
+    def __analytical_pages_file(self):
+        log_info('******************* analytical pages *******************')
+        Var.pages_func = Dict()
+        pages_dir = os.path.join(Var.ROOT, "pages")
+        for rt, dirs, files in os.walk(pages_dir):
+            if (rt == 'pages/app') | (rt == 'pages/web'):
                 self.__load_common_func(rt, files)
-            elif rt.split(os.sep)[-1].lower() == Var.platformName.lower():
-                self.__load_common_func(rt, files)
-        log_info('common: {}'.format(Var.common_func.keys()))
+        log_info('pages: {}'.format(Var.pages_func.keys()))
 
 
     def __load_common_func(self,rt ,files):
@@ -147,19 +163,24 @@ class Project(object):
             if not f.endswith('yaml'):
                 continue
             for commonK, commonV in analytical_file(os.path.join(rt, f)).items():
-                Var.common_func[commonK] = commonV
+                Var.pages_func[commonK] = commonV
+
 
 
     def __init_testcase_suite(self):
         self.__suite = []
         for case_path in self.__testcase:
-            testcase = analytical_file(case_path)
-            testcase['testcase_path'] = case_path
-            Var.testcase = testcase
+            if type(case_path) == str:
+                testcase = analytical_file(case_path)
+                testcase['testcase_path'] = case_path
+                Var.testcase = testcase
+            else:
+                testcase = analytical_file(case_path[0])
+                testcase['testcase_path'] = case_path[0] +'/' +case_path[1]
+                Var.testcase = testcase
             subsuite = unittest.TestLoader().loadTestsFromTestCase(RunCase)
             self.__suite.append(subsuite)
             Var.testcase = None
-
 
 
     def start(self):
@@ -179,4 +200,7 @@ class Project(object):
         suite = unittest.TestSuite(tuple(self.__suite))
         runner = TestRunner()
         runner.run(suite)
-        # server.stop_server()
+        if "appdriver" in self.__config.keys():
+            appserver.stop_server()
+        if "web_driver" in self.__config.keys():
+            web_driver.init()

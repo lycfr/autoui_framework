@@ -6,7 +6,7 @@ from concurrent import futures
 
 from atf.commons.logging import *
 from atf.commons.variable_global import Var
-
+from atf.utils.commom_utils import *
 
 
 class AppDriverBase(object):
@@ -90,6 +90,33 @@ class AppDriverBase(object):
         appdriver.get_screenshot_as_file(image_name)
         return image_name
 
+    @staticmethod
+    def seekBar():
+        '''
+        only appium
+        :return:
+        '''
+        print("进入滑动进度条")
+
+        appdriver.seekBar()
+    #     截图
+
+    @staticmethod
+    def tapSeekBar(x):
+        '''
+        only appium
+        :return:
+        '''
+        print("点击到进度条某一位置")
+        appdriver.tapSeekBar(x)
+
+    @staticmethod
+    def swipeSeekBar(x):
+        '''
+        only appium
+        :return:
+        '''
+        appdriver.swipeSeekBar(x)
     @staticmethod
     def background_app():
         '''
@@ -257,11 +284,25 @@ class AppDriverBase(object):
         :param index:
         :return:
         '''
-        elements = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval)
+        elements = AppDriverBase.get_eles(key=key, timeout=timeout, interval=interval)
         if not elements:
             raise Exception("Can't find element {}".format(key))
         textlist = appdriver.get_texts(elements)
         return textlist
+
+    @staticmethod
+    def get_eles(key, timeout=10, interval=1):
+        '''
+        :param key:
+        :param timeout:
+        :param interval:
+        :param index:
+        :return:
+        '''
+        elements = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=None)
+        if not elements:
+            raise Exception("Can't find element {}".format(key))
+        return elements
 
     @staticmethod
     def get_page_source():
@@ -277,7 +318,7 @@ class AppDriverBase(object):
 
 
     @staticmethod
-    def find_elements_by_key(key, timeout=10, interval=1, index=0):
+    def find_elements_by_key(key, timeout=10, interval=1, index=None):
         '''
         :param key:
         :param timeout:
@@ -328,6 +369,7 @@ class AppDriverBase(object):
         timeout = elements_info['timeout']
         interval = elements_info['interval']
         index = elements_info['index']
+
         if element_type == 'name':
             elements = appdriver.wait_for_elements_by_name(name=element, timeout=timeout, interval=interval)
         elif element_type == 'id':
@@ -340,18 +382,30 @@ class AppDriverBase(object):
         else:
             elements = None
         log_info('return elements: {}'.format(elements))
-        # if elements:
-        #     if len(elements) <= int(index):
-        #         log_error('elements exists, but cannot find index({}) position'.format(index), False)
-        #         raise Exception('list index out of range, index:{}'.format(index))
-        #     return elements[index]
-        # else:
-        #     return None
+
         try:
+            # if len(elements) <= int(index):
+            #     log_error('elements exists, but cannot find index({}) position'.format(index), False)
+            #     raise Exception('list index out of range, index:{}'.format(index))
             # 如果成功，清空错误计数
             _error_count = 0
-            return elements[index]
-        # else:
+            if elements_info['index'] != None:
+                # 进行截图Var.file
+                if Var.ocrimg is not None:
+                    cv2.imwrite(Var.file, Var.ocrimg)
+                    Var.ocrimg = None
+                else:
+                    # Var.instance.save_screenshot(Var.file)app_screenshot_eles_steps
+                    app_screenshot_steps(elements[index], Var.tmp_file, Var.file, zoom=1.0)
+                return elements[index]
+            else:
+                # 截图
+                if Var.ocrimg is not None:
+                    cv2.imwrite(Var.file, Var.ocrimg)
+                    Var.ocrimg = None
+                else:
+                    app_screenshot_eles_steps(elements, Var.tmp_file, Var.file, zoom=1.0)
+                return elements
         except Exception as e:
             # 如果次数太多，就退出异常逻辑，直接报错
             if _error_count > _error_max:
@@ -361,7 +415,6 @@ class AppDriverBase(object):
             # 对黑名单里的弹框进行处理
             for i in Var.black_list:
                 w = re.split('[(,)]', i)
-                log_info(i)
                 elements = appdriver.black_for_elements(w[1], w[2])
                 if len(elements) > 0:
                     elements[0].click()

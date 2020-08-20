@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
+import random
 import sys
 import time
+from ast import literal_eval
+from datetime import datetime
 
 from atf.commons.logging import *
 from atf.commons.variable_global import Var
 from atf.drivers.app_driver_base import AppDriverBase
 from atf.drivers.web_driver_base import WebDriverBase
+from atf.utils.commom_utils import app_screenshot_steps
 from atf.utils.opcv_utils import OpencvUtils, CompareImage
 
 
@@ -100,6 +104,23 @@ class ActionExecutor(object):
         """
         AppDriverBase.adb_shell('shell input keyevent 4')
 
+    def __action_keyCode(self, action):
+        """
+        行为执行：
+        :param action:
+        :return:
+        """
+        # import os
+        # 查看当前输入法有哪些adb shell ime list -s
+        AppDriverBase.adb_shell('shell ime set com.sohu.inputmethod.sogou/.SogouIME')
+        # os.system("adb shell ime set com.sohu.inputmethod.sogou/.SogouIME")  # 从默认的appium输入法 切换到 搜狗输入法
+        time.sleep(3)
+        str1 = "input keyevent " +  str(action.parms[0])
+        AppDriverBase.adb_shell(str1)
+        time.sleep(3)
+        AppDriverBase.adb_shell('shell ime set io.appium.settings/.UnicodeIME')
+        # os.system("adb shell ime set io.appium.settings/.UnicodeIME")  # 切换回app
+
     def __action_tap(self, action):
         """
         行为执行：tap
@@ -169,12 +190,49 @@ class ActionExecutor(object):
         if len(parms) == 1:
             text = AppDriverBase.get_text(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0)
         elif len(parms) == 2:
+            print(action.parms)
+            print(parms[0])
+            print(parms[-1])
             text = AppDriverBase.get_text(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[-1])
         else:
             raise TypeError('getText missing 1 required positional argument: element')
+        t = text.strip()
+        return t
+
+    def __action_getTexts(self, action):
+        """
+        行为执行：getText
+        :param action:
+        :return:
+        """
+        parms = action.parms
+        if len(parms):
+            text = AppDriverBase.get_texts(key=parms[0], timeout=Var.timeout, interval=Var.interval)
+        else:
+            raise TypeError('getTexts missing 1 required positional argument: element')
         return text
 
-
+    def __action_findIndex(self, action):
+        """
+        行为执行：findIndex
+        :param action:
+        :return:
+        """
+        parms = action.parms
+        if len(parms):
+            text = parms[0]
+            texts = parms[1]
+            fi_index = 0
+            if len(parms) == 3:
+                fi_index = parms[2]
+            index = [i for i, x in enumerate(texts) if x.find(text) != -1]
+            if len(index) == 0:
+                log_error("Can't find text {}".format(text))
+                return None
+            else:
+                return index[fi_index]
+        else:
+            raise TypeError('findIndex missing 1 required no argument')
 
 
     def __action_click(self, action):
@@ -244,8 +302,8 @@ class ActionExecutor(object):
 
     def __action_isContain(self,action):
         pagesource = AppDriverBase.get_page_source()
-
-        if action.parms in pagesource:
+        str = action.parms.strip("\'")
+        if str in pagesource:
             return True
         else:
             return False
@@ -311,6 +369,7 @@ class ActionExecutor(object):
         elif len(parms) == 1:
             time.sleep(float(parms[0]))
 
+
     def __ocr_analysis(self, action, element, israise):
         """
         :param action:
@@ -331,16 +390,50 @@ class ActionExecutor(object):
                 raise Exception("Can't find element {}".format(element))
             else:
                 return None
-
     def __action_getVar(self, action):
         '''
         :return:
         '''
         if action.key == '$.getText':
             result = self.__action_getText(action)
+
+        elif action.key == '$.getTexts':
+            result = self.__action_getTexts(action)
+        elif action.key == '$.findIndex':
+            result = self.__action_findIndex(action)
         elif action.key == '$.id':
+            print('$.id:',action.parms)
+
             result = eval(action.parms)
+
+        elif action.key == 'listlen':
+            print('listlen:str', action.parms)
+            result = self.__action_listlen(action)
+
+        elif action.key == 'random':
+            print('listlen:str', action.parms)
+            result = self.__action_random(action)
+
+        elif action.key == 'findallNum':
+            print('findall:str中所有的数字', action.parms)
+            result = self.__action_findallNum(action)
+
+        elif action.key == 'split':
+            print("__action_split")
+            result = self.__action_split(action)
+        elif action.key == 'addlist':
+            print("addlist")
+            result = self.__action_addlist(action)
+
+        elif action.key == 'goTime':
+            print("goTime")
+            result = self.__action_goTime(action)
+        elif action.key == 'compareTime':
+            print("goTime")
+            result = self.__action_compareTime(action)
+
         elif action.key == 'isContain':
+            print("进入isContain")
             result = self.__action_isContain(action)
         elif action.key == 'compare_image':
             result = self.__action_compare_image(action)
@@ -360,10 +453,12 @@ class ActionExecutor(object):
                 exec(l)
             func = f'{action.key}({action.parms})'
             result = eval(func)
+
         else:
            result = action.parms[0]
         log_info(f'{action.name}: {result}')
         return result
+
 
     def __action_setVar(self, action):
         '''
@@ -412,16 +507,39 @@ class ActionExecutor(object):
             log_info('没有对应参数：{}'.format(action.parms))
         return now
 
-    def __action_log(self,action):
+    def __action_log(self, action):
         """
         打印对应日志信息
         :param action:
         :return:
         """
         parms = action.parms
-        print('split,parms::::', parms)
-        print(len(parms))
-        log_info(action.parms[0])
+        if len(parms):
+            log_info(action.parms[0])
+        else:
+            log_info('没有对应参数：{}'.format(action.parms))
+
+    def __action_seekBar(self, action):
+        """
+
+        :param action: 滑动__action_seekBar
+        :return:
+        """
+
+        parms = action.parms
+        if len(parms):
+            if len(parms) == 1:
+                log_info('对应参数：{}填写错误'.format(action.parms))
+            elif len(parms) == 2:
+                if parms[0] == 'tap':
+                    AppDriverBase.tapSeekBar(parms[1])
+                elif parms[0] == 'swipe':
+                    AppDriverBase.swipeSeekBar(parms[1])
+
+        else:
+            log_info('没有对应参数：{}'.format(action.parms))
+            # 滑动到最开始位置
+            AppDriverBase.seekBar()
 
     def __action_compare_image(self, action):
         """
@@ -448,19 +566,84 @@ class ActionExecutor(object):
         :param action:
         :return:
         """
-        splits = []
-        parms = action.parms
-        if len(parms):
-            if len(parms) == 1:
-                splits = parms[0].split()
-            elif len(parms) == 2:
-                splits = parms[0].split(parms[1])
-            return splits
+        listparams = action.parms.split(",")
+        if len(action.parms):
+            s1 = listparams[0].strip("'")
+            if len(listparams) == 1:
+                splits = s1.split()
+                return splits
+            elif len(listparams) == 2:
+                splits = s1.split(listparams[1])
+                return splits
+            elif len(listparams) == 3:
+                splits = s1.split(listparams[1])
+                if len(splits) >= int(listparams[2]):
+                    return splits[int(listparams[2])]
+                else:
+                    log_info('数组越界：{}'.format(splits))
         else:
             log_info('没有对应参数：{}'.format(action.parms))
 
+    def __action_listlen(self, action):
+        listparam = literal_eval(action.parms)
+        result = len(listparam)
+        return result
+
+    def __action_random(self, action):
+        listparams = action.parms.split(",")
+        # randint, 0,${len_itemWordList}
+        if len(listparams):
+
+            if len(listparams) == 3:
+                if 'randint' == listparams[0]:
+                    result = random.randint(int(listparams[1]),int(listparams[2]))
+        else:
+            log_info('没有对应参数：{}'.format(action.parms))
+
+        return result
+
+    def __action_findallNum(self, action):
+        import re
+        result = re.sub("\D","",action.parms)
+        return result
 
 
+    def __action_addlist(self, action):
+        listparam = literal_eval(action.parms)
+        lists = []
+        if len(listparam):
+            if list == type(listparam):
+                lists = listparam
+            elif tuple == type(listparam):
+                listparam[0].extend(listparam[1])
+                lists = listparam[0]
+            else:
+                log_info('---没有对应参数：{}'.format(action.parms))
+        else:
+            log_info('没有对应参数：{}'.format(action.parms))
+
+        dlists = sorted(set(lists), key=lists.index)
+        return dlists
+
+    def __action_goTime(self, action):
+        listparam = action.parms.split(",")
+        s1 = listparam[0].strip("'")
+        b = datetime.strptime(s1, '%M:%S')
+        pp = b.timestamp() + int(listparam[1])
+        date = datetime.fromtimestamp(pp)
+        endtime = str(date.strftime('%M:%S'))
+        return endtime
+
+    def __action_compareTime(self, action):
+        listparam = action.parms.split(",")
+        s1 = listparam[0].strip("'")
+        s2 = listparam[1].strip("'")
+        b = datetime.strptime(s1, '%M:%S')
+        pp = b.timestamp()
+        b1 = datetime.strptime(s2, '%M:%S')
+        pp1 = b1.timestamp()
+        diff = int(pp1 - pp)
+        return diff
 
     def __action_web_getAttribute(self, action):
         """
@@ -559,73 +742,110 @@ class ActionExecutor(object):
         :param action:
         :return:
         """
+
         if action.tag and action.tag == 'getVar' :
             result = self.__action_getVar(action)
+            # ele =
         elif action.tag and action.tag == 'setVar':
             result = self.__action_setVar(action)
+
         elif action.tag and action.tag == 'call':
             result = self.__action_call(action)
+
         elif action.tag and action.tag == 'other':
             result = self.__action_other(action)
+
         elif action.key == 'installApp':
             result = self.__action_install_app(action)
+
         elif action.key == 'uninstallApp':
             result = self.__action_uninstall_app(action)
+
         elif action.key == 'launchApp':
             result = self.__action_start_app(action)
+
         elif action.key == 'closeApp':
             result = self.__action_stop_app(action)
+
         elif action.key == 'tap':
             result = self.__action_tap(action)
+
         elif action.key == 'doubleTap':
             result = self.__action_doubleTap(action)
+
         elif action.key == 'press':
             result = self.__action_press(action)
+
         elif action.key == 'goBack':
             result = self.__action_goback(action)
+
+        elif action.key == 'keyCode':
+            result = self.__action_keyCode(action)
+
         elif action.key == 'adb':
             result = self.__action_adb(action)
+
         elif action.key == 'swipe':
             result = self.__action_swipe(action)
+
         elif action.key == 'click':
             result = self.__action_click(action)
+
         elif action.key == 'check':
             result = self.__action_check(action)
+
         elif action.key == 'input':
             result = self.__action_input(action)
+
+
         elif action.key == 'sleep':
             result = self.__action_sleep(action)
+
         elif action.key == 'ifiOS':
             result = self.__action_ifiOS(action)
+
         elif action.key == 'ifAndroid':
             result = self.__action_ifAndroid(action)
+
         elif action.key == 'ifcheck':
             result = self.__action_ifcheck(action)
+
         elif action.key == 'elifcheck':
             result = self.__action_ifcheck(action)
+
         elif action.key == 'break':
             result = None
+
         elif action.key == 'else':
+            # elifresults = [True,False,False]
+            #只要有一个True，就不会再继续执行else
             if True in self.elifresults:
                 result = None
             else:
                 result = "else"
-        elif action.key == 'isContain':
-            result = self.__action_isContain(action)
+
         elif action.key == 'webInput':
             result = self.__action_web_input(action)
+
         elif action.key == 'webClick':
             result = self.__action_web_click(action)
+
         elif action.key == 'webGetAttribute':
             result = self.__action_web_getAttribute(action)
-        elif action.key == 'split':
-            result = self.__action_split(action)
+
         elif action.key == 'replace':
             result = self.__action_replace(action)
+
+        elif action.key == 'seekBar':
+            result = self.__action_seekBar(action)
+
         elif action.key == 'log':
             result = self.__action_log(action)
+
         elif action.key == 'compare_image':
             result = self.__action_compare_image(action)
+
         else:
             raise KeyError('The {} keyword is undefined!'.format(action.key))
+
         return result

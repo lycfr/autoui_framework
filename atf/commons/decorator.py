@@ -42,7 +42,10 @@ def keywords(func, *args, **kwds):
         Var.exception_flag = False
         snapshot_index = Var.case_snapshot_index
         imagename = "Step_{}.png".format(snapshot_index)
-        file = os.path.join(Var.snapshot_dir, imagename)
+        tmp_imagename = "tmp_Step_{}.png".format(snapshot_index)
+        Var.file = os.path.join(Var.snapshot_dir, imagename)
+        Var.tmp_file = os.path.join(Var.snapshot_dir, tmp_imagename)
+
         action_step = args[-2].step
         action_tag = args[-2].tag
         style = args[-1]
@@ -56,15 +59,6 @@ def keywords(func, *args, **kwds):
             exception_flag = True
         finally:
             try:
-                if Var.ocrimg is not None:
-                    cv2.imwrite(file, Var.ocrimg)
-                    Var.ocrimg = None
-                else:
-                    list_file = file.split("/")
-                    if 'web' == list_file[2]:
-                        Var.webinstance.save_screenshot(file)
-                    if 'app' == list_file[2]:
-                        Var.appinstance.save_screenshot(file)
                 stop_time = time.time()
                 duration = str('%.1f' % (stop_time - start_time))
 
