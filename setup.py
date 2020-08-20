@@ -25,8 +25,7 @@ setuptools.setup(
     url="http://gitlab.igetcool.com/qa/autoui_framework",
     packages=setuptools.find_packages(),
     include_package_data=True,
-    #package_data={'atf/result':['resource/*']},
-    package_data = ['', ['*.css','*.js']],
+    package_data={'atf/result':['resource/*']},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
