@@ -1,0 +1,16 @@
+module: Login
+skip: false
+description: app
+steps:
+  - click('com.dedao.juvenile:id/notificationBtn')
+  - input('com.dedao.juvenile:id/etMobile','12300001399')
+  - click("//*[@text='发送验证码']")
+  - input('com.dedao.juvenile:id/vecEditText','8888')
+#  - check('com.dedao.juvenile:id/itemTitle', 1)
+#  - if check('com.dedao.juvenile:id/itemTitle', 1):
+#    - ${login} = True #登录成功
+#    - goBack
+#  - else: #进行登录
+#    - input('com.dedao.juvenile:id/etMobile','12300001399')
+#    - click("//*[@text='发送验证码']")
+#    - input('com.dedao.juvenile:id/vecEditText','8888')

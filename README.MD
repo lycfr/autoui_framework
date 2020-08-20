@@ -27,18 +27,27 @@
 [issues](https://github.com/Jodeee/fasttest/issues)
 
 
+# 打包
+```
+建立setup.py
+
+python3 setup.py bdist_egg
+
+easy_install atf-0.0.1-py3.6.eg
+```
+
+
+# pip安装cd 
+
+```
+pip install git+http://gitlab.igetcool.com/qa/autoui_framework#egg=atf
+```
+
 # 参考
 
 https://www.yuque.com/jodeee/kb/uie02g#77ZLs
 
 https://testerhome.com/topics/24661
-
-
-
-
-# 参考
-
-用例地址
 
 https://github.com/Jodeee/fasttestDemo 
  

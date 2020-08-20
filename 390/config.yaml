@@ -1,0 +1,37 @@
+testenv: test
+appdriver: appium
+caps:
+  - chromedriverpath: '/Users/gaijinfeng/Downloads/chromedriver/2.37/chromedriver'
+    host: 127.0.0.1
+desiredcaps:
+  - platformName : 'android'
+    udid: 'emulator-5554'
+    deviceName: 'emulator-5554'
+    # Android
+    restart: true
+    package: com.dedao.juvenile
+    activity: com.dedao.juvenile.business.splash.SplashActivity
+    automationName: UiAutomator2
+    noReset: True
+    enableWebviewDetailsCollection: True
+    autoGrantPermissions: True
+    unicodeKeyboard: True
+    resetKeyboard: True
+    newCommandTimeout: 3600
+main:
+  - ${islogin} = isContain(免费专区)
+web_driver: chrome
+prefs:
+  - profile.default_content_setting_values.media_stream_camera: 1
+    profile.default_content_setting_values.media_stream_mic: 1
+    profile.default_content_setting_values.notifications: 1
+    profile.default_content_setting_values.geolocation: 1
+path: '/Users/gaijinfeng/Downloads/chromedriver/83.0.41003/chromedriver'
+url: 'https://live.igetcool.com/weblivev2/?roomId=2279088&scheduleId=484550672833875968'
+
+
+
+testcase:
+  - testcase/appTestcase/AppProfile.yaml/APPLogin
+  - testcase/webTestcase/TeacherEntryRoom.yaml
+  - testcase/appTestcase/AppInClass.yaml

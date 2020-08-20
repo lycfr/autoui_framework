@@ -1,0 +1,20 @@
+module: APPLogin
+skip: false
+description: appLogin
+steps:
+  - click('com.dedao.juvenile:id/notificationBtn')
+  - sleep(3)
+  - ${islogin} = isContain(系统通知)
+  - sleep(3)
+  - if ${islogin}: #进行登录
+    - goBack
+  - elif False:
+    - sleep(10)
+  - else:
+    - sleep(3)
+    - input('com.dedao.juvenile:id/etMobile','12345698028')
+    - sleep(3)
+    - click("//*[@text='发送验证码']")
+    - sleep(3)
+    - input('com.dedao.juvenile:id/vecEditText','8888')
+#登录成功
