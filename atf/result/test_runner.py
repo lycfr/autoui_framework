@@ -5,7 +5,7 @@ import sys
 import time
 import unittest
 
-from atf.common.variable_global import Var
+from atf.commons.variable_global import Var
 from atf.result.test_result import TestResult
 from atf.result.html_result import HTMLTestRunner
 

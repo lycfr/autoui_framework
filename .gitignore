@@ -19,4 +19,6 @@ SuperApp.log
 504
 venv/*
 example/*
-
+atf.egg-info/*
+dist/*
+.DS_Store/*
