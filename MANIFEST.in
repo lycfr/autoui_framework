@@ -1,1 +1,2 @@
-include fasttest/result/resource/*
+include atf/result/resource/*
+include atf/resource/resource/*
