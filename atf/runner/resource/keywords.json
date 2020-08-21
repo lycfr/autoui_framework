@@ -8,7 +8,7 @@
         "doubleTap",
         "press",
         "goBack",
-        "keyCode",
+        "goSearch",
         "adb",
         "swipe",
         "click",
