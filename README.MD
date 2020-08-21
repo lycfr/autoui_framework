@@ -33,7 +33,7 @@
 
 python3 setup.py bdist_egg
 
-easy_install atf-0.0.1-py3.6.eg
+easy_install *.egg
 ```
 
 

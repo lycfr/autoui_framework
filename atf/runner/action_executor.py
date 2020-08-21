@@ -22,6 +22,17 @@ class ActionExecutor(object):
         self.elifresults = []
 
 
+
+    def __action_getPageSource(self,action):
+        """
+        获取页面元素
+        :return:
+        """
+        # parms = action.parms
+        return AppDriverBase.get_page_source()
+
+
+
     def __from_scripts_file(self):
 
         file_list = []
@@ -388,10 +399,12 @@ class ActionExecutor(object):
                 raise Exception("Can't find element {}".format(element))
             else:
                 return None
+
     def __action_getVar(self, action):
         '''
         :return:
         '''
+
         if action.key == '$.getText':
             result = self.__action_getText(action)
 
@@ -407,6 +420,9 @@ class ActionExecutor(object):
 
         elif action.key == 'random':
             result = self.__action_random(action)
+
+        elif action.key == 'getPageSource':
+            result = self.__action_getPageSource(action)
 
         elif action.key == 'findallNum':
             result = self.__action_findallNum(action)
@@ -834,6 +850,8 @@ class ActionExecutor(object):
         elif action.key == 'compare_image':
             result = self.__action_compare_image(action)
 
+        elif action.key == 'getPageSource':
+            result = self.__action_getPageSource(action)
         else:
             raise KeyError('The {} keyword is undefined!'.format(action.key))
 

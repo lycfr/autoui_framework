@@ -22,3 +22,4 @@ example/*
 atf.egg-info/*
 dist/*
 .DS_Store/*
+idea/*

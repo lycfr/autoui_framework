@@ -43,6 +43,7 @@
         "listlen",
         "findallNum",
         "random",
-        "$.findIndex"
+        "$.findIndex",
+        "getPageSource"
     ]
 }
