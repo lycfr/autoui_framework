@@ -36,13 +36,23 @@ black_list:
 
 
 testcase:
+  #app首页语文课
+#  - testcase/appTestcase/TestYuWen.yaml/TestUnloginYoungYuWen
+
   #学生端少年头条
 #  - testcase/appTestcase/TestYoungHeadlines.yaml/TestYoungWord
 #  - testcase/appTestcase/TestYoungHeadlines.yaml/TestYoungWord1
 #  - testcase/appTestcase/TestYoungHeadlines.yaml/TestYoungMini
 
+  #首页的搜索框-直接点击搜索
+  - testcase/appTestcase/TestYoungSearch.yaml/TestYoungSearch
+  #首页的搜索框-输入对应文字搜索
+  - testcase/appTestcase/TestYoungSearch.yaml/TestInputSearch
+  #首页搜索框-热词搜索
+  - testcase/appTestcase/TestYoungSearch.yaml/TestHotsearch
+
   #播放页面一倍速
-  - testcase/appTestcase/TestYoungHeadlines.yaml/TestOneSpeedVoice
+#  - testcase/appTestcase/TestYoungHeadlines.yaml/TestOneSpeedVoice
   #播放页面2倍速
 #  - testcase/appTestcase/TestYoungHeadlines.yaml/TestTwoSpeedVoice
   #播放页面点上一个播放按钮，弹出这是第一条

@@ -105,22 +105,19 @@ class ActionExecutor(object):
         log_info("点击手机返回按键")
         AppDriverBase.adb_shell('shell input keyevent 4')
 
-    def __action_keyCode(self, action):
+    def __action_gosearch(self, action):
         """
         行为执行：
         :param action:
         :return:
         """
-        # import os
+        log_info("点击搜狗输入法的搜索按键")
         # 查看当前输入法有哪些adb shell ime list -s
         AppDriverBase.adb_shell('shell ime set com.sohu.inputmethod.sogou/.SogouIME')
-        # os.system("adb shell ime set com.sohu.inputmethod.sogou/.SogouIME")  # 从默认的appium输入法 切换到 搜狗输入法
         time.sleep(3)
-        str1 = "input keyevent " +  str(action.parms[0])
-        AppDriverBase.adb_shell(str1)
+        AppDriverBase.adb_shell("input keyevent 66")
         time.sleep(3)
         AppDriverBase.adb_shell('shell ime set io.appium.settings/.UnicodeIME')
-        # os.system("adb shell ime set io.appium.settings/.UnicodeIME")  # 切换回app
 
     def __action_tap(self, action):
         """
@@ -768,8 +765,8 @@ class ActionExecutor(object):
         elif action.key == 'goBack':
             result = self.__action_goback(action)
 
-        elif action.key == 'keyCode':
-            result = self.__action_keyCode(action)
+        elif action.key == 'goSearch':
+            result = self.__action_gosearch(action)
 
         elif action.key == 'adb':
             result = self.__action_adb(action)

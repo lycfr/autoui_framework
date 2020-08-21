@@ -21,7 +21,7 @@ methods:
             #获取默认搜索框内的文字为
             - ${etSearchInput} = $.getText('com.dedao.juvenile:id/etSearchInput')
             #切换到搜狗输入法后，点击66搜索按钮
-            - keyCode(66)
+            - goSearch
             - sleep(2)
             - ${isEtSearchInput} = isContain(${etSearchInput})
             - $.setVar('isEtSearchInput',${isEtSearchInput})
@@ -35,7 +35,7 @@ methods:
             #获取默认搜索框内的文字为
             - input('com.dedao.juvenile:id/etSearchInput',${InputSearch})
             #切换到搜狗输入法后，点击66搜索按钮
-            - keyCode(66)
+            - goSearch
             - sleep(2)
             - ${isInputSearch} = isContain(${InputSearch})
             - $.setVar('isInputSearch',${isInputSearch})
