@@ -1,0 +1,31 @@
+module: app
+description: 语文课
+input: []
+output: []
+
+methods:
+    YuWen:
+        desc: 点击首页金刚位-语文课
+        steps:
+            #点击首页金刚位-语文课com.dedao.juvenile:id/itemCategoryImageView
+            - click('com.dedao.juvenile:id/itemCategoryImageView')
+            #进入语文页面
+            - sleep(2)
+
+
+
+    UnloginYoungYuWen:
+        desc: 未登录时，幼升小页面title为四个
+        steps:
+            #点击语文课页面的选择年级阶段按钮com.dedao.juvenile:id/imv_right_image_3
+            - click('com.dedao.juvenile:id/txt_right_title_small')
+            #选择幼升小com.dedao.juvenile:id/tv_choose_grade_name
+            - ${itemWordList} = $.getText('com.dedao.juvenile:id/tv_choose_grade_name')
+            - click('com.dedao.juvenile:id/tv_choose_grade_name')
+            - sleep(2)
+            - ${itemWordList} = $.getTexts('com.dedao.juvenile:id/tvTitle')
+            - swipe(up)
+            - ${itemWordList1} = $.getTexts('com.dedao.juvenile:id/tvTitle')
+            - ${listTitle} = addlist(${itemWordList},${itemWordList1})
+            - $.setVar('listTitle',${listTitle})
+            - goBack

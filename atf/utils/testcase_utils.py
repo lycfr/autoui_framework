@@ -20,10 +20,10 @@ class TestCaseUtils(object):
 
 
     def testcase_path(self, dirname, paths):
+        print("testcase_path",dirname, paths)
         if not paths:
             raise Exception('test case is empty.')
         self.__testcase_list = yaml_testMethod(paths)
-
         for path in self.__testcase_list:
             file_path = os.path.join(dirname, path[0])
             if os.path.isfile(file_path):

@@ -38,7 +38,7 @@ class Project(object):
     def __init_project(self):
 
         for path in [path  for path in inspect.stack() if str(path[1]).endswith("runtest.py")]:
-            self.__ROOT = os.path.dirname(path[1])
+            self.__ROOT = os.path.dirname(path[1]) + "test/"
             self.__config = analytical_file(os.path.join(self.__ROOT, 'config.yaml'))
             sys.path.append(self.__ROOT)
             sys.path.append(os.path.join(self.__ROOT, 'Scripts'))
@@ -143,6 +143,7 @@ class Project(object):
             log_info('{}: {}'.format(configK, configV))
         log_info('******************* analytical testcase *******************')
         testcase = TestCaseUtils()
+        print("Var.ROOT, Var.testcase",Var.ROOT, Var.testcase)
         self.__testcase = testcase.testcase_path(Var.ROOT, Var.testcase)
         Var.cases_var = self.__testcase
 

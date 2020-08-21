@@ -1,0 +1,14 @@
+module: TestYuWen
+description: 首页进入语文课页面
+input: [yongList]
+output: []
+
+methods:
+    TestUnloginYoungYuWen:
+        desc: 语文课，没有登录用户，幼升小页面
+        steps:
+            - pages/app/YuWen.yaml/YuWen
+            - pages/app/YuWen.yaml/UnloginYoungYuWen
+            - ${listTitle} = $.getVar('listTitle')
+            - assert ${yongList} == str(${listTitle})
+

@@ -1,0 +1,178 @@
+module: app
+description: app少年头条播放页面
+input: [toast]
+output: []
+methods:
+    OneLabelVoice:
+        desc: 播放倍速选择正常倍速
+        steps:
+            #进行选择倍速
+            - click('com.dedao.juvenile:id/ivSpeed')
+            #点击正常倍速
+            - click('com.dedao.juvenile:id/label2')
+            #点击开始暂停按钮
+            - click('com.dedao.juvenile:id/ivPlay')
+            #等待2秒
+            - sleep(2)
+            #获取当前时间显示
+            - ${OneLabetvCurrentDuration} = $.getText('com.dedao.juvenile:id/tvCurrentDuration')
+            - $.setVar('OneLabetvCurrentDuration',${OneLabetvCurrentDuration})
+
+    TwoLabelVoice:
+        desc: 播放倍速选择2倍速
+        steps:
+            #进行选择倍速
+            - click('com.dedao.juvenile:id/ivSpeed')
+            #点击2倍速
+            - click('com.dedao.juvenile:id/label5')
+            - ${isTvSpeed} = check(com.dedao.juvenile:id/tvSpeed)
+            - if ${isTvSpeed}:
+                  - ${tvSpeed} = $.getText('com.dedao.juvenile:id/tvSpeed')
+            - if '2.0x' == ${tvSpeed}:
+                  - click('com.dedao.juvenile:id/ivPlay')
+                  - sleep(2)
+                  - ${TwoLabetvCurrentDuration} = $.getText('com.dedao.juvenile:id/tvCurrentDuration')
+                  - $.setVar('TwoLabetvCurrentDuration',${TwoLabetvCurrentDuration})
+
+    ListAudio:
+        desc: 获取列表标题，点击后退按钮，页面弹出对应toast
+        steps:
+          #点击列表按钮
+          - click('com.dedao.juvenile:id/ivList')
+          #获取列表对应标题名com.dedao.juvenile:id/itemTitle
+          - ${itemTitles} = $.getTexts('com.dedao.juvenile:id/itemTitle')
+          - log(${itemTitles})
+          - $.setVar('itemTitles',${itemTitles})
+          #点击播放列表标题的关闭按钮
+          - click('com.dedao.juvenile:id/closeBtn')
+          #获取当前的播放标题
+          - ${nowTitle} = $.getText('com.dedao.juvenile:id/tvTitle')
+          - ${nowTitleIndex} = $.findIndex(${nowTitle},${itemTitles})
+          - $.setVar('nowTitleIndex',${nowTitleIndex})
+
+
+    ivPreAudio:
+        desc: 点击上一个播放按钮
+        steps:
+          # 点击上一个播放按钮
+          - click('com.dedao.juvenile:id/ivPreAudio')
+          - ${preTitle} = $.getText('com.dedao.juvenile:id/tvTitle')
+          - $.setVar('preTitle',${preTitle})
+
+
+    NextAudio:
+        desc: 点击下一个播放按钮
+        steps:
+          #点击下一个播放按钮com.dedao.juvenile:id/ivNextAudio
+          - click('com.dedao.juvenile:id/ivNextAudio')
+          - ${nextTitle} = $.getText('com.dedao.juvenile:id/tvTitle')
+          - $.setVar('nextTitle',${nextTitle})
+
+
+
+    FifteenTimeOff:
+        desc: 定时关闭按钮，列表下的15分钟
+        steps:
+          #点击页面定时关闭按钮
+          - click('com.dedao.juvenile:id/ivTimer')
+          #选择定时关闭下的15分钟
+          - click('com.dedao.juvenile:id/label1')
+          - sleep(2)
+          - ${isTvTimer} = check(com.dedao.juvenile:id/tvTimer)
+          - if ${isTvTimer}:
+            - ${tvTimer} = $.getText('com.dedao.juvenile:id/tvTimer')
+            - $.setVar('tvTimer',${tvTimer})
+
+    FinishedTimeOff:
+        desc: 定时关闭按钮，列表下的播完当前音频
+        steps:
+          #点击页面定时关闭按钮
+          - click('com.dedao.juvenile:id/ivTimer')
+          #选择定时关闭下的播完当前音频com.dedao.juvenile:id/tvTotalDuration
+          - click('com.dedao.juvenile:id/label4')
+          - sleep(2)
+          - ${isTvTimer} = check(com.dedao.juvenile:id/tvTimer)
+          - if ${isTvTimer}:
+            - ${FinishedTvTimer} = $.getText('com.dedao.juvenile:id/tvTimer')
+            - $.setVar('FinishedTvTimer',${FinishedTvTimer})
+
+    TotalDuration:
+        desc: 获取当前播放页面的，总分钟数
+        steps:
+          - ${tvTotalDuration} = $.getText('com.dedao.juvenile:id/tvTotalDuration')
+          - ${TotalMinute} = split(${tvTotalDuration},:,0)
+          - $.setVar('TotalMinute',${TotalMinute})
+
+    CloseTimeOff:
+        desc: 关闭当前倒计时
+        steps:
+          #点击页面定时关闭按钮
+          - click('com.dedao.juvenile:id/ivTimer')
+          #选择定时关闭下的关闭当前倒计时按钮
+          - click('com.dedao.juvenile:id/label5')
+
+
+    CommentNum:
+        desc: 当前播放页面的精选留言数有多少
+        steps:
+           - ${tvCommentNum} = $.getText('com.dedao.juvenile:id/tvCommentNum')
+           - $.setVar('tvCommentNum',${tvCommentNum})
+
+    CommentPage:
+        desc: 播放页面点击留言，进入精选留言页面，查看精选留言个数，大于10条
+        steps:
+          #播放页面点击留言
+          - click('com.dedao.juvenile:id/ivComment')
+          #当前播放页面的精选留言数有多少
+          - ${main_title} = $.getText('com.dedao.juvenile:id/txt_main_title')
+          - ${titleCommentNum} = findallNum(${main_title})
+          - ${flag} = True
+          - while ${flag}:
+              - ${isAudioClose} = check(com.dedao.juvenile:id/ivAudioClose)
+              - if ${isAudioClose}:
+                  - click('com.dedao.juvenile:id/ivAudioClose')
+
+              - ${tv_comment_contents1} = $.getTexts('com.dedao.juvenile:id/tv_comment_content') #[1]
+
+              - if ${comment_contents} != None:
+                  - ${comment_contents} = addlist(${comment_contents},${tv_comment_contents1})
+              - else:
+                  - ${comment_contents} = addlist(${tv_comment_contents1}) #[1]
+              - ${len_contents} = listlen(${comment_contents})
+              - if ${len_contents} == int(${titleCommentNum}):
+                  - ${flag} = False
+                  - $.setVar('len_contents',${len_contents})
+                  - break
+              - else:
+                  - swipe(0.5,0.75,0.5,0.35)
+                  #                  - ${tv_comment_contents2} = $.getTexts('com.dedao.juvenile:id/tv_comment_content')
+                  #                  - ${comment_contents} = addlist(${tv_comment_contents1},${tv_comment_contents2})
+                  - ${flag} = True
+
+
+    6CommentPage:
+        desc: 播放页面点击留言，进入精选留言页面，查看精选留言个数，小于10条
+        steps:
+          - click('com.dedao.juvenile:id/ivComment')
+          - ${flag} = True
+          - while ${flag}:
+              - ${isAudioClose} = check(com.dedao.juvenile:id/ivAudioClose)
+              - if ${isAudioClose}:
+                  - click('com.dedao.juvenile:id/ivAudioClose')
+
+              - ${tv_comment_contents1} = $.getTexts('com.dedao.juvenile:id/tv_comment_content') #[1]
+
+              - if ${comment_contents} != None:
+                  - ${comment_contents} = addlist(${comment_contents},${tv_comment_contents1})
+              - else:
+                  - ${comment_contents} = addlist(${tv_comment_contents1}) #[1]
+
+              - ${isEndtext} = isContain(有知识的少年最酷)
+              - if ${isEndtext}:
+                  - ${flag} = False
+                  - break
+              - else:
+                  - swipe(0.5,0.75,0.5,0.35)
+#                  - ${tv_comment_contents2} = $.getTexts('com.dedao.juvenile:id/tv_comment_content')
+#                  - ${comment_contents} = addlist(${tv_comment_contents1},${tv_comment_contents2})
+                  - ${flag} = True
