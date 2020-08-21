@@ -19,9 +19,7 @@ class AppServerUtils(object):
             return None
 
 
-    def __init__(self, appdriver,caps, desired_capabilities):
-        print("ServerUtils--__init__",appdriver)
-
+    def __init__(self, appdriver,appmodule,caps, desired_capabilities):
         if appdriver.lower() in ['appium', 'macaca']:
             self.appdriver = appdriver.lower()
         else:
@@ -51,15 +49,10 @@ class AppServerUtils(object):
             log_info('    {}: {}'.format(key, value))
             object.__setattr__(self, key, value)
 
-
+        self.appmodule = appmodule.lower()
         self.appinstance = None
         self.desired_capabilities = desired_capabilities_dict
         self.port = self.__get_device_port()
-        current_path = os.path.abspath(os.path.dirname(__file__))
-
-        self.appium_log = os.path.join(current_path, "log/appium.log")
-        print("canshu :::",self.desired_capabilities)
-        print(self.appium_log)
 
 
 
@@ -99,7 +92,7 @@ class AppServerUtils(object):
             if result:
                 continue
             else:
-                log_info('get port return {}'.format(port))
+                # log_info('get port return {}'.format(port))
                 return port
         return 3456
 
@@ -125,9 +118,10 @@ class AppServerUtils(object):
             self.stop_server()
             if self.appdriver == 'appium':
                 self.pipe = subprocess.Popen('appium -a {} -p {} --session-override --log-level info'.format('127.0.0.1', self.port), stdout=subprocess.PIPE, shell=True)
-
-                thread = threading.Thread(target=self.__print_appium_log)
-                thread.start()
+                log_info('Appium REST http interface listener started on {}:{}'.format('127.0.0.1', self.port))
+                if self.appmodule == 'debug':
+                    thread = threading.Thread(target=self.__print_appium_log)
+                    thread.start()
                 time.sleep(5)
             else:
                 # ob = subprocess.Popen('macaca server -p {}'.format(self.port), stdout=subprocess.PIPE, shell=True)
@@ -135,7 +129,7 @@ class AppServerUtils(object):
                 #     out_ = str(out_, encoding='utf-8')
                 #     log_info(out_.strip())
                 #     if 'Macaca server started' in out_: break
-                print('其他服务')
+                log_info('其他服务')
         except Exception as e:
             raise e
 
@@ -155,7 +149,7 @@ class AppServerUtils(object):
                         self.appinstance.implicitly_wait(10)
                     time.sleep(10)
                 else:
-                    print(self._driver)
+                    log_info(self._driver)
                     # todo:
                     self.appinstance.start_activity(self.desired_capabilities["appPackage"], self.desired_capabilities["appActivity"])
             else:
@@ -163,7 +157,7 @@ class AppServerUtils(object):
                 # self.appinstance = Webdriver(url='{}:{}/wd/hub'.format(self.url, self.port),
                 #                           desired_capabilities=self.desired_capabilities)
                 # self.appinstance.init()
-                print('myou')
+                log_info('没有')
             return self.appinstance
 
         except Exception as e:

@@ -201,7 +201,6 @@ class ActionAnalysis(object):
 
         if re.match(r'\$\.(\w)+\(.*\)', var_value):
             key = var_value.split('(', 1)[0]
-            print("key----",key)
             if key == '$.id':
                 parms = self.__get_replace_string(var_value.split(key, 1)[-1][1:-1])
             else:
@@ -248,7 +247,6 @@ class ActionAnalysis(object):
         
     def __match_keywords(self, step, style):
         if re.match(' ', step):
-            print(re.match(' ', step))
             raise SyntaxError(f'"{step}"')
         step = step.strip()
 

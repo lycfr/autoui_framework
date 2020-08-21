@@ -48,9 +48,10 @@ class TestInfo(object):
         self.module_name = test_method.module
         self.description = test_method.description
 
+
 class TestResult(unittest.TextTestResult):
 
-    def __init__(self,stream, descriptions, verbosity,infoclass = None):
+    def __init__(self,stream, descriptions,verbosity,infoclass = None):
         super(TestResult,self).__init__(stream,descriptions,verbosity)
         self.stream = stream
         self.showAll = verbosity > 1

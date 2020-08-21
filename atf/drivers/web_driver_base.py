@@ -82,6 +82,7 @@ class WebDriverBase(object):
         element = WebDriverBase.find_elements_by_key(key1=key1, key2=key2, timeout=timeout, interval=interval, index=index)
         if not element:
             raise Exception("Can't find element {}".format(key1,key2))
+        log_info("click:{}".format(element))
         element.click()
         time.sleep(2)
 

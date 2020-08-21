@@ -96,10 +96,8 @@ class AppDriverBase(object):
         only appium
         :return:
         '''
-        print("进入滑动进度条")
-
+        log_info("滑动进度条")
         appdriver.seekBar()
-    #     截图
 
     @staticmethod
     def tapSeekBar(x):
@@ -107,7 +105,7 @@ class AppDriverBase(object):
         only appium
         :return:
         '''
-        print("点击到进度条某一位置")
+        log_info("点击到进度条某一位置")
         appdriver.tapSeekBar(x)
 
     @staticmethod
@@ -228,6 +226,7 @@ class AppDriverBase(object):
         element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index)
         if not element:
             raise Exception("Can't find element {}".format(key))
+        log_info("click:{},{}".format(key,index))
         element.click()
 
     @staticmethod
@@ -381,7 +380,7 @@ class AppDriverBase(object):
             elements = appdriver.wait_for_elements_by_classname(classname=element, timeout=timeout, interval=interval)
         else:
             elements = None
-        log_info('return elements: {}'.format(elements))
+        # log_info('查找到对应元素列表为: {}'.format(elements))
 
         try:
             # if len(elements) <= int(index):

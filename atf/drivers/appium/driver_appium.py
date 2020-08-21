@@ -22,10 +22,9 @@ class AndroidDriver(object):
         :return:
         '''
         try:
-            log_info('adb: {}'.format(cmd))
+            log_info('adb对应命令为: {}'.format(cmd))
             if cmd.startswith('shell'):
                 cmd = ["adb", "-s", Var.udid, "shell", "{}".format(cmd.lstrip('shell').strip())]
-                print(cmd)
                 pipe = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE)
                 out = pipe.communicate()
@@ -68,15 +67,14 @@ class AndroidDriver(object):
         :param package_info: Android(package/activity) or iOS(bundleId)
         :return:
         '''
-        # try:
-        #     if not package_info:
-        #         Var.appinstance.launch_app()
-        #     else:
-        #         AndroidDriver.adb_shell('shell am start -W {}'.format(package_info))
-        #
-        # except Exception as e:
-        #     raise e
-        print("guoguoguo")
+        try:
+            if not package_info:
+                Var.appinstance.launch_app()
+            else:
+                AndroidDriver.adb_shell('shell am start -W {}'.format(package_info))
+
+        except Exception as e:
+            raise e
 
     @staticmethod
     def close_app(package_info):

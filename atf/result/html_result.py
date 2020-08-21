@@ -113,7 +113,8 @@ class Template_mixin(object):
     # module_name
     MODULE_NAME = r'''
                 <tr>
-                    <td class="module_td" colspan="2" style=" text-align:left; text-indent: 20px;">{module_name}</td>
+                    <td class="module_td" colspan="1" style=" text-align:left; text-indent: 20px;">{module_name}</td>
+                    <td class="module_td" colspan="1" style=" text-align:left; text-indent: 20px;">{pardescription}</td>
                     <td class="module_td" colspan="3"><span class="Pass status">&nbsp;Pass:{Pass}&nbsp;</span> | <span class="failure status">&nbsp;failure:{failure}&nbsp;</span> | <span class="error status">&nbsp;error:{error}&nbsp;</span> | <span class="skipped status">&nbsp;skipped:{skipped}&nbsp;</span></td>
                     <td class="module_name" data-tag='module_{tag_module_name}'>Open</td>
                 </tr>
@@ -185,7 +186,7 @@ class Template_mixin(object):
 
     DEFAULT_TITLE = 'Unit Test Report'
     DEFAULT_DESCRIPTION = ''
-
+    DEFAULT_PARDESCRIPTION = ''
 class HTMLTestRunner(Template_mixin):
 
     def __init__(self, stream=sys.stdout, verbosity=1, title=None, description=None):
@@ -193,6 +194,7 @@ class HTMLTestRunner(Template_mixin):
         self.verbosity = verbosity
         self.title = title if title else self.DEFAULT_TITLE
         self.description = description if description else self.DEFAULT_DESCRIPTION
+
 
     def generateReport(self,result,starttime,stoptime):
         report_attrs = self._getReportAttributes(result, starttime, stoptime)
@@ -232,15 +234,17 @@ class HTMLTestRunner(Template_mixin):
             failure = 0
             error = 0
             skipped = 0
-
             cls_list = []
+            pardescription = ""
             for tup_result in cls_results:
                 _status = tup_result[0]
                 testinfo = tup_result[1]
 
+                descriptions = testinfo.description.split("/")
+                pardescription = descriptions[0]
+
                 caseinfo = self._generate_case(testinfo, status_list[_status])
                 cls_list.append(caseinfo)
-
                 if _status != 3: # 跳过
                     casedeta = self._generate_case_deta(testinfo)
                     cls_list.append(casedeta)
@@ -254,8 +258,11 @@ class HTMLTestRunner(Template_mixin):
                 elif _status == 3:
                     skipped += 1
 
+            pardescription = pardescription if pardescription else self.DEFAULT_PARDESCRIPTION
+
             module_name = self.MODULE_NAME.format(
                 module_name = module_name,
+                pardescription = pardescription,
                 Pass = Pass,
                 failure = failure,
                 error = error,
@@ -308,9 +315,12 @@ class HTMLTestRunner(Template_mixin):
             return heading
 
     def _generate_case(self,testinfo,status):
-
         casename = testinfo.casename
-        description = testinfo.description
+        # description = testinfo.description
+        descriptions = testinfo.description.split("/")
+        description = descriptions[1]
+        # print("testinfo.description:",testinfo.description)
+
         startTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(testinfo.start_time))
         duration = str(int(testinfo.stop_time - testinfo.start_time)) + 's'
         dataId = testinfo.dataId

@@ -102,6 +102,7 @@ class ActionExecutor(object):
         :param action:
         :return:
         """
+        log_info("点击手机返回按键")
         AppDriverBase.adb_shell('shell input keyevent 4')
 
     def __action_keyCode(self, action):
@@ -190,9 +191,6 @@ class ActionExecutor(object):
         if len(parms) == 1:
             text = AppDriverBase.get_text(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0)
         elif len(parms) == 2:
-            print(action.parms)
-            print(parms[0])
-            print(parms[-1])
             text = AppDriverBase.get_text(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[-1])
         else:
             raise TypeError('getText missing 1 required positional argument: element')
@@ -402,38 +400,29 @@ class ActionExecutor(object):
         elif action.key == '$.findIndex':
             result = self.__action_findIndex(action)
         elif action.key == '$.id':
-            print('$.id:',action.parms)
-
             result = eval(action.parms)
 
         elif action.key == 'listlen':
-            print('listlen:str', action.parms)
             result = self.__action_listlen(action)
 
         elif action.key == 'random':
-            print('listlen:str', action.parms)
             result = self.__action_random(action)
 
         elif action.key == 'findallNum':
-            print('findall:str中所有的数字', action.parms)
             result = self.__action_findallNum(action)
 
         elif action.key == 'split':
-            print("__action_split")
             result = self.__action_split(action)
         elif action.key == 'addlist':
-            print("addlist")
             result = self.__action_addlist(action)
 
         elif action.key == 'goTime':
-            print("goTime")
             result = self.__action_goTime(action)
+
         elif action.key == 'compareTime':
-            print("goTime")
             result = self.__action_compareTime(action)
 
         elif action.key == 'isContain':
-            print("进入isContain")
             result = self.__action_isContain(action)
         elif action.key == 'compare_image':
             result = self.__action_compare_image(action)
@@ -618,7 +607,7 @@ class ActionExecutor(object):
                 listparam[0].extend(listparam[1])
                 lists = listparam[0]
             else:
-                log_info('---没有对应参数：{}'.format(action.parms))
+                log_info('没有对应参数：{}'.format(action.parms))
         else:
             log_info('没有对应参数：{}'.format(action.parms))
 

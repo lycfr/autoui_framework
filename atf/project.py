@@ -192,7 +192,7 @@ class Project(object):
             Var.webinstance.maximize_window()
             log_info('******************* web open {}*******************'.format(Var.url))
         if Var.appdriver != None:
-            appserver = AppServerUtils(Var.appdriver, Var.caps, Var.desired_caps)
+            appserver = AppServerUtils(Var.appdriver, Var.appmodule,Var.caps, Var.desired_caps)
             appserver.start_server()
             Var.appinstance = appserver.start_connect()
             log_info('******************* app open *******************')

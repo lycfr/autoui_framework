@@ -25,6 +25,13 @@ class TestCase(unittest.TestCase):
             raise NameError("name 'testcase' is not defined")
         for key, value in Var.testcase.items():
             setattr(self, key, value)
+
+        self.testcase_path_list = []
+        self.testcase_path_list = split_yaml(self.testcase_path)
+        methodname = self.testcase_path_list[1]
+        self.method = self.methods[methodname]
+        self.desc = self.method['desc']
+        self.description = self.description + "/" + self.desc
         self.snapshot_dir = os.path.join(Var.report, self.module, self.testcase_path.split(os.sep)[-1].split(".")[0])
 
     def run(self, result=None):
@@ -36,14 +43,10 @@ class TestCase(unittest.TestCase):
             Var.snapshot_dir = self.snapshot_dir
             if not os.path.exists(Var.snapshot_dir):
                 os.makedirs(Var.snapshot_dir)
+            log_info("******************* TestMthod {} Start *******************".format(self.description))
+            log_info("******************* TestSteps *******************")
 
-            log_info("******************* TestCase {} Start *******************".format(self.description))
-            self.testcase_path_list = []
-            self.testcase_path_list = split_yaml(self.testcase_path)
-            methodname = self.testcase_path_list[1]
-            method = self.methods[methodname]
-            log_info("******************* TestMthod {} Start *******************".format(method['desc']))
-            testSteps = method['steps']
+            testSteps = self.method['steps']
             self.__testcases_list = yaml_testMethod(testSteps)
             for ii in self.__testcases_list:
                 if type(ii) == str:
@@ -51,9 +54,12 @@ class TestCase(unittest.TestCase):
                 elif (type(ii) == list) and (len(ii) == 2):
                     listyaml = yaml_steps(ii)
                     for l in listyaml:
+                        log_info(l)
                         Var.testcase_steps.append(l)
+            log_info("******************* Run TestSteps *******************")
             unittest.TestCase.run(self, result)
             Var.testcase_steps = []
+
 
             log_info(
                 "******************* Total: {}, Pass: {}, Failed: {}, Error: {}, Skipped: {} ********************\n"

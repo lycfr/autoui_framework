@@ -53,7 +53,6 @@ def split_yaml(sp):
     value = s[1]
     dd.append(key)
     dd.append(value)
-    print("dd:",dd)
     return dd
 
 #test里面yaml文件解析
