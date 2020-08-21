@@ -46,7 +46,7 @@ class TestRunner(unittest.TextTestRunner):
         html_runner = HTMLTestRunner(stream=fp,
                                      title='Test Results',
                                      description='Test')
-        # html_runner.generateReport(result,starTime,stopTime)
+        html_runner.generateReport(result,starTime,stopTime)
         fp.close()
 
         return result

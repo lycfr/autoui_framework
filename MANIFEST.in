@@ -1,2 +1,2 @@
 include atf/result/resource/*
-include atf/resource/resource/*
+include atf/runner/resource/*
