@@ -96,7 +96,7 @@ class OpencvUtils(object):
         outImg = None
         outImg = cv2.drawMatches(self.baseimage, keypoints1, self.matchimage, keypoints2, MatchePoints, outImg, matchColor=(0, 255, 0),
                                  flags=cv2.DRAW_MATCHES_FLAGS_DEFAULT)
-        # cv2.imwrite("outimg.png", outImg)
+        cv2.imwrite(Var.file, outImg)
 
         matchinfo = {
             'x':int(x),

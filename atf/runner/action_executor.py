@@ -249,7 +249,13 @@ class ActionExecutor(object):
         """
         parms = action.parms
         if len(parms):
-            if len(parms) == 1:
+            img_info = self.__ocr_analysis(action.action, parms[0], True)
+            if not isinstance(img_info, bool):
+                Var.ocrimg = img_info['ocrimg']
+                x = img_info['x']
+                y = img_info['y']
+                AppDriverBase.tap(x, y)
+            elif len(parms) == 1:
                 AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0)
             elif len(parms) == 2:
                 AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1])

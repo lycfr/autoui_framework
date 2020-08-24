@@ -460,6 +460,26 @@ class AndroidDriver(object):
             raise e
 
 
+
+
+
+    @staticmethod
+    def save_context(self):
+        _current_context = Var.appinstance.context
+        if "WEBVIEW" in _current_context:
+            _current_window = Var.appinstance.current_window_handle
+
+    @staticmethod
+    def restore_context(self):
+        if self._current_context != Var.appinstance.context:
+            Var.appinstance.switch_to.context(self._current_context)
+
+        if "WEBVIEW" in self._current_context:
+            Var.appinstance.switch_to.window(self._current_window)
+            logging.info(Var.appinstance.page_source)
+
+
+
 class iOSDriver(object):
 
     @staticmethod
