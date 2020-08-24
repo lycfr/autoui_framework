@@ -411,6 +411,9 @@ class ActionExecutor(object):
             result = self.__action_findIndex(action)
         elif action.key == '$.id':
             result = eval(action.parms)
+        # 获取对应列表中某一个元素
+        elif action.key == '$.getOne':
+            result = self.__action_oneInList(action)
 
         elif action.key == 'listlen':
             result = self.__action_listlen(action)
@@ -590,6 +593,24 @@ class ActionExecutor(object):
         listparam = literal_eval(action.parms)
         result = len(listparam)
         return result
+
+
+    def __action_oneInList(self, action):
+        parms = action.parms
+        listName = parms[0]
+        param = parms[1]
+        if len(parms):
+            if int == type(param):
+                result = listName[param]
+                return result
+            elif str == type(param):
+                result = listName.index(param)
+                return result
+            else:
+                log_info('没有对应参数：{}'.format(action.parms))
+        else:
+            raise TypeError('getOne missing 1 required positional argument: action')
+
 
     def __action_random(self, action):
         listparams = action.parms.split(",")
