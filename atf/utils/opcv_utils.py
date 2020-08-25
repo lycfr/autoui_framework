@@ -115,7 +115,7 @@ class OpencvUtils(object):
         outImg = cv2.drawMatches(self.baseimage, keypoints1, self.matchimage, keypoints2, MatchePoints, img_matches,
                                  matchColor=(0, 255, 0),
                                  flags=cv2.DRAW_MATCHES_FLAGS_DEFAULT)
-        cv2.imwrite(Var.file, outImg)
+        # cv2.imwrite(Var.file, outImg)
         print("x",x,",y:",y)
         matchinfo = {
             'x':int(x),

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import time
 import traceback
 import subprocess
 
@@ -195,6 +196,8 @@ class AndroidDriver(object):
             if y <= 1.0:
                 y = y * height
             Var.appinstance.tap([(int(x), int(y))])
+            time.sleep(1)
+            Var.appinstance.save_screenshot(Var.file)
         except Exception as e:
             raise e
 
