@@ -175,13 +175,37 @@ class ActionExecutor(object):
         if parms is None:
             raise TypeError('swipe missing 4 required positional argument: from_x, from_y, to_x, to_y')
         if parms[0] == 'up':
-            AppDriverBase.swipe_up()
+            if len(parms) == 2:
+                n = int(parms[1])
+            else:
+                n = 1
+            log_info("向上滑动{}次".format(n))
+            for i in range(n):
+                AppDriverBase.swipe_up()
         elif parms[0] == 'down':
-            AppDriverBase.swipe_down()
+            if len(parms) == 2:
+                n = int(parms[1])
+            else:
+                n = 1
+            log_info("向下滑动{}次".format(n))
+            for i in range(n):
+                AppDriverBase.swipe_down()
         elif parms[0] == 'left':
-            AppDriverBase.swipe_left()
+            if len(parms) == 2:
+                n = int(parms[1])
+            else:
+                n = 1
+            log_info("向左滑动{}次".format(n))
+            for i in range(n):
+                AppDriverBase.swipe_left()
         elif parms[0] == 'right':
-            AppDriverBase.swipe_right()
+            if len(parms) == 2:
+                n = int(parms[1])
+            else:
+                n = 1
+            log_info("向右滑动{}次".format(n))
+            for i in range(n):
+                AppDriverBase.swipe_right()
         elif len(parms) == 4:
             AppDriverBase.swipe(float(action.parms[0]), float (action.parms[1]), float(action.parms[2]), float(action.parms[3]))
         elif len(parms) == 5:
