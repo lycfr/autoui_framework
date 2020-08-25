@@ -67,7 +67,8 @@ class AppDriverBase(object):
         :param package_info: Android(package/activity) or iOS(bundleId)
         :return:
         '''
-        appdriver.launch_app(package_info)
+        print("lauch_app")
+        # appdriver.launch_app(package_info)
 
     @staticmethod
     def close_app(package_info):
