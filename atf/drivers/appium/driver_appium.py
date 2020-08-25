@@ -275,6 +275,7 @@ class AndroidDriver(object):
             width = Var.appinstance.get_window_size()['width']
             height = Var.appinstance.get_window_size()['height']
             AndroidDriver.swipe(width / 2, height / 4, width / 2, height * 3 / 4, duration)
+
         except Exception as e:
             raise e
 
@@ -327,11 +328,9 @@ class AndroidDriver(object):
                 to_y = to_y * height
             AndroidDriver.adb_shell(
                 'shell input swipe {} {} {} {} {}'.format(from_x, from_y, to_x, to_y, duration * 100))
-            if Var.ocrimg is not None:
-                cv2.imwrite(Var.file, Var.ocrimg)
-                Var.ocrimg = None
-            else:
-                return Var.appinstance.save_screenshot(Var.file)
+
+            time.sleep(1)
+            Var.appinstance.save_screenshot(Var.file)
         except Exception as e:
             raise e
 
@@ -653,6 +652,7 @@ class iOSDriver(object):
             width = Var.appinstance.get_window_size()['width']
             height = Var.appinstance.get_window_size()['height']
             iOSDriver.swipe(width / 2, height / 4, width / 2, height * 3 / 4, duration)
+
         except Exception as e:
             raise e
 
