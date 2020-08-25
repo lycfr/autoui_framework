@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import cv2
+import numpy as np
 
 from atf.commons.logging import log_info
 from atf.commons.variable_global import Var
@@ -40,32 +41,45 @@ class OpencvUtils(object):
         """
         if os.path.exists(self.matchimage):
             self.baseimage = cv2.imread(self.baseimage)
-            # self.baseimage = cv2.resize(self.baseimage, dsize=(int(self.baseimage.shape[1] / 2), int(self.baseimage.shape[0] / 2)))
             self.matchimage = cv2.imread(self.matchimage)
 
-            view_height = Var.appinstance.get_window_size()['height']
-            image_height = self.baseimage.shape[0]
+            view_height = Var.appinstance.get_window_size()['height']#获取手机屏幕的高度
+            image_height = self.baseimage.shape[0]#图像的大小可以通过其shape属性来获取，shape返回的是一个tuple元组，第一个元素表示图像的高度，第二个表示图像的宽度，第三个表示像素的通道数。
+            print("image_height",image_height)
             if view_height * 2 == image_height:
                 self.iszoom = True
 
         else:
             raise FileExistsError(self.matchimage)
-
+        '''
+        1.使用SIFT算法检测特征点、描述符
+        '''
         # 创建一个SURF对象
-        surf = cv2.xfeatures2d.SURF_create(1000)
-
+        #SURF将SIFT中的Laplacian of a Gaussian（LOG）用一个方框滤波（box filter）代替。opencv2:cv2.SURF，opencv3:cv2.xfeatures2d.SURF_create()
+        #大的值输出的数量比较少但是它们更为突出，相比之下输出较小的值虽然多但是不够突出（就是与普通差别不够大）
+        min_hessian = 1000
+        surf = cv2.xfeatures2d.SURF_create(min_hessian)
         # SIFT对象会使用Hessian算法检测关键点，并且对每个关键点周围的区域计算特征向量。该函数返回关键点的信息和描述符
         keypoints1, descriptor1 = surf.detectAndCompute(self.baseimage, None)
         keypoints2, descriptor2 = surf.detectAndCompute(self.matchimage, None)
 
         if descriptor2 is None:
             return None
-
+        '''
+        2、FLANN匹配
+        '''
         # 特征点匹配
         matcher = cv2.FlannBasedMatcher()
-        matchePoints = matcher.match(descriptor1, descriptor2)
-
-        # #提取强匹配特征点
+        matchePoints = matcher.match(descriptor1, descriptor2)#(self, queryDescriptors, trainDescriptors, mask=None)
+        # matchePoints = matcher.knnMatch(descriptor1, descriptor2, k=2)#(self, queryDescriptors, trainDescriptors, k, mask=None, compactResult=None)
+        '''
+        matchePoints
+        queryIdx：测试图像的特征点描述符的下标（第几个特征点描述符），同时也是描述符对应特征点的下标。
+        trainIdx：样本图像的特征点描述符下标,同时也是描述符对应特征点的下标。
+        distance：代表这怡翠匹配的特征点描述符的欧式距离，数值越小也就说明俩个特征点越相近
+        .pt:关键点坐标，.angle：表示关键点方向，.response表示响应强度，.size:标书该点的直径大小
+        '''
+        #提取强匹配特征点
         minMatch = 1
         maxMatch = 0
         for i in range(len(matchePoints)):
@@ -75,37 +89,40 @@ class OpencvUtils(object):
                 maxMatch = matchePoints[i].distance
         if minMatch > 0.2:
             return None
-        # #获取排雷在前边的几个最优匹配结果
-        DMatch = None
+        # #获取排列在前边的几个最优匹配结果
         MatchePoints = []
         for i in range(len(matchePoints)):
             if matchePoints[i].distance == minMatch:
-
                 keypoint = keypoints1[matchePoints[i].queryIdx]
                 x, y = keypoint.pt
                 if self.iszoom:
                     x = x / 2.0
                     y = y / 2.0
-                keypoints1 = [keypoint]
-
+                # keypoints1 = [keypoint]
                 dmatch = matchePoints[i]
+
                 dmatch.queryIdx = 0
                 MatchePoints.append(dmatch)
+                # print("MatchePoints.append(dmatch)",MatchePoints)
+
 
         # 绘制最优匹配点
+        img_matches = np.empty((max(self.baseimage.shape[0], self.matchimage.shape[0]), self.baseimage.shape[1] + self.matchimage.shape[1], 3), dtype=np.uint8)
+
         outImg = None
-        outImg = cv2.drawMatches(self.baseimage, keypoints1, self.matchimage, keypoints2, MatchePoints, outImg, matchColor=(0, 255, 0),
+        # outImg = cv2.drawMatches(self.baseimage, keypoints1, self.matchimage, keypoints2, MatchePoints, outImg, matchColor=(0, 255, 0),
+        #                          flags=cv2.DRAW_MATCHES_FLAGS_DEFAULT)
+        outImg = cv2.drawMatches(self.baseimage, keypoints1, self.matchimage, keypoints2, MatchePoints, img_matches,
+                                 matchColor=(0, 255, 0),
                                  flags=cv2.DRAW_MATCHES_FLAGS_DEFAULT)
         cv2.imwrite(Var.file, outImg)
-
+        print("x",x,",y:",y)
         matchinfo = {
             'x':int(x),
             'y':int(y),
             'ocrimg':outImg
         }
-        print("matchinfo:::000",matchinfo)
         return matchinfo
-
 
 
 from PIL import Image
