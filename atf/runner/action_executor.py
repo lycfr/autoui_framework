@@ -431,6 +431,9 @@ class ActionExecutor(object):
         elif action.key == 'getPageSource':
             result = self.__action_getPageSource(action)
 
+        elif action.key == 'compare_image':
+            result = self.__action_compare_image(action)
+
         elif action.key == 'findallNum':
             result = self.__action_findallNum(action)
 
@@ -871,9 +874,6 @@ class ActionExecutor(object):
 
         elif action.key == 'log':
             result = self.__action_log(action)
-
-        elif action.key == 'compare_image':
-            result = self.__action_compare_image(action)
 
         elif action.key == 'getPageSource':
             result = self.__action_getPageSource(action)
