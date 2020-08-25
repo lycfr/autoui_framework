@@ -249,6 +249,7 @@ class ActionExecutor(object):
         """
         parms = action.parms
         if len(parms):
+            print("action.action",action.action)
             img_info = self.__ocr_analysis(action.action, parms[0], True)
             if not isinstance(img_info, bool):
                 Var.ocrimg = img_info['ocrimg']
@@ -450,8 +451,7 @@ class ActionExecutor(object):
 
         elif action.key == 'isContain':
             result = self.__action_isContain(action)
-        elif action.key == 'compare_image':
-            result = self.__action_compare_image(action)
+
         elif action.key == 'check':
             result = self.__action_check(action)
         elif action.key == '$.getVar':
@@ -569,7 +569,12 @@ class ActionExecutor(object):
         if parms in Var.extensions_var['images_file']:
             file1 = Var.extensions_var['images_file'][parms]
             result = compare_image.compare_image(file1,file2)
-            return float(result)
+            # return float(result)
+            if float(result) > 0.85:
+                return True
+            else:
+                return False
+
         else:
             raise KeyError('The {} keyword is undefined!'.format(action.step))
 
