@@ -68,7 +68,7 @@ class AppDriverBase(object):
         :return:
         '''
         print("lauch_app")
-        # appdriver.launch_app(package_info)
+        appdriver.launch_app(package_info)
 
     @staticmethod
     def close_app(package_info):
