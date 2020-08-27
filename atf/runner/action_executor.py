@@ -892,7 +892,6 @@ class ActionExecutor(object):
         elif action.key == 'pressElement':
             result = self.__action_pressElement(action)
 
-
         elif action.key == 'goBack':
             result = self.__action_goback(action)
 
