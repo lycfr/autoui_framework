@@ -13,6 +13,7 @@
         "swipe",
         "click",
         "check",
+        "getElements",
         "input",
         "sleep",
         "break",

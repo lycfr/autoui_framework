@@ -287,6 +287,33 @@ class ActionExecutor(object):
         else:
             raise TypeError('click missing 1 required positional argument: element')
 
+
+    def __action_getElements(self, action):
+        '''
+        获取到元素列表
+        :param element:
+        :param timeout:
+        :param interval:
+        :param index:
+        :return:
+        '''
+        parms = action.parms
+        print('__action_getElements {}'.format(parms))
+        print('__action_getElements type {}'.format(type(parms)))
+        elements = None
+        if len(parms) == 1:
+            elements = AppDriverBase.find_elements_by_key(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=None)
+        elif len(parms) == 2:
+            elements = AppDriverBase.find_elements_by_key(key=parms[0], timeout=Var.timeout, interval=Var.interval,
+                                                          index=parms[1])
+
+        if  elements == None:
+            raise Exception("Can't find element {}".format(parms))
+
+        return elements
+
+
+
     def __action_check(self, action):
         """
         行为执行：check
@@ -475,6 +502,9 @@ class ActionExecutor(object):
 
         elif action.key == 'isContain':
             result = self.__action_isContain(action)
+
+        elif action.key == 'getElements':
+            result = self.__action_getElements(action)
 
         elif action.key == 'check':
             result = self.__action_check(action)
