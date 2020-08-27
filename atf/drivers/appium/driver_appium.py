@@ -248,7 +248,8 @@ class AndroidDriver(object):
         :return:
         '''
         try:
-            Var.appinstance.long_press(element=element, duration=duration)
+            # Var.appinstance.long_press(element=element, duration=duration)
+            TouchAction(Var.appinstance).long_press(el=element,duration=duration).perform()
         except Exception as e:
             raise e
 
@@ -599,7 +600,7 @@ class iOSDriver(object):
             raise e
 
     @staticmethod
-    def press(x, y, duration=2):
+    def press(el=None, x=None, y=None, duration=2):
         '''
         :param x:
         :param y:
@@ -613,7 +614,10 @@ class iOSDriver(object):
                 x = x * width
             if y <= 1.0:
                 y = y * height
-            Var.appinstance.long_press(x=int(x), y=int(y), duration=duration)
+            # Var.appinstance.long_press(x=int(x), y=int(y), duration=duration)
+
+            TouchAction(Var.appinstance).long_press(el=el,x=int(x), y=int(y),duration=duration).perform()
+
         except Exception as e:
             raise e
 
@@ -625,7 +629,8 @@ class iOSDriver(object):
         :return:
         '''
         try:
-            Var.appinstance.long_press(element=element, duration=duration)
+            # Var.appinstance.long_press(element=element, duration=duration)
+            TouchAction(Var.appinstance).long_press(el=element,duration=duration).perform()
         except Exception as e:
             raise e
 
