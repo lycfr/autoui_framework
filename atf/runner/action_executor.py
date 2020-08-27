@@ -165,6 +165,21 @@ class ActionExecutor(object):
         else:
             raise TypeError('press missing 2 required positional argument: x, y')
 
+    def __action_pressElement(self, action):
+        """
+        行为执行：pressElement
+        :param action:
+        :return:
+        """
+        parms = action.parms
+        if len(parms):
+            if len(parms) == 1:
+                AppDriverBase.pressElement(parms[0])
+            elif len(action.parms) == 2:
+                AppDriverBase.pressElement(parms[0], float(parms[-1]))
+            else:
+                raise TypeError('press missing Element:{}'.format(parms[0]))
+
     def __action_swipe(self, action):
         """
         行为执行：swipe
@@ -873,6 +888,10 @@ class ActionExecutor(object):
 
         elif action.key == 'press':
             result = self.__action_press(action)
+
+        elif action.key == 'pressElement':
+            result = self.__action_pressElement(action)
+
 
         elif action.key == 'goBack':
             result = self.__action_goback(action)

@@ -153,13 +153,13 @@ class AppDriverBase(object):
         appdriver.press(x, y, duration)
 
     @staticmethod
-    def press(element, duration=2):
+    def pressElement(element, duration=2):
         '''
         :param element:
         :param duration:
         :return:
         '''
-        appdriver.press(element, duration)
+        appdriver.pressElement(element, duration)
 
     @staticmethod
     def swipe_up(duration=2):

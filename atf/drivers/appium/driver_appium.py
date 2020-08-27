@@ -241,7 +241,7 @@ class AndroidDriver(object):
             raise e
 
     @staticmethod
-    def press(element, duration=2):
+    def pressElement(element, duration=2):
         '''
         :param element:
         :param duration:
@@ -618,7 +618,7 @@ class iOSDriver(object):
             raise e
 
     @staticmethod
-    def press(element, duration=2):
+    def pressElement(element, duration=2):
         '''
         :param element:
         :param duration:
