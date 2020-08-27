@@ -298,17 +298,23 @@ class ActionExecutor(object):
         :return:
         '''
         parms = action.parms
-        print('__action_getElements {}'.format(parms))
-        print('__action_getElements type {}'.format(type(parms)))
+        list_params = parms.split(',')
+
+        print('__action_getElements {}'.format(list_params))
+        print('__action_getElements type {}'.format(type(list_params)))
         elements = None
-        if len(parms) == 1:
-            elements = AppDriverBase.find_elements_by_key(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=None)
-        elif len(parms) == 2:
-            elements = AppDriverBase.find_elements_by_key(key=parms[0], timeout=Var.timeout, interval=Var.interval,
-                                                          index=parms[1])
+        print('list_params[0]',list_params[0])
+        print('list_params[1]',list_params[1])
+        if len(list_params) == 1:
+            print('len(list_params) == 1')
+            elements = AppDriverBase.find_elements_by_key(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=None)
+        elif len(list_params) == 2:
+            print("len(list_params) == 2")
+            elements = AppDriverBase.find_elements_by_key(key=list_params[0], timeout=Var.timeout, interval=Var.interval,
+                                                          index=int(list_params[1]))
 
         if  elements == None:
-            raise Exception("Can't find element {}".format(parms))
+            raise Exception("Can't find element {}".format(list_params))
 
         return elements
 
@@ -335,7 +341,7 @@ class ActionExecutor(object):
             elif len(list_params) == 1:
                 check = AppDriverBase.check(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=0)
             elif len(list_params) == 2:
-                check = AppDriverBase.check(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=list_params[1])
+                check = AppDriverBase.check(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=int(list_params[1]))
             else:
                 raise TypeError('check takes 2 positional arguments but {} was given'.format(len(list_params)))
 
