@@ -337,7 +337,7 @@ class ActionExecutor(object):
 
     def __action_check(self, action):
         """
-        行为执行：check
+        行为执行：check  str
         :param action:
         :return:
         """
@@ -345,6 +345,11 @@ class ActionExecutor(object):
         list_params = parms.split(',')
 
         if len(list_params):
+            if list_params[0].startswith("\""):
+                list_params[0] = list_params[0].strip("\"")
+
+            elif list_params[0].startswith("\'"):
+                list_params[0] = list_params[0].strip("\'")
 
             img_info = self.__ocr_analysis(action.action, list_params[0], True)
             if not isinstance(img_info, bool):
