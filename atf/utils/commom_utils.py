@@ -127,3 +127,8 @@ def app_screenshot_eles_steps(elements,filepath,redFilepath,zoom=1.0):
         if (os.path.exists(filepath)):
             os.remove(filepath)
         return file
+
+
+
+
+

@@ -835,6 +835,7 @@ class ActionExecutor(object):
 
             return result
         except Exception as e:
+            app_screenshot_steps(None, Var.tmp_file, Var.file, zoom=1.0)
             raise e
 
     def new_action_executor(self, action):

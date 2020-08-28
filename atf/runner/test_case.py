@@ -34,6 +34,26 @@ class TestCase(unittest.TestCase):
         self.description = self.description + "/" + self.desc
         self.snapshot_dir = os.path.join(Var.report, self.module, self.testcase_path.split(os.sep)[-1].split(".")[0])
 
+
+    def setUp(self):
+        # 重新赋值failureException，注意：failureException的值是一个类，不是类实例
+        self.failureException = self.failure_monitor()
+
+    def failure_monitor(self):
+        test_case = self  # 将self赋值给test_case，以便下方的AssertionErrorPlus内部类可调用外部类的方法
+
+        class AssertionErrorPlus(AssertionError):
+            def __init__(self, msg):
+                try:
+                    app_screenshot_steps(None, Var.tmp_file, Var.file, zoom=1.0)
+                    log_info('失败截图已保存到: %s' % Var.tmp_file)
+                except BaseException:
+                    log_info('截图失败: %s' % traceback.format_exc())
+
+                super(AssertionErrorPlus, self).__init__(msg)
+
+        return AssertionErrorPlus  # 返回AssertionErrorPlus类
+
     def run(self, result=None):
         try:
             Var.case_step_index = 0
