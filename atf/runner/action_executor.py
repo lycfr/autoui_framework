@@ -521,6 +521,9 @@ class ActionExecutor(object):
         elif action.key == 'compareTime':
             result = self.__action_compareTime(action)
 
+        elif action.key == 'compareList':
+            result = self.__action_compareList(action)
+
         elif action.key == 'isContain':
             result = self.__action_isContain(action)
 

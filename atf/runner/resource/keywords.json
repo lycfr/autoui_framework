@@ -39,6 +39,7 @@
         "replace",
         "log",
         "compare_image",
+        "compareList",
         "seekBar",
         "goTime",
         "compareTime",
