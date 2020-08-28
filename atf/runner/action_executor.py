@@ -343,20 +343,11 @@ class ActionExecutor(object):
         """
         parms = action.parms
         list_params = parms.split(',')
-        print(list_params)
-        print(type(list_params))
         if len(list_params):
-            print("list_params[0]:",list_params[0])
-            print(type(list_params[0]))
             if list_params[0].startswith("\""):
                 list_params[0] = list_params[0].strip("\"")
-                print("list_params[0]:", list_params[0])
-                print(type(list_params[0]))
             if list_params[0].startswith("\'"):
                 list_params[0] = list_params[0].strip("\'")
-                print("list_params[0]:", list_params[0])
-                print(type(list_params[0]))
-
             img_info = self.__ocr_analysis(action.action, list_params[0], True)
             if not isinstance(img_info, bool):
                 if img_info is not None:
