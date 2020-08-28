@@ -747,6 +747,29 @@ class ActionExecutor(object):
         endtime = str(date.strftime('%M:%S'))
         return endtime
 
+
+
+    def __action_compareList(self, action):
+        """
+        list对比，获取两个list是否一致，不论元素顺序前后
+        :param action:
+        :return:
+        """
+        parms = action.parms
+        print(parms)
+        print(type(parms))
+        listparam = parms.split(",")
+        print("listparam",listparam)
+        print(type(listparam))
+        list1 = list(listparam[0])
+        list2 = list(listparam[0])
+        list1.sort()
+        list2.sort()
+        if list1 == list2:
+            return True
+        else:
+            return False
+
     def __action_compareTime(self, action):
         listparam = action.parms.split(",")
         s1 = listparam[0].strip("'")
