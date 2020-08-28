@@ -356,8 +356,6 @@ class ActionExecutor(object):
                 else:
                     check = False
             elif len(list_params) == 1:
-                print("list_params[0]:", list_params[0])
-                print(type(list_params[0]))
                 check = AppDriverBase.check(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=0)
             elif len(list_params) == 2:
                 check = AppDriverBase.check(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=int(list_params[1]))
