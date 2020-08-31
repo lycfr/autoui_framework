@@ -341,7 +341,7 @@ class AppDriverBase(object):
                 dict['element_type'] = 'id'
             elif re.match(r'android\.[a-zA-Z]+[\.(a-zA-Z)]+', key) or re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+', key):
                 dict['element_type'] = 'classname'
-            elif re.match('//\*\[@\S+=\S+\]', key) or re.match('//[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+\[\d+\]', key):
+            elif re.match('//\*\[@\S+=\S+\]', key) or re.match('//[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+\[\d+\]', key) or re.match('//*[contains(@\S,)]', key):
                 dict['element_type'] = 'xpath'
             else:
                 dict['element_type'] = 'name'
