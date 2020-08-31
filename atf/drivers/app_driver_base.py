@@ -425,6 +425,7 @@ class AppDriverBase(object):
                         # 继续寻找原来的正常控件
                         return AppDriverBase.wait_for_elements_by_key(elements_info)
 
+            app_screenshot_eles_steps(None, Var.tmp_file, Var.file, zoom=1.0)
 
             # 如果黑名单也没有，就报错
             log_info("black list no one found")
