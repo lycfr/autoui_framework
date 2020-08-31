@@ -381,6 +381,7 @@ class AppDriverBase(object):
             elements = appdriver.wait_for_elements_by_classname(classname=element, timeout=timeout, interval=interval)
         else:
             elements = None
+
         # log_info('查找到对应元素列表为: {}'.format(elements))
 
         try:
@@ -413,15 +414,18 @@ class AppDriverBase(object):
             # 记录一直异常的次数
             _error_count += 1
             # 对黑名单里的弹框进行处理
-            for i in Var.black_list:
-                w = re.split('[(,)]', i)
-                elements = appdriver.black_for_elements(w[1], w[2])
-                if len(elements) > 0:
-                    elements[0].click()
-                    if len(w) == 5:
-                        time.sleep(int(w[3]))
-                    # 继续寻找原来的正常控件
-                    return AppDriverBase.wait_for_elements_by_key(elements_info)
+            if Var.black_list:
+                for i in Var.black_list:
+                    w = re.split('[(,)]', i)
+                    elements = appdriver.black_for_elements(w[1], w[2])
+                    if len(elements) > 0:
+                        elements[0].click()
+                        if len(w) == 5:
+                            time.sleep(int(w[3]))
+                        # 继续寻找原来的正常控件
+                        return AppDriverBase.wait_for_elements_by_key(elements_info)
+
+
             # 如果黑名单也没有，就报错
             log_info("black list no one found")
             return None

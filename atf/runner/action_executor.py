@@ -205,7 +205,7 @@ class ActionExecutor(object):
                 else:
                     flag = False
                     break
-        if len(params) == 3:
+        elif len(params) == 3:
             j = params[1] + params[2]
             while flag:
                 #滑动到该元素出现，默认是第一个元素
@@ -228,7 +228,7 @@ class ActionExecutor(object):
                     break
         elif len(params) == 4:
             # 滑动到该元素出现
-            j = params[3] + params[2]
+            j = int(params[3]) + int(params[2])
             while flag:
                 paramscheck = str(params[0]) + ","+ str(params[1])
                 eleCheck = self.__check_ele(paramscheck)

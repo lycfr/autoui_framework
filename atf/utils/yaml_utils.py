@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# -*- co
-# ding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
 import yaml
 import collections
 
@@ -44,3 +44,8 @@ def analytical_file(path):
             for key, value in yaml_data.items():
                 yaml_dict[key] = value
     return yaml_dict
+
+
+if __name__ == '__main__':
+    i = analytical_file('/root/autoui_testcases/config.yaml')
+    print(i)
