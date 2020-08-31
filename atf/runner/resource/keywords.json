@@ -12,6 +12,7 @@
         "goSearch",
         "adb",
         "swipe",
+        "swipeToEle",
         "click",
         "check",
         "getElements",

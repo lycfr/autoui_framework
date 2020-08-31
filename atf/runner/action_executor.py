@@ -180,6 +180,79 @@ class ActionExecutor(object):
             else:
                 raise TypeError('press missing Element:{}'.format(parms[0]))
 
+    def __action_swipeToEle(self, action):
+        """
+        行为执行：swipeToEle
+        :param action:
+        :return:
+        """
+        params = action.parms
+        flag = True
+        i = 0
+        eleCheck = False
+        if params is None:
+            raise TypeError('swipe missing Element')
+        if len(params) == 2:
+            while flag:
+                #滑动到该元素出现，默认是第一个元素
+                eleCheck = self.__check_ele(params[0])
+                if (eleCheck == False) and (i < params[1]):
+                    #下滑查找
+                    AppDriverBase.swipe(float(0.5), float(0.75), float(0.5), float(0.55))
+                    i += 1
+                    flag = True
+                    log_info("向下滑动了多少次：{}".format(i))
+                else:
+                    flag = False
+                    break
+        if len(params) == 3:
+            j = params[1] + params[2]
+            while flag:
+                #滑动到该元素出现，默认是第一个元素
+                eleCheck = self.__check_ele(params[0])
+                print(eleCheck)
+                if (eleCheck == False) and (i < params[1]):
+                    #下滑查找
+                    AppDriverBase.swipe(float(0.5), float(0.75), float(0.5), float(0.55))
+                    i += 1
+                    flag = True
+                    log_info("向下滑动了多少次：{}".format(i))
+                elif (eleCheck == False) and (params[1] <= i < j):
+                    #上滑查找
+                    AppDriverBase.swipe(float(0.5), float(0.55), float(0.5), float(0.75))
+                    i += 1
+                    flag = True
+                    log_info("向上滑动了多少次：{}".format(i))
+                else:
+                    flag = False
+                    break
+        elif len(params) == 4:
+            # 滑动到该元素出现
+            j = params[3] + params[2]
+            while flag:
+                paramscheck = str(params[0]) + ","+ str(params[1])
+                eleCheck = self.__check_ele(paramscheck)
+                if (eleCheck == False) and (i < params[2]):
+                    AppDriverBase.swipe(float(0.5), float(0.75), float(0.5), float(0.55))
+                    i += 1
+                    flag = True
+                    log_info("向下滑动了多少次：{}".format(i))
+                elif (eleCheck == False) and (params[2] <= i < j):
+                    AppDriverBase.swipe(float(0.5), float(0.55), float(0.5), float(0.75))
+                    i += 1
+                    flag = True
+                    log_info("向上滑动了多少次：{}".format(i))
+                else:
+                    flag = False
+                    break
+        else:
+            raise TypeError('swipeToEle no element')
+        log_info("总共滑动了多少次：{}".format(i))
+
+
+
+
+
     def __action_swipe(self, action):
         """
         行为执行：swipe
@@ -332,6 +405,45 @@ class ActionExecutor(object):
             raise Exception("Can't find element {}".format(list_params))
 
         return elements
+
+
+
+    def __check_ele(self, parms):
+        """
+        行为执行：check
+        :param action:
+        :return:
+        """
+        action = None
+        print(parms)
+        list_params = parms.split(',')
+
+        if len(list_params):
+            if list_params[0].startswith("\""):
+                list_params[0] = list_params[0].strip("\"")
+            if list_params[0].startswith("\'"):
+                list_params[0] = list_params[0].strip("\'")
+
+            img_info = self.__ocr_analysis(action, list_params[0], True)
+            if not isinstance(img_info, bool):
+                if img_info is not None:
+                    Var.ocrimg = img_info['ocrimg']
+                    checkEle = True
+                else:
+                    checkEle = False
+            elif len(list_params) == 1:
+                checkEle = AppDriverBase.check(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=0)
+            elif len(list_params) == 2:
+                checkEle = AppDriverBase.check(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=int(list_params[1]))
+            else:
+                raise TypeError('check takes 2 positional arguments but {} was given'.format(len(list_params)))
+
+            if not checkEle:
+                return False
+            return checkEle
+        else:
+            raise TypeError('check missing 1 required positional argument: element')
+
 
 
 
@@ -986,6 +1098,9 @@ class ActionExecutor(object):
 
         elif action.key == 'log':
             result = self.__action_log(action)
+
+        elif action.key == 'swipeToEle':
+            result = self.__action_swipeToEle(action)
 
         elif action.key == 'getPageSource':
             result = self.__action_getPageSource(action)
