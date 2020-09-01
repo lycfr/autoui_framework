@@ -126,7 +126,7 @@ class ActionExecutor(object):
         # 查看当前输入法有哪些adb shell ime list -s
         AppDriverBase.adb_shell('shell ime set com.sohu.inputmethod.sogou/.SogouIME')
         time.sleep(3)
-        AppDriverBase.adb_shell("input keyevent 66")
+        AppDriverBase.adb_shell("shell input keyevent 66")
         time.sleep(3)
         AppDriverBase.adb_shell('shell ime set io.appium.settings/.UnicodeIME')
 
