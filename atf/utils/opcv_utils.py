@@ -103,6 +103,7 @@ class OpencvUtils(object):
                 dmatch = matchePoints[i]
 
                 dmatch.queryIdx = 0
+
                 MatchePoints.append(dmatch)
                 # print("MatchePoints.append(dmatch)",MatchePoints)
 
