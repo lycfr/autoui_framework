@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
+
 import cv2
 import numpy as np
 
@@ -57,7 +58,7 @@ class OpencvUtils(object):
         # 创建一个SURF对象
         #SURF将SIFT中的Laplacian of a Gaussian（LOG）用一个方框滤波（box filter）代替。opencv2:cv2.SURF，opencv3:cv2.xfeatures2d.SURF_create()
         #大的值输出的数量比较少但是它们更为突出，相比之下输出较小的值虽然多但是不够突出（就是与普通差别不够大）
-        min_hessian = 1000
+        min_hessian = 400
         surf = cv2.xfeatures2d.SURF_create(min_hessian)
         # SIFT对象会使用Hessian算法检测关键点，并且对每个关键点周围的区域计算特征向量。该函数返回关键点的信息和描述符
         keypoints1, descriptor1 = surf.detectAndCompute(self.baseimage, None)
