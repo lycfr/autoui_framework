@@ -362,6 +362,7 @@ class AppDriverBase(object):
         :param elements_info:
         :return:
         '''
+        print("elements_info",elements_info)
         _error_max = 10
         _error_count = 0
         element_type = elements_info['element_type']
