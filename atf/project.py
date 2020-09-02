@@ -19,6 +19,7 @@ from atf.utils.yaml_utils import analytical_file, Dict
 from atf.commons.variable_global import Var
 
 from atf.commons.logging import log_info
+from atf.utils.scp_untils import scpFileToRemoteNode
 
 
 class Project(object):
@@ -131,6 +132,7 @@ class Project(object):
 
         # 生成报告地址
         Var.report = os.path.join(Var.ROOT, "Report", report_child)
+        log_info('Report Path is {}'.format(os.getcwd() + Var.report))
         if not os.path.exists(Var.report):
             os.makedirs(Var.report)
             os.makedirs(os.path.join(Var.report, 'resource'))
@@ -205,3 +207,16 @@ class Project(object):
             appserver.stop_server()
         if "web_driver" in self.__config.keys():
             web_driver.init()
+
+        log_info('Report Path is {}'.format(os.path.join(os.getcwd(),Var.report)))
+
+        time.sleep(5)
+        # 暂时写死生成报告时间
+        scpFileToRemoteNode("root", "10.30.130.116", "5yKUHcxTynfDORnN1",
+                            os.path.join(os.getcwd(),Var.report),
+                            "/data/apache/www/html/apks/reports", 22)
+
+        log_info('******************* ui task over *******************')
+
+
+
