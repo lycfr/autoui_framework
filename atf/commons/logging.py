@@ -4,8 +4,18 @@ import os
 import sys
 import logging
 from logging.handlers import RotatingFileHandler
+import colorlog
 
 logger = None
+
+log_colors_config = {
+    'DEBUG': 'cyan',
+    'INFO': 'green',
+    'WARNING': 'yellow',
+    'ERROR': 'red',
+    'CRITICAL': 'red',
+}
+
 
 def log_init(report):
     global logger
@@ -18,7 +28,13 @@ def log_init(report):
 
     logger = logging.getLogger(logging.NOTSET)
     logger.setLevel(logging.NOTSET)
+
     formatter = logging.Formatter('%(asctime)s %(levelname)s :%(message)s')
+
+    formatter = colorlog.ColoredFormatter(
+        '%(log_color)s[%(asctime)s] [%(filename)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s',
+        log_colors=log_colors_config)  # 日志输出格式
+
 
     ch = logging.StreamHandler(stream=sys.stdout)
     rh = logging.handlers.RotatingFileHandler(log_file_path, mode='a', maxBytes=50 * 1024 * 1024, backupCount=10)
