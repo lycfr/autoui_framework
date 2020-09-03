@@ -24,8 +24,9 @@ from atf.utils.scp_untils import scpFileToRemoteNode
 
 class Project(object):
 
-    def __init__(self):
+    def __init__(self,config_name='config.yaml'):
 
+        self.config_name= config_name
         self.__init_project()
         self.__init_config()
         self.__init_logging()
@@ -40,7 +41,7 @@ class Project(object):
 
         for path in [path  for path in inspect.stack() if str(path[1]).endswith("runtest.py")]:
             self.__ROOT = os.path.dirname(path[1])
-            self.__config = analytical_file(os.path.join(self.__ROOT, 'config.yaml'))
+            self.__config = analytical_file(os.path.join(self.__ROOT, self.config_name))
             sys.path.append(self.__ROOT)
             sys.path.append(os.path.join(self.__ROOT, 'Scripts'))
             Var.ROOT = self.__ROOT
