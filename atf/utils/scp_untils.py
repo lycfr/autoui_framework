@@ -49,7 +49,7 @@ def scpFileToRemoteNode(user,ip,password,localsource,remotedest,port=22):
         SCP_CMD_BASE = r"""
                 expect -c "
                 set timeout 300 ;
-                spawn scp -P {port} -r {localsource} {username}@{host}:{remotedest} ;
+                spawn scp -o StrictHostKeyChecking=no -P {port} -r {localsource} {username}@{host}:{remotedest};
                 expect *assword* {{{{ send {password}\r }}}}  ;
                 expect *\r ;
                 expect \r ;
@@ -69,4 +69,27 @@ def scpFileToRemoteNode(user,ip,password,localsource,remotedest,port=22):
         log_info('scpFileToRemoteNode is {e}'.format(e=e))
 
 
+
+
+def sshpassFileToRemoteNode(user,ip,password,localsource,remotedest,port=22):
+    """
+    sshpass免密码登录
+    """
+    ServerHost = 'http://qa-jenkins-test.igetcool.com/apks/reports/'
+
+    local_file = str(localsource).split('/')[-1]
+
+    try:
+        SCP_CMD_BASE = "sshpass -p {password} scp -o StrictHostKeyChecking=no -r {localsource} {username}@{host}:{remotedest}".\
+            format(username=user,password=password,host=ip,localsource=localsource,remotedest=remotedest,port=port)
+        log_info("execute SCP_CMD:  {}".format(SCP_CMD_BASE))
+        p  = subprocess.Popen( SCP_CMD , stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        p.communicate()
+        os.system(SCP_CMD)
+
+        ReportPath = ServerHost + local_file + '/report.html'
+        log_info("ReportPath:  {}".format(ReportPath))
+        return ReportPath
+    except Exception as e:
+        log_info('sshpassFileToRemoteNode is {e}'.format(e=e))
 
