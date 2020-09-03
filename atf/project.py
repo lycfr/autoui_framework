@@ -78,7 +78,7 @@ class Project(object):
             else:
                 Var.retry_count = 0
 
-            log_info("******************* 最大重试用例次数 %{} *******************".format(Var.retry_count))
+            log_info("******************* 最大重试用例次数 {} *******************".format(Var.retry_count))
 
         if "appdriver" in self.__config.keys():
             log_info("******************* appdriver 初始化 *******************")
