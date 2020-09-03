@@ -6,6 +6,9 @@ import time
 import json
 import inspect
 import unittest
+
+from atf.utils.message_untils import MessageUtils
+
 from atf.commons.logging import *
 from atf.drivers.app_driver_base import AppDriverBase
 from atf.drivers.web_driver_base import WebDriverBase
@@ -219,11 +222,30 @@ class Project(object):
 
         time.sleep(5)
         # 暂时写死生成报告时间
-        scpFileToRemoteNode("root", "10.30.130.116", "5yKUHcxTynfDORnN1",
+        ReportPath = scpFileToRemoteNode("root", "10.30.130.116", "5yKUHcxTynfDORnN1",
                             os.path.join(os.getcwd(),Var.report),
                             "/data/apache/www/html/apks/reports", 22)
 
         log_info('******************* ui task over *******************')
 
+        message_params = {}
+        message_params['content'] = self.create_message_body(ReportPath)
+        MessageUtils().send_message_result(message_params)
 
 
+
+    def create_message_body(self,ReportPath):
+        """
+        创建提测消息体
+        :return:
+        """
+
+        return '\n> ' \
+                       '时间: ' + str(time.strftime("%Y-%m-%d %H:%M:%S")) + "\n" + \
+                       '持续时间: ' + str(Var.duration)  + "\n" + \
+                       '累计用例: ' + str(Var.Total)  + "\n" + \
+                       '成功用例: ' + str(Var.Pass)  + "\n" + \
+                       '失败用例: ' + str(Var.Failure)  + "\n" + \
+                       '错误用例: ' + str(Var.Error)  + "\n" + \
+                       '跳过用例: ' + str(Var.skipped)  + "\n" + \
+                       '报告地址: ' + str(ReportPath)   + "\n"

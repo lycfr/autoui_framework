@@ -6,6 +6,9 @@ import sys
 import time
 import shutil
 
+from atf.commons.variable_global import Var
+
+
 class Template_mixin(object):
     """
      Define a HTML template for report customerization and generation.
@@ -221,6 +224,14 @@ class HTMLTestRunner(Template_mixin):
         Failure = len(result.failures)
         Error = len(result.errors)
         skipped = len(result.skipped)
+
+        Var.duration = duration
+        Var.Total = Total
+        Var.Pass = Pass
+        Var.Failure = Failure
+        Var.Error = Error
+        Var.skipped = skipped
+
         return (Total,Pass,Failure,Error,skipped,startTime,duration)
 
     def _generate_report(self, result):
