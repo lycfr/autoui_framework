@@ -69,6 +69,7 @@ class AppDriverBase(object):
         '''
         print("lauch_app")
         appdriver.launch_app(package_info)
+        time.sleep(3)
 
     @staticmethod
     def close_app(package_info):

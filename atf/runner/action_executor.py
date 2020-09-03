@@ -501,7 +501,7 @@ class ActionExecutor(object):
 
     def __action_isContain(self,action):
         pagesource = AppDriverBase.get_page_source()
-        print(pagesource)
+        # print(pagesource)
         str = action.parms.strip("\'")
         if str in pagesource:
             return True

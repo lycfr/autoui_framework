@@ -32,7 +32,8 @@ def log_init(report):
     formatter = logging.Formatter('%(asctime)s %(levelname)s :%(message)s')
 
     formatter = colorlog.ColoredFormatter(
-        '%(log_color)s[%(asctime)s] [%(filename)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s',
+        # '%(log_color)s[%(asctime)s] [%(filename)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s',
+        '%(log_color)s[%(asctime)s] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s',
         log_colors=log_colors_config)  # 日志输出格式
 
 
