@@ -706,6 +706,7 @@ class ActionExecutor(object):
         :return:
         """
         parms = action.parms
+        now = ''
         if len(parms):
             if len(parms) == 4:
                 listname = parms[0]
