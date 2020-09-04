@@ -27,9 +27,10 @@ from atf.utils.scp_untils import scpFileToRemoteNode
 
 class Project(object):
 
-    def __init__(self,config_name='config.yaml'):
+    def __init__(self,config_name='config.yaml',device_name=None):
 
         self.config_name= config_name
+        self.device_name = device_name
         self.__init_project()
         self.__init_config()
         self.__init_logging()
@@ -88,6 +89,14 @@ class Project(object):
             log_info("******************* web_driver 初始化 *******************")
             WebDriverBase.init()
 
+        # 覆盖配置文件的udid
+        if self.device_name != None:
+           Var.desired_caps['udid'] = self.device_name
+           Var.desired_caps['deviceName'] = self.device_name
+           Var.udid = self.device_name
+
+
+        log_info("******************* 设备号 {} *******************".format(Var.udid))
 
 
     def __init_data(self):
