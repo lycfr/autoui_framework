@@ -48,7 +48,6 @@
         "listlen",
         "findallNum",
         "random",
-        "$.findIndex",
         "getPageSource"
     ]
 }
