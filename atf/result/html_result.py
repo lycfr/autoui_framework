@@ -63,16 +63,105 @@ class Template_mixin(object):
     <title>测试报告</title>
     <link rel="stylesheet" type="text/css" href="resource/css.css">
     <script type="text/javascript" src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/3.8.5/echarts.common.min.js"></script>
     <script src="resource/js.js"></script>
 </head>
 <body>
 <div class="root">
     {heading}
+    {pie}    
+    {device}
+    {apk}
     {tabdiv}
 </div>
 </body>
+<script language="javascript" type="text/javascript">
+{chart_script}
+</script>
 </html>
     '''
+
+
+    ECHARTS_SCRIPT = """
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('chart'));
+
+    // 指定图表的配置项和数据
+    var option = {
+    title : {
+    text: '测试执行情况',
+    x:'center'
+    },
+    tooltip : {
+    trigger: 'item',
+    formatter: "{a} <br/>{b} : {c} ({d}%%)"
+    },
+    color: ['#95b75d', 'grey', '#b64645'],
+    legend: {
+    orient: 'vertical',
+    left: 'left',
+    data: ['通过','失败','错误']
+    },
+    series : [
+    {
+    name: '测试执行情况',
+    type: 'pie',
+    radius : '60%%',
+    center: ['50%%', '60%%'],
+    data:[
+    {value:%(Pass)s, name:'通过'},
+    {value:%(fail)s, name:'失败'},
+    {value:%(error)s, name:'错误'}
+    ],
+    itemStyle: {
+    emphasis: {
+    shadowBlur: 10,
+    shadowOffsetX: 0,
+    shadowColor: 'rgba(0, 0, 0, 0.5)'
+    }
+    }
+    }
+    ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    """
+
+
+    # 结果饼图
+    PIE_TMPL = r'''
+        <div class="head" style="height: 240px">
+            <div class="head_title">PIE</div>
+            <div style="height: 210px;border: 1px solid rgb(220,220,220); background-color: white">
+                <div id="chart" style="width:500px;height:200px;float:left;"></div>
+            </div>
+        </div>
+        '''
+
+
+    # 设备信息
+    DEVICE_TMPL = r'''
+        <div class="head" style="height: 240px">
+            <div class="head_title">Device Info</div>
+            <div style="height: 210px;border: 1px solid rgb(220,220,220); background-color: white">
+                <p class="text">Device Udid：{device_udid}</p>
+                <p class="text">Device Version：{device_version}</p>
+            </div>
+        </div>
+        '''
+
+
+    # APK信息
+    APK_TMPL = r'''
+        <div class="head" style="height: 240px">
+            <div class="head_title">Apk Info</div>
+            <div style="height: 210px;border: 1px solid rgb(220,220,220); background-color: white">
+                <p class="text">Apk Version：{apk_version}</p>
+            </div>
+        </div>
+        '''
+
 
     # 测试汇总
     HEADING_TMPL = r'''
@@ -202,13 +291,26 @@ class HTMLTestRunner(Template_mixin):
     def generateReport(self,result,starttime,stoptime):
         report_attrs = self._getReportAttributes(result, starttime, stoptime)
         report = self._generate_report(result)
+
+        device = self._generate_device()
+        apk = self._generate_apk()
+
         heading = self._generate_heading(report_attrs)
         tabdiv = self.TABDIV_TMPL.format(
             trlist = report
         )
+
+        chart = self._generate_chart()
+
+        pie = self._generate_pie()
+
         output = self.HTML_TMPL.format(
             heading = heading,
-            tabdiv = tabdiv
+            device=device,
+            apk=apk,
+            tabdiv = tabdiv,
+            pie = pie,
+            chart_script = chart
         )
         resource = os.path.join(os.path.split(os.path.abspath(__file__))[0], "resource")
         shutil.copy(os.path.join(resource,"css.css"), os.path.join(result.report,'resource'))
@@ -233,6 +335,22 @@ class HTMLTestRunner(Template_mixin):
         Var.skipped = skipped
 
         return (Total,Pass,Failure,Error,skipped,startTime,duration)
+
+
+    def _generate_pie(self):
+        return self.PIE_TMPL
+
+
+
+
+    def _generate_chart(self):
+        chart = self.ECHARTS_SCRIPT % dict(
+                Pass=str(Var.Pass),
+                fail=str(Var.Failure),
+                error=str(Var.Error),
+                )
+        return chart
+
 
     def _generate_report(self, result):
 
@@ -308,6 +426,22 @@ class HTMLTestRunner(Template_mixin):
             rmap[cls].append((n, t, o))
         r = [(cls, rmap[cls]) for cls in classes]
         return r
+
+
+    def _generate_device(self):
+        device = self.DEVICE_TMPL.format(
+            device_udid=Var.udid ,
+            device_version=Var.device_version,
+
+        )
+        return device
+
+
+    def _generate_apk(self):
+        apk = self.APK_TMPL.format(
+            apk_version=Var.apk_version ,
+        )
+        return apk
 
 
     def _generate_heading(self,report_attrs):

@@ -20,7 +20,7 @@ class TestCaseUtils(object):
 
 
     def testcase_path(self, dirname, paths):
-        print("testcase_path",dirname, paths)
+        #print("testcase_path",dirname, paths)
         if not paths:
             raise Exception('test case is empty.')
         self.__testcase_list = yaml_testMethod(paths)

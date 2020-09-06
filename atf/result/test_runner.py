@@ -25,7 +25,7 @@ class TestRunner(unittest.TextTestRunner):
             self.resultclass = TestResult
         else:
             self.resultclass = resultclass
-        print("self.resultclass,:", self.resultclass)
+        #print("self.resultclass,:", self.resultclass)
 
     def _makeResult(self):
             return  self.resultclass(self.stream,self.descriptions,self.verbosity)

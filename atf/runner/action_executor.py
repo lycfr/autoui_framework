@@ -210,7 +210,7 @@ class ActionExecutor(object):
             while flag:
                 #滑动到该元素出现，默认是第一个元素
                 eleCheck = self.__check_ele(params[0])
-                print(eleCheck)
+                #print(eleCheck)
                 if (eleCheck == False) and (i < params[1]):
                     #下滑查找
                     AppDriverBase.swipe(float(0.5), float(0.75), float(0.5), float(0.55))
@@ -361,7 +361,7 @@ class ActionExecutor(object):
         """
         parms = action.parms
         if len(parms):
-            print("action.action",action.action)
+            #print("action.action",action.action)
             img_info = self.__ocr_analysis(action.action, parms[0], True)
             if not isinstance(img_info, bool):
                 Var.ocrimg = img_info['ocrimg']
@@ -388,16 +388,16 @@ class ActionExecutor(object):
         parms = action.parms
         list_params = parms.split(',')
 
-        print('__action_getElements {}'.format(list_params))
-        print('__action_getElements type {}'.format(type(list_params)))
+        #print('__action_getElements {}'.format(list_params))
+        #print('__action_getElements type {}'.format(type(list_params)))
         elements = None
-        print('list_params[0]',list_params[0])
-        print('list_params[1]',list_params[1])
+        #print('list_params[0]',list_params[0])
+        #print('list_params[1]',list_params[1])
         if len(list_params) == 1:
-            print('len(list_params) == 1')
+            #print('len(list_params) == 1')
             elements = AppDriverBase.find_elements_by_key(key=list_params[0], timeout=Var.timeout, interval=Var.interval, index=None)
         elif len(list_params) == 2:
-            print("len(list_params) == 2")
+            #print("len(list_params) == 2")
             elements = AppDriverBase.find_elements_by_key(key=list_params[0], timeout=Var.timeout, interval=Var.interval,
                                                           index=int(list_params[1]))
 
@@ -415,7 +415,7 @@ class ActionExecutor(object):
         :return:
         """
         action = None
-        print(parms)
+        #print(parms)
         list_params = parms.split(',')
 
         if len(list_params):
@@ -873,11 +873,10 @@ class ActionExecutor(object):
         :return:
         """
         parms = action.parms
-        print(parms)
-        print(type(parms))
+
         listparam = parms.split(",")
-        print("listparam",listparam)
-        print(type(listparam))
+        # print("listparam",listparam)
+        # print(type(listparam))
         list1 = list(listparam[0])
         list2 = list(listparam[0])
         list1.sort()

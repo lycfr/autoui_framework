@@ -143,6 +143,10 @@ class Project(object):
         if Var.platformName != None:
             devices = DevicesUtils(Var.platformName, Var.udid)
             Var.udid, deviceinfo = devices.device_info()
+
+            Var.device_version = devices.get_device_version()
+            Var.apk_version = devices.get_app_version()
+
             report_time = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
             report_child = "{}_{}".format(deviceinfo, report_time)
         else:
@@ -164,7 +168,7 @@ class Project(object):
             log_info('{}: {}'.format(configK, configV))
         log_info('******************* analytical testcase *******************')
         testcase = TestCaseUtils()
-        print("Var.ROOT, Var.testcase",Var.ROOT, Var.testcase)
+        #print("Var.ROOT, Var.testcase",Var.ROOT, Var.testcase)
         self.__testcase = testcase.testcase_path(Var.ROOT, Var.testcase)
         Var.cases_var = self.__testcase
 

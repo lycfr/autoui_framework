@@ -15,6 +15,47 @@ class DevicesUtils(object):
         self.__udid = udid
 
 
+
+    def get_app_version(self):
+        """
+        获取app版本号
+        :return:
+        """
+        app_version = "0.0.0"
+        try:
+            cmd = 'adb -s {} shell dumpsys package com.dedao.juvenile'.format(self.__udid)
+            log_info(cmd)
+            result = subprocess.Popen(cmd, shell=True,
+                                      stdout=subprocess.PIPE).stdout.readlines()
+            for line in result:
+                line = (str(line, encoding="utf-8"))
+                if 'versionName=' in line:
+                    app_version = line.split('versionName=')[-1].replace("'", ''). \
+                        replace("\n", '').replace("platformBuildVersionName=", '').strip()
+        except Exception as e:
+            log_info("获取App版本号异常: {}".format(e))
+        finally:
+            return app_version
+
+
+
+    def get_device_version(self):
+        """
+        获取系统版本号
+        """
+        pipe = os.popen("adb -s {} shell getprop ro.build.version.release".format(self.__udid))
+        result = pipe.read()
+        return result
+
+    def get_device_sdk_version(self):
+        """
+        获取系统sdk版本号
+        """
+        pipe = os.popen("adb -s {} shell getprop ro.build.version.sdk".format(self.__udid))
+        result = pipe.read()
+        return result
+
+
     def device_info(self):
         if self.__platformName.lower() == 'android':
             devices = self.get_devices()
@@ -64,7 +105,7 @@ class DevicesUtils(object):
         if self.__platformName.lower() == 'android':
             pipe = os.popen("adb devices")
             deviceinfo = pipe.read()
-            print(deviceinfo)
+            #print(deviceinfo)
             devices = deviceinfo.replace('\tdevice', "").split('\n')
             devices.pop(0)
             while "" in devices:

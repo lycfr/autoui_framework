@@ -29,7 +29,7 @@ class WebServerUtils(object):
             else:
                 log_error("path地址错误")
         else:
-            print("passweb")
+            log_info("passweb")
 
         # log_info('web    {}: {}'.format(key, value))
         # object.__setattr__(self, key, value)
