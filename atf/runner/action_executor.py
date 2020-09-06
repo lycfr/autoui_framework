@@ -329,28 +329,28 @@ class ActionExecutor(object):
         else:
             raise TypeError('getTexts missing 1 required positional argument: element')
         return text
-
-    def __action_findIndex(self, action):
-        """
-        行为执行：findIndex
-        :param action:
-        :return:
-        """
-        parms = action.parms
-        if len(parms):
-            text = parms[0]
-            texts = parms[1]
-            fi_index = 0
-            if len(parms) == 3:
-                fi_index = parms[2]
-            index = [i for i, x in enumerate(texts) if x.find(text) != -1]
-            if len(index) == 0:
-                log_error("Can't find text {}".format(text))
-                return None
-            else:
-                return index[fi_index]
-        else:
-            raise TypeError('findIndex missing 1 required no argument')
+    #
+    # def __action_findIndex(self, action):
+    #     """
+    #     行为执行：findIndex
+    #     :param action:
+    #     :return:
+    #     """
+    #     parms = action.parms
+    #     if len(parms):
+    #         text = parms[0]
+    #         texts = parms[1]
+    #         fi_index = 0
+    #         if len(parms) == 3:
+    #             fi_index = parms[2]
+    #         index = [i for i, x in enumerate(texts) if x.find(text) != -1]
+    #         if len(index) == 0:
+    #             log_error("Can't find text {}".format(text))
+    #             return None
+    #         else:
+    #             return index[fi_index]
+    #     else:
+    #         raise TypeError('findIndex missing 1 required no argument')
 
 
     def __action_click(self, action):
@@ -601,8 +601,8 @@ class ActionExecutor(object):
 
         elif action.key == '$.getTexts':
             result = self.__action_getTexts(action)
-        elif action.key == '$.findIndex':
-            result = self.__action_findIndex(action)
+        # elif action.key == '$.findIndex':
+        #     result = self.__action_findIndex(action)
         elif action.key == '$.id':
             result = eval(action.parms)
         # 获取对应列表中某一个元素
@@ -706,6 +706,7 @@ class ActionExecutor(object):
         :return:
         """
         parms = action.parms
+        now = ''
         if len(parms):
             if len(parms) == 4:
                 listname = parms[0]
