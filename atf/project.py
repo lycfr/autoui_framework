@@ -27,10 +27,11 @@ from atf.utils.scp_untils import scpFileToRemoteNode
 
 class Project(object):
 
-    def __init__(self,config_name='config.yaml',device_name=None):
+    def __init__(self,config_name='config.yaml',data_json='data.json',device_name=None):
 
-        self.config_name= config_name
+        self.config_name = config_name
         self.device_name = device_name
+        self.data_json = data_json
         self.__init_project()
         self.__init_config()
         self.__init_logging()
@@ -101,8 +102,11 @@ class Project(object):
 
     def __init_data(self):
 
-        if os.path.exists(os.path.join(Var.ROOT, 'data.json')):
-            with open(os.path.join(Var.ROOT, 'data.json'), 'r', encoding='utf-8') as f:
+        # if os.path.exists(os.path.join(Var.ROOT, 'data.json')):
+        if os.path.exists(os.path.join(Var.ROOT, self.data_json)):
+            with open(os.path.join(Var.ROOT, self.data_json), 'r', encoding='utf-8') as f:
+
+            # with open(os.path.join(Var.ROOT, 'data.json'), 'r', encoding='utf-8') as f:
                 dict = Dict(json.load(fp=f))
                 if dict:
                     log_info('******************* analytical data *******************')
