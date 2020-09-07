@@ -46,7 +46,7 @@ class OpencvUtils(object):
 
             view_height = Var.appinstance.get_window_size()['height']#获取手机屏幕的高度
             image_height = self.baseimage.shape[0]#图像的大小可以通过其shape属性来获取，shape返回的是一个tuple元组，第一个元素表示图像的高度，第二个表示图像的宽度，第三个表示像素的通道数。
-            print("image_height",image_height)
+            #print("image_height",image_height)
             if view_height * 2 == image_height:
                 self.iszoom = True
 
@@ -118,7 +118,7 @@ class OpencvUtils(object):
                                  matchColor=(0, 255, 0),
                                  flags=cv2.DRAW_MATCHES_FLAGS_DEFAULT)
         cv2.imwrite(Var.file, outImg)
-        print("x",x,",y:",y)
+        #print("x",x,",y:",y)
         matchinfo = {
             'x':int(x),
             'y':int(y),

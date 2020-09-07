@@ -19,7 +19,7 @@ class WebDriverBase(object):
 
     @staticmethod
     def init():
-        print("WebDriverBase--init")
+        log_info("WebDriverBase--init")
         try:
             global web_driver
             print('Var.web_driver',Var.web_driver)
@@ -38,7 +38,7 @@ class WebDriverBase(object):
 
             else:
                 # from drivers.macaca import AndroidDriver, iOSDriver
-                print("else==")
+                log_info("else==")
         except Exception as e:
             raise e
 

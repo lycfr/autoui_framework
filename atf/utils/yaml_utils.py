@@ -46,6 +46,3 @@ def analytical_file(path):
     return yaml_dict
 
 
-if __name__ == '__main__':
-    i = analytical_file('/root/autoui_testcases/config.yaml')
-    print(i)

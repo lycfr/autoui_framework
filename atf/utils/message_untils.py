@@ -7,6 +7,7 @@ import platform
 import subprocess
 from atf.commons.logging import log_info
 import requests
+from logzero import logger
 
 
 send_to_list = 'xinxi,gaijinfeng'
@@ -33,7 +34,7 @@ class MessageUtils(object):
 
         response = requests.request("POST", url, headers=headers, json=payload)
 
-        print(response.json())
+        logger.info(response.json())
 
 
 
