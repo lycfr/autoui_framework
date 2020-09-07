@@ -399,6 +399,7 @@ class AppDriverBase(object):
                     Var.ocrimg = None
                 else:
                     # Var.instance.save_screenshot(Var.file)app_screenshot_eles_steps
+                    print("截图时：elements[index]",elements[index])
                     app_screenshot_steps(elements[index], Var.tmp_file, Var.file, zoom=1.0)
                 return elements[index]
             else:
