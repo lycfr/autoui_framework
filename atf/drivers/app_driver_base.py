@@ -196,7 +196,7 @@ class AppDriverBase(object):
         appdriver.swipe_right(duration)
 
     @staticmethod
-    def swipe(from_x, from_y, to_x, to_y, duration=2):
+    def swipe1(from_x, from_y, to_x, to_y, duration=2):
         '''
         :param from_x:
         :param from_y:
@@ -205,7 +205,7 @@ class AppDriverBase(object):
         :param duration:
         :return:
         '''
-        appdriver.swipe(from_x, from_y, to_x, to_y, duration)
+        appdriver.swipe1(from_x, from_y, to_x, to_y, duration)
 
     @staticmethod
     def move_to(x, y):

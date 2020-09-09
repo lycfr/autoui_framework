@@ -114,6 +114,7 @@ class ActionExecutor(object):
         :return:
         """
         log_info("点击手机返回按键")
+
         AppDriverBase.adb_shell('shell input keyevent 4')
 
     def __action_gosearch(self, action):
@@ -198,7 +199,7 @@ class ActionExecutor(object):
                 eleCheck = self.__check_ele(params[0])
                 if (eleCheck == False) and (i < params[1]):
                     #下滑查找
-                    AppDriverBase.swipe(float(0.5), float(0.75), float(0.5), float(0.55))
+                    AppDriverBase.swipe1(float(0.5), float(0.75), float(0.5), float(0.55))
                     i += 1
                     flag = True
                     log_info("向下滑动了多少次：{}".format(i))
@@ -213,13 +214,13 @@ class ActionExecutor(object):
                 #print(eleCheck)
                 if (eleCheck == False) and (i < params[1]):
                     #下滑查找
-                    AppDriverBase.swipe(float(0.5), float(0.75), float(0.5), float(0.55))
+                    AppDriverBase.swipe1(float(0.5), float(0.75), float(0.5), float(0.55))
                     i += 1
                     flag = True
                     log_info("向下滑动了多少次：{}".format(i))
                 elif (eleCheck == False) and (params[1] <= i < j):
                     #上滑查找
-                    AppDriverBase.swipe(float(0.5), float(0.55), float(0.5), float(0.75))
+                    AppDriverBase.swipe1(float(0.5), float(0.55), float(0.5), float(0.75))
                     i += 1
                     flag = True
                     log_info("向上滑动了多少次：{}".format(i))
@@ -233,12 +234,12 @@ class ActionExecutor(object):
                 paramscheck = str(params[0]) + ","+ str(params[1])
                 eleCheck = self.__check_ele(paramscheck)
                 if (eleCheck == False) and (i < params[2]):
-                    AppDriverBase.swipe(float(0.5), float(0.75), float(0.5), float(0.55))
+                    AppDriverBase.swipe1(float(0.5), float(0.75), float(0.5), float(0.55))
                     i += 1
                     flag = True
                     log_info("向下滑动了多少次：{}".format(i))
                 elif (eleCheck == False) and (params[2] <= i < j):
-                    AppDriverBase.swipe(float(0.5), float(0.55), float(0.5), float(0.75))
+                    AppDriverBase.swipe1(float(0.5), float(0.55), float(0.5), float(0.75))
                     i += 1
                     flag = True
                     log_info("向上滑动了多少次：{}".format(i))
@@ -295,9 +296,9 @@ class ActionExecutor(object):
             for i in range(n):
                 AppDriverBase.swipe_right()
         elif len(parms) == 4:
-            AppDriverBase.swipe(float(action.parms[0]), float (action.parms[1]), float(action.parms[2]), float(action.parms[3]))
+            AppDriverBase.swipe1(float(action.parms[0]), float (action.parms[1]), float(action.parms[2]), float(action.parms[3]))
         elif len(parms) == 5:
-            AppDriverBase.swipe(float(action.parms[0]), float(action.parms[1]), float(action.parms[2]), float(action.parms[3]), int(action.parms[4]))
+            AppDriverBase.swipe1(float(action.parms[0]), float(action.parms[1]), float(action.parms[2]), float(action.parms[3]), int(action.parms[4]))
         else:
             raise TypeError('swipe takes 1 positional argument but {} were giver'.format(len(action.action)))
 
