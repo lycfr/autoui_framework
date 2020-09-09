@@ -810,6 +810,13 @@ class iOSDriver(object):
         except Exception as e:
             raise e
 
+    @staticmethod
+    def get_page_source():
+        try:
+            page_source = Var.appinstance.page_source
+            return page_source
+        except Exception as e:
+            raise e
 
     @staticmethod
     def save_context(self):

@@ -145,6 +145,7 @@ class Template_mixin(object):
         <div class="head" style="height: 240px">
             <div class="head_title">Device Info</div>
             <div style="height: 210px;border: 1px solid rgb(220,220,220); background-color: white">
+                <p class="text">Device Name：{device_name}</p>
                 <p class="text">Device Udid：{device_udid}</p>
                 <p class="text">Device Version：{device_version}</p>
             </div>
@@ -430,8 +431,9 @@ class HTMLTestRunner(Template_mixin):
 
     def _generate_device(self):
         device = self.DEVICE_TMPL.format(
-            device_udid=Var.udid ,
-            device_version=Var.device_version,
+            device_name = Var.device_type,
+            device_udid = Var.udid,
+            device_version = Var.device_version,
 
         )
         return device

@@ -44,7 +44,7 @@ class Project(object):
 
     def __init_project(self):
 
-        for path in [path  for path in inspect.stack() if str(path[1]).endswith("runtest.py")]:
+        for path in [path for path in inspect.stack() if str(path[1]).endswith("runtest.py")]:
             self.__ROOT = os.path.dirname(path[1])
             self.__config = analytical_file(os.path.join(self.__ROOT, self.config_name))
             sys.path.append(self.__ROOT)
@@ -101,7 +101,6 @@ class Project(object):
 
 
     def __init_data(self):
-
         # if os.path.exists(os.path.join(Var.ROOT, 'data.json')):
         if os.path.exists(os.path.join(Var.ROOT, self.data_json)):
             with open(os.path.join(Var.ROOT, self.data_json), 'r', encoding='utf-8') as f:
@@ -146,13 +145,15 @@ class Project(object):
         log_info('******************* __init_logging *******************')
         if Var.platformName != None:
             devices = DevicesUtils(Var.platformName, Var.udid)
-            Var.udid, deviceinfo = devices.device_info()
-
-            Var.device_version = devices.get_device_version()
-            Var.apk_version = devices.get_app_version()
+            Var.__udid, deviceinfo, Var.device_version = devices.device_info()
+            Var.device_type = deviceinfo
+            if Var.platformName.lower() == 'ios':
+                Var.apk_version = devices.get_app_version(self.__ROOT,Var.desired_caps['app'])
+            else:
+                Var.apk_version = devices.get_app_version(self.__ROOT,Var.desired_caps['package'])
 
             report_time = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
-            report_child = "{}_{}".format(deviceinfo, report_time)
+            report_child = "{}_{}".format(deviceinfo.strip(), report_time)
         else:
             report_time = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
             report_child = "{}_{}".format(Var.web_driver.lower(), report_time)
@@ -172,7 +173,6 @@ class Project(object):
             log_info('{}: {}'.format(configK, configV))
         log_info('******************* analytical testcase *******************')
         testcase = TestCaseUtils()
-        #print("Var.ROOT, Var.testcase",Var.ROOT, Var.testcase)
         self.__testcase = testcase.testcase_path(Var.ROOT, Var.testcase)
         Var.cases_var = self.__testcase
 
