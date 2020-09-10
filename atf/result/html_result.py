@@ -387,6 +387,7 @@ class HTMLTestRunner(Template_mixin):
                 descriptions = testinfo.description.split("/")
                 pardescription = descriptions[0]
                 description = descriptions[1]
+                pardescription = pardescription if pardescription else self.DEFAULT_PARDESCRIPTION
                 description = description if description else self.DEFAULT_DESCRIPTION
                 Var.reportPardesc = "模块:" + pardescription
                 Var.reportDes = "功能:" + description
@@ -411,7 +412,6 @@ class HTMLTestRunner(Template_mixin):
                     error += 1
                 elif _status == 3:
                     skipped += 1
-            pardescription = pardescription if pardescription else self.DEFAULT_PARDESCRIPTION
 
             module_name = self.MODULE_NAME.format(
                 module_name = module_name,
