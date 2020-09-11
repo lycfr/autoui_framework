@@ -41,7 +41,7 @@ def upload_img(remote_path=None,local_path=None):
 
 def scpFileToRemoteNode(user,ip,password,localsource,remotedest,port=22):
 
-    ServerHost = 'http://qa-jenkins-test.igetcool.com/apks/reports/'
+    ServerHost = 'http://qa-jenkins-test.igetcool.com/reports/'
 
     local_file = str(localsource).split('/')[-1]
 

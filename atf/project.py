@@ -241,7 +241,7 @@ class Project(object):
         # 暂时写死生成报告时间
         ReportPath = scpFileToRemoteNode("root", "10.30.130.116", "5yKUHcxTynfDORnN1",
                             os.path.join(os.getcwd(),Var.report),
-                            "/data/apache/www/html/apks/reports", 22)
+                            "/opt/data/reports", 22)
 
         log_info('******************* ui task over *******************')
 
