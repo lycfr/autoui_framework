@@ -175,7 +175,7 @@ class Template_mixin(object):
                     
         '''
 
-    REPORT_TMPL_DIV = r'''<pre class="reportPardesc">{reportPardesc}    {reportDes}    {reportStatus}</pre>'''
+    REPORT_TMPL_DIV = r'''<pre class="reportPardesc" style="padding-left: 10px">{reportPardesc}    {reportDes}    {reportStatus}</pre>'''
 
 
     # 测试汇总
