@@ -21,7 +21,7 @@ class AppDriverBase(object):
 
             else:
                 # from drivers.macaca import AndroidDriver, iOSDriver
-                print("else==")
+                pass
             if Var.platformName.lower() == "ios":
                 appdriver = iOSDriver
             elif Var.platformName.lower() == "android":

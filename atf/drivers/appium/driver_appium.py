@@ -851,3 +851,15 @@ class iOSDriver(object):
         if "WEBVIEW" in self._current_context:
             Var.appinstance.switch_to.window(self._current_window)
             logging.info(Var.appinstance.page_source)
+
+
+    @staticmethod
+    def get_page_source():
+        try:
+            page_source = Var.appinstance.page_source
+            return page_source
+        except Exception as e:
+            raise e
+
+
+
