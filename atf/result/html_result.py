@@ -72,6 +72,7 @@ class Template_mixin(object):
     {pie}    
     {device}
     {apk}
+    {trReportList}
     {tabdiv}
 </div>
 </body>
@@ -145,6 +146,7 @@ class Template_mixin(object):
         <div class="head" style="height: 240px">
             <div class="head_title">Device Info</div>
             <div style="height: 210px;border: 1px solid rgb(220,220,220); background-color: white">
+                <p class="text">Device Name：{device_name}</p>
                 <p class="text">Device Udid：{device_udid}</p>
                 <p class="text">Device Version：{device_version}</p>
             </div>
@@ -161,6 +163,19 @@ class Template_mixin(object):
             </div>
         </div>
         '''
+
+    # caseReport
+    REPORT_TMPL = r'''
+                    <div class="head" style="height: auto">
+                        <div class="head_title">Report</div>
+                        <div style="height: auto;border: 1px solid rgb(220,220,220); background-color: white">
+                                {trReportList}
+                        </div>
+                    </div>
+                    
+        '''
+
+    REPORT_TMPL_DIV = r'''<pre class="reportPardesc" style="padding-left: 10px">{reportPardesc}    {reportDes}    {reportStatus}</pre>'''
 
 
     # 测试汇总
@@ -252,6 +267,8 @@ class Template_mixin(object):
                     </td>
                 </tr>
     '''
+
+
     CASE_SNAPSHOT_DIV = r'''
                             <div class="Stepsdetails">
                                 <div class="steps" style="display: inline-block">
@@ -282,6 +299,7 @@ class Template_mixin(object):
 class HTMLTestRunner(Template_mixin):
 
     def __init__(self, stream=sys.stdout, verbosity=1, title=None, description=None):
+        Var.case_reports = []
         self.stream = stream
         self.verbosity = verbosity
         self.title = title if title else self.DEFAULT_TITLE
@@ -291,26 +309,23 @@ class HTMLTestRunner(Template_mixin):
     def generateReport(self,result,starttime,stoptime):
         report_attrs = self._getReportAttributes(result, starttime, stoptime)
         report = self._generate_report(result)
-
         device = self._generate_device()
         apk = self._generate_apk()
-
+        reportCase = self._generate_reportCase()
         heading = self._generate_heading(report_attrs)
         tabdiv = self.TABDIV_TMPL.format(
             trlist = report
         )
-
         chart = self._generate_chart()
-
         pie = self._generate_pie()
-
         output = self.HTML_TMPL.format(
             heading = heading,
             device=device,
             apk=apk,
             tabdiv = tabdiv,
             pie = pie,
-            chart_script = chart
+            chart_script = chart,
+            trReportList = reportCase
         )
         resource = os.path.join(os.path.split(os.path.abspath(__file__))[0], "resource")
         shutil.copy(os.path.join(resource,"css.css"), os.path.join(result.report,'resource'))
@@ -326,6 +341,7 @@ class HTMLTestRunner(Template_mixin):
         Failure = len(result.failures)
         Error = len(result.errors)
         skipped = len(result.skipped)
+
 
         Var.duration = duration
         Var.Total = Total
@@ -353,9 +369,9 @@ class HTMLTestRunner(Template_mixin):
 
 
     def _generate_report(self, result):
-
         sortedResult = self.sortResult(result.result)
         table_lsit = []
+        Var.reportsList = []
         for cid, (cls, cls_results) in enumerate(sortedResult):
             module_name = cls
             status_list = ['Pass','failure','error','skipped']
@@ -368,10 +384,20 @@ class HTMLTestRunner(Template_mixin):
             for tup_result in cls_results:
                 _status = tup_result[0]
                 testinfo = tup_result[1]
-
                 descriptions = testinfo.description.split("/")
                 pardescription = descriptions[0]
-
+                description = descriptions[1]
+                pardescription = pardescription if pardescription else self.DEFAULT_PARDESCRIPTION
+                description = description if description else self.DEFAULT_DESCRIPTION
+                Var.reportPardesc = "模块:" + pardescription
+                Var.reportDes = "功能:" + description
+                Var.reportStatus = "结果为:" + status_list[_status]
+                report_tmpl_div = self.REPORT_TMPL_DIV.format(
+                    reportPardesc = Var.reportPardesc,
+                    reportDes = Var.reportDes,
+                    reportStatus = Var.reportStatus
+                )
+                Var.reportsList.append(report_tmpl_div)
                 caseinfo = self._generate_case(testinfo, status_list[_status])
                 cls_list.append(caseinfo)
                 if _status != 3: # 跳过
@@ -387,8 +413,6 @@ class HTMLTestRunner(Template_mixin):
                 elif _status == 3:
                     skipped += 1
 
-            pardescription = pardescription if pardescription else self.DEFAULT_PARDESCRIPTION
-
             module_name = self.MODULE_NAME.format(
                 module_name = module_name,
                 pardescription = pardescription,
@@ -398,12 +422,9 @@ class HTMLTestRunner(Template_mixin):
                 skipped = skipped,
                 tag_module_name = module_name
             )
-
             table_lsit.append(module_name)
             for tr in cls_list:
                 table_lsit.append(tr)
-
-
         tr_ = ''
         for tr in table_lsit:
             tr_ = tr_ + tr
@@ -430,8 +451,9 @@ class HTMLTestRunner(Template_mixin):
 
     def _generate_device(self):
         device = self.DEVICE_TMPL.format(
-            device_udid=Var.udid ,
-            device_version=Var.device_version,
+            device_name = Var.device_type,
+            device_udid = Var.udid,
+            device_version = Var.device_version,
 
         )
         return device
@@ -439,10 +461,15 @@ class HTMLTestRunner(Template_mixin):
 
     def _generate_apk(self):
         apk = self.APK_TMPL.format(
-            apk_version=Var.apk_version ,
+            apk_version=Var.apk_version
         )
         return apk
 
+    def _generate_reportCase(self):
+        reportCase = self.REPORT_TMPL.format(
+            trReportList="".join(Var.reportsList)
+        )
+        return reportCase
 
     def _generate_heading(self,report_attrs):
 
@@ -461,13 +488,11 @@ class HTMLTestRunner(Template_mixin):
 
     def _generate_case(self,testinfo,status):
         casename = testinfo.casename
-        # description = testinfo.description
         descriptions = testinfo.description.split("/")
         description = descriptions[1]
-        # print("testinfo.description:",testinfo.description)
-
         startTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(testinfo.start_time))
         duration = str(int(testinfo.stop_time - testinfo.start_time)) + 's'
+        Var.reportDuration = duration
         dataId = testinfo.dataId
         module_name = testinfo.module_name
 
@@ -544,6 +569,8 @@ class HTMLTestRunner(Template_mixin):
                 steplist=steps,
                 errlist=err
             )
+
+
 
         return casedeta
 

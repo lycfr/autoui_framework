@@ -40,6 +40,7 @@ class AppDriverBase(object):
         Returns:
             None
         """
+
         appdriver.adb_shell(cmd)
 
     @staticmethod
@@ -195,7 +196,7 @@ class AppDriverBase(object):
         appdriver.swipe_right(duration)
 
     @staticmethod
-    def swipe(from_x, from_y, to_x, to_y, duration=2):
+    def swipe1(from_x, from_y, to_x, to_y, duration=2):
         '''
         :param from_x:
         :param from_y:
@@ -204,7 +205,7 @@ class AppDriverBase(object):
         :param duration:
         :return:
         '''
-        appdriver.swipe(from_x, from_y, to_x, to_y, duration)
+        appdriver.swipe1(from_x, from_y, to_x, to_y, duration)
 
     @staticmethod
     def move_to(x, y):
@@ -419,17 +420,18 @@ class AppDriverBase(object):
             # 对黑名单里的弹框进行处理
             if Var.black_list:
                 for i in Var.black_list:
-                    w = re.split('[(,)]', i)
-                    elements = appdriver.black_for_elements(w[1], w[2])
+                    # w = re.split('[(,)]', i)
+                    inBrackets = i[12:-1]
+                    douIndex = inBrackets.find(",")
+                    byBlack = inBrackets[:douIndex]
+                    eleBlack = inBrackets[(douIndex + 1):]
+                    elements = appdriver.black_for_elements(byBlack,eleBlack)
                     if len(elements) > 0:
                         elements[0].click()
-                        if len(w) == 5:
-                            time.sleep(int(w[3]))
+                        time.sleep(1)
                         # 继续寻找原来的正常控件
                         return AppDriverBase.wait_for_elements_by_key(elements_info)
-
             app_screenshot_eles_steps(None, Var.tmp_file, Var.file, zoom=1.0)
-
             # 如果黑名单也没有，就报错
             log_info("black list no one found")
             return None

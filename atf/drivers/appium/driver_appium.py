@@ -138,7 +138,7 @@ class AndroidDriver(object):
                 Var.appinstance.tap([(index,ey)],500)      #用tap方法横向点击某按钮，ex+400,ey不变
             elif 'y' in index:
                 # driver.swipe(ex, ey, ex + 400, ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
-                Var.appinstance.swipe(ex, ey, ex + 400, ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
+                Var.appinstance.swipe1(ex, ey, ex + 400, ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
 
         except Exception as e:
             raise e
@@ -165,7 +165,7 @@ class AndroidDriver(object):
             ex = e.location.get('x')  # 获取元素初始横坐标
             ey = e.location.get('y')  # 获取元素初始纵坐标
             # driver.swipe(ex, ey, ex + 400, ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
-            Var.appinstance.swipe(ex, ey, ex + int(index), ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
+            Var.appinstance.swipe1(ex, ey, ex + int(index), ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
         except Exception as e:
             raise e
 
@@ -262,7 +262,7 @@ class AndroidDriver(object):
         try:
             width = Var.appinstance.get_window_size()['width']
             height = Var.appinstance.get_window_size()['height']
-            AndroidDriver.swipe(width / 2, height * 3 / 4, width / 2, height / 4, duration)
+            AndroidDriver.swipe1(width / 2, height * 3 / 4, width / 2, height / 4, duration)
         except Exception as e:
             raise e
 
@@ -275,7 +275,7 @@ class AndroidDriver(object):
         try:
             width = Var.appinstance.get_window_size()['width']
             height = Var.appinstance.get_window_size()['height']
-            AndroidDriver.swipe(width / 2, height / 4, width / 2, height * 3 / 4, duration)
+            AndroidDriver.swipe1(width / 2, height / 4, width / 2, height * 3 / 4, duration)
 
         except Exception as e:
             raise e
@@ -289,7 +289,7 @@ class AndroidDriver(object):
         try:
             width = Var.appinstance.get_window_size()['width']
             height = Var.appinstance.get_window_size()['height']
-            AndroidDriver.swipe(width * 3 / 4, height / 2, width / 4, height / 2, duration)
+            AndroidDriver.swipe1(width * 3 / 4, height / 2, width / 4, height / 2, duration)
         except Exception as e:
             raise e
 
@@ -302,12 +302,12 @@ class AndroidDriver(object):
         try:
             width = Var.appinstance.get_window_size()['width']
             height = Var.appinstance.get_window_size()['height']
-            AndroidDriver.swipe(width / 4, height / 2, width * 3 / 4, height / 2, duration)
+            AndroidDriver.swipe1(width / 4, height / 2, width * 3 / 4, height / 2, duration)
         except Exception as e:
             raise e
 
     @staticmethod
-    def swipe(from_x, from_y, to_x, to_y, duration=3):
+    def swipe1(from_x, from_y, to_x, to_y, duration=3):
         '''
         :param from_x:
         :param from_y:
@@ -336,7 +336,7 @@ class AndroidDriver(object):
             raise e
 
     @staticmethod
-    def input(element, text, clear=True, hide_keyboard=True):
+    def input(element, text, hide_keyboard=True):
         '''
         :param element:
         :param text:
@@ -345,10 +345,7 @@ class AndroidDriver(object):
         :return:
         '''
         try:
-            # if clear:
-            #     AndroidDriver.clear()
-            # if hide_keyboard:
-            #     AndroidDriver.hide_keyboard()
+            element.clear()
             element.send_keys(text)
         except Exception as e:
             raise e
@@ -389,26 +386,6 @@ class AndroidDriver(object):
         except Exception as e:
             raise e
 
-
-    @staticmethod
-    def clear():
-        '''
-        :return:
-        '''
-        try:
-            Var.appinstance.clear()
-        except:
-            traceback.print_exc()
-
-    @staticmethod
-    def hide_keyboard():
-        '''
-        :return:
-        '''
-        try:
-            Var.appinstance.hide_keyboard()
-        except:
-            traceback.print_exc()
 
     @staticmethod
     def wait_for_elements_by_id(id, timeout=10, interval=1):
@@ -635,15 +612,22 @@ class iOSDriver(object):
             raise e
 
     @staticmethod
-    def swipe_up(duration=2):
+    def swipe_up(duration=200):
         '''
         :param duration:
         :return:
         '''
+        print("ios进行滑动")
         try:
             width = Var.appinstance.get_window_size()['width']
+            print("width：",width)
             height = Var.appinstance.get_window_size()['height']
-            iOSDriver.swipe(width / 2, height * 3 / 4, width / 2, height / 4, duration)
+            print("height:",height)
+            print(width / 2, height * 3 / 4, width / 2, height / 4, duration)
+            # Var.appinstance.swipe(width / 2, height * 3 / 4, width / 2, height / 4, duration)
+            # TouchAction(Var.appinstance).press(width / 2, height * 3 / 4).move_to(width / 2,
+            #                                                                   height / 4).release().perform()
+            iOSDriver.swipe1(width / 2, height * 3 / 4, width / 2, height / 4, duration)
         except Exception as e:
             raise e
 
@@ -656,8 +640,8 @@ class iOSDriver(object):
         try:
             width = Var.appinstance.get_window_size()['width']
             height = Var.appinstance.get_window_size()['height']
-            iOSDriver.swipe(width / 2, height / 4, width / 2, height * 3 / 4, duration)
-
+            iOSDriver.swipe1(width / 2, height / 4, width / 2, height * 3 / 4, duration)
+            # TouchAction(Var.appinstance).press(width / 2, height / 4).move_to(width / 2, height * 3 / 4).release().perform()
         except Exception as e:
             raise e
 
@@ -670,7 +654,7 @@ class iOSDriver(object):
         try:
             width = Var.appinstance.get_window_size()['width']
             height = Var.appinstance.get_window_size()['height']
-            iOSDriver.swipe(width * 3 / 4, height / 2, width / 4, height / 2, duration)
+            iOSDriver.swipe1(width * 3 / 4, height / 2, width / 4, height / 2, duration)
         except Exception as e:
             raise e
 
@@ -683,12 +667,12 @@ class iOSDriver(object):
         try:
             width = Var.appinstance.get_window_size()['width']
             height = Var.appinstance.get_window_size()['height']
-            iOSDriver.swipe(width / 4, height / 2, width * 3 / 4, height / 2, duration)
+            iOSDriver.swipe1(width / 4, height / 2, width * 3 / 4, height / 2, duration)
         except Exception as e:
             raise e
 
     @staticmethod
-    def swipe(from_x, from_y, to_x, to_y, duration=3):
+    def swipe1(from_x, from_y, to_x, to_y, duration=3):
         '''
         :param from_x:
         :param from_y:
@@ -708,7 +692,8 @@ class iOSDriver(object):
                 to_x = to_x * width
             if to_y <= 1.0:
                 to_y = to_y * height
-            Var.appinstance.swipe(int(from_x), int(from_y), int(to_x), int(to_y), duration)
+            print(Var.appinstance)
+            Var.appinstance.swipe(int(from_x), int(from_y), int(to_x), int(to_y), 200)
 
             if Var.ocrimg is not None:
                 cv2.imwrite(Var.file, Var.ocrimg)
@@ -720,7 +705,7 @@ class iOSDriver(object):
             raise e
 
     @staticmethod
-    def input(element, text, clear=True, hide_keyboard=True):
+    def input(element, text, hide_keyboard=True):
         '''
         :param element:
         :param text:
@@ -729,10 +714,8 @@ class iOSDriver(object):
         :return:
         '''
         try:
-            # if clear:
-            #     iOSDriver.clear()
-            # if hide_keyboard:
-            #     iOSDriver.hide_keyboard()
+            if hide_keyboard:
+                iOSDriver.hide_keyboard1()
             element.clear()
             element.send_keys(text)
         except Exception as e:
@@ -750,18 +733,9 @@ class iOSDriver(object):
         except Exception as e:
             raise e
 
-    @staticmethod
-    def clear():
-        '''
-        :return:
-        '''
-        try:
-            Var.appinstance.clear()
-        except:
-            traceback.print_exc()
 
     @staticmethod
-    def hide_keyboard():
+    def hide_keyboard1():
         '''
         :return:
         '''
@@ -797,7 +771,7 @@ class iOSDriver(object):
     @staticmethod
     def black_for_elements(by,ele):
         '''
-        :param name:
+        :param name:ios
         :return:
         '''
         if by == 'name':
@@ -836,6 +810,13 @@ class iOSDriver(object):
         except Exception as e:
             raise e
 
+    @staticmethod
+    def get_page_source():
+        try:
+            page_source = Var.appinstance.page_source
+            return page_source
+        except Exception as e:
+            raise e
 
     @staticmethod
     def save_context(self):
