@@ -568,7 +568,7 @@ class ActionExecutor(object):
         if parms is None:
             raise TypeError('sleep missing 1 required positional argument')
         elif len(parms) == 1:
-            time.sleep(float(parms[0]))
+            time.sleep(int(parms[0]))
 
 
     def __ocr_analysis(self, action, element, israise):
@@ -1054,7 +1054,6 @@ class ActionExecutor(object):
 
         elif action.key == 'input':
             result = self.__action_input(action)
-
 
         elif action.key == 'sleep':
             result = self.__action_sleep(action)

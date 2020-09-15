@@ -714,8 +714,8 @@ class iOSDriver(object):
         :return:
         '''
         try:
-            if hide_keyboard:
-                iOSDriver.hide_keyboard1()
+            # if hide_keyboard:
+            #     iOSDriver.hide_keyboard1()
             element.clear()
             element.send_keys(text)
         except Exception as e:
@@ -740,8 +740,10 @@ class iOSDriver(object):
         :return:
         '''
         try:
+            print("进行键盘的隐藏")
             Var.appinstance.hide_keyboard()
         except:
+            print("键盘报错")
             traceback.print_exc()
 
     @staticmethod
@@ -794,6 +796,7 @@ class iOSDriver(object):
         '''
         try:
             elements = Var.appinstance.find_elements_by_xpath(xpath)
+            print("elements:::",elements)
             return elements
         except Exception as e:
             raise e
@@ -842,5 +845,19 @@ class iOSDriver(object):
         except Exception as e:
             raise e
 
-
+    @staticmethod
+    def get_texts(elements):
+        '''
+        android
+        :param element:
+        :return:
+        '''
+        texts = list()
+        try:
+            for ele in elements:
+                text = ele.text
+                texts.append(text)
+            return texts
+        except Exception as e:
+            raise e
 

@@ -247,6 +247,15 @@ class AppDriverBase(object):
         return True
 
 
+
+    @staticmethod
+    def hide_keyboard1():
+        '''
+        '''
+        print("hide_keyboard-appdriverbase")
+        appdriver.hide_keyboard1()
+
+
     @staticmethod
     def input(key, text='', timeout=10, interval=1, index=0, clear=True):
         '''
