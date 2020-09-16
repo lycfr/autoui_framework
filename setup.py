@@ -15,7 +15,7 @@ with open("README.MD", "r", encoding='UTF-8') as fh:
 
 setuptools.setup(
     name="atf", # 软件包发行名称
-    version="0.0.1", # 软件包版本
+    version="0.0.2", # 软件包版本
     author="igetcool_qa", # 作者
     author_email="qa@igetcool.com", # 邮件
     keywords=('macaca', 'appium', 'UI自动化', '关键字驱动'),

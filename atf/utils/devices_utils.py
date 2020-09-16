@@ -31,12 +31,14 @@ class DevicesUtils(object):
                 pipe = os.popen("adb -s {} shell dumpsys package {} | grep versionName".format(self.__udid,packageName))
             result = pipe.read()
             app_version = "None" if not result else \
-                re.split('=',result)[-1]
+                str(re.split('=', result)[-1]).strip()
 
         elif self.__platformName.lower() == 'ios':
             if os.path.exists(os.path.join(ROOT, "IGCProject.ipa")):
                 ipa_path = os.path.join(ROOT, "IGCProject.ipa")
                 app_version = self.analyze_ipa_with_plistlib(ipa_path)
+            else:
+                app_version = self.get_ios_verson()
         else:
             raise Exception("Test Platform must be Android or iOS!")
 
@@ -115,6 +117,24 @@ class DevicesUtils(object):
         return devices
 
 
+    def get_ios_verson(self):
+        """
+        查询设备中的app版本号,不太准
+        """
+        version = '0.0.0'
+        try:
+            pipe = os.popen("ideviceinstaller -u {udid} -l".find(udid=self.__udid))
+            deviceinfo = pipe.readlines()
+            pattern = re.compile(r'com.igetcool.app')
+            for line in deviceinfo:
+                if 'com.igetcool.app' in line:
+                    version = str(line).split('-')[1]
+        except Exception as e:
+            log_info(e)
+        return version
+
+
+
     def analyze_ipa_with_plistlib(self,ipa_path):
         ipa_file = zipfile.ZipFile(ipa_path)
         plist_path = self.find_plist_path(ipa_file)
@@ -136,3 +156,5 @@ class DevicesUtils(object):
         log_info('Display Name: {}'.format(plist_root['CFBundleDisplayName']))
         log_info('Bundle Identifier: {}'.format(plist_root['CFBundleIdentifier']))
         log_info('Version: {}'.format( plist_root['CFBundleShortVersionString']))
+
+

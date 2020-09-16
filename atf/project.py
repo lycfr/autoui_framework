@@ -77,6 +77,9 @@ class Project(object):
             else:
                 Var[configK] = configV
 
+            if configK == 'testenv':
+                Var.testenv = configV
+
             if configK == 'retry_count':
                 Var.retry_count = configV
 
@@ -249,6 +252,8 @@ class Project(object):
         message_params['content'] = self.create_message_body(ReportPath)
         MessageUtils().send_message_result(message_params)
 
+        MessageUtils().send_message_markdown(message_params)
+
 
 
     def create_message_body(self,ReportPath):
@@ -259,6 +264,9 @@ class Project(object):
 
         return '\n> ' \
                        '时间: ' + str(time.strftime("%Y-%m-%d %H:%M:%S")) + "\n" + \
+                       '版本: ' + str(Var.apk_version) + "\n" + \
+                       '平台: ' + str(Var.platformName.lower()) + "\n" + \
+                       '环境: ' + str(Var.testenv) + "\n" + \
                        '持续时间: ' + str(Var.duration)  + "\n" + \
                        '累计用例: ' + str(Var.Total)  + "\n" + \
                        '成功用例: ' + str(Var.Pass)  + "\n" + \
