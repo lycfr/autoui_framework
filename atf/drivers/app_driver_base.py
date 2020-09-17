@@ -68,7 +68,7 @@ class AppDriverBase(object):
         :param package_info: Android(package/activity) or iOS(bundleId)
         :return:
         '''
-        print("lauch_app")
+        log_info("启动app")
         appdriver.launch_app(package_info)
         time.sleep(3)
 
@@ -118,6 +118,29 @@ class AppDriverBase(object):
         :return:
         '''
         appdriver.swipeSeekBar(x)
+
+    @staticmethod
+    def iosSeekBar(ele1,ele2):
+        '''
+        only appium
+        :return:
+        '''
+        element1 = AppDriverBase.find_elements_by_key(key=ele1,timeout=10, interval=1, index=0)
+        if not element1:
+            raise Exception("Can't find element {}".format(ele1))
+
+        element2 = AppDriverBase.find_elements_by_key(key=ele2, timeout=10, interval=1, index=0)
+        if not element2:
+            raise Exception("Can't find element {}".format(ele2))
+        fromX = element1.location.get('x')
+        fromY = element1.location.get('y')
+        toX = element2.location.get('x')
+        toY = element2.location.get('y')
+        log_info("iosSeekBar:{},{}".format(ele1, ele2))
+
+        appdriver.iosSeekBar(fromX,fromY,toX,toY)
+
+
     @staticmethod
     def background_app():
         '''
@@ -247,15 +270,6 @@ class AppDriverBase(object):
         return True
 
 
-
-    @staticmethod
-    def hide_keyboard1():
-        '''
-        '''
-        print("hide_keyboard-appdriverbase")
-        appdriver.hide_keyboard1()
-
-
     @staticmethod
     def input(key, text='', timeout=10, interval=1, index=0, clear=True):
         '''
@@ -373,7 +387,6 @@ class AppDriverBase(object):
         :param elements_info:
         :return:
         '''
-        print("elements_info",elements_info)
         _error_max = 10
         _error_count = 0
         element_type = elements_info['element_type']
@@ -408,8 +421,6 @@ class AppDriverBase(object):
                     cv2.imwrite(Var.file, Var.ocrimg)
                     Var.ocrimg = None
                 else:
-                    # Var.instance.save_screenshot(Var.file)app_screenshot_eles_steps
-                    print("截图时：elements[index]",elements[index])
                     app_screenshot_steps(elements[index], Var.tmp_file, Var.file, zoom=1.0)
                 return elements[index]
             else:

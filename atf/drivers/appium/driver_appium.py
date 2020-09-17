@@ -617,16 +617,9 @@ class iOSDriver(object):
         :param duration:
         :return:
         '''
-        print("ios进行滑动")
         try:
             width = Var.appinstance.get_window_size()['width']
-            print("width：",width)
             height = Var.appinstance.get_window_size()['height']
-            print("height:",height)
-            print(width / 2, height * 3 / 4, width / 2, height / 4, duration)
-            # Var.appinstance.swipe(width / 2, height * 3 / 4, width / 2, height / 4, duration)
-            # TouchAction(Var.appinstance).press(width / 2, height * 3 / 4).move_to(width / 2,
-            #                                                                   height / 4).release().perform()
             iOSDriver.swipe1(width / 2, height * 3 / 4, width / 2, height / 4, duration)
         except Exception as e:
             raise e
@@ -694,7 +687,6 @@ class iOSDriver(object):
                 to_y = to_y * height
             print(Var.appinstance)
             Var.appinstance.swipe(int(from_x), int(from_y), int(to_x), int(to_y), 200)
-
             if Var.ocrimg is not None:
                 cv2.imwrite(Var.file, Var.ocrimg)
                 Var.ocrimg = None
@@ -732,19 +724,6 @@ class iOSDriver(object):
             return text
         except Exception as e:
             raise e
-
-
-    @staticmethod
-    def hide_keyboard1():
-        '''
-        :return:
-        '''
-        try:
-            print("进行键盘的隐藏")
-            Var.appinstance.hide_keyboard()
-        except:
-            print("键盘报错")
-            traceback.print_exc()
 
     @staticmethod
     def wait_for_elements_by_id(id, timeout=10, interval=1):
@@ -796,7 +775,6 @@ class iOSDriver(object):
         '''
         try:
             elements = Var.appinstance.find_elements_by_xpath(xpath)
-            print("elements:::",elements)
             return elements
         except Exception as e:
             raise e
@@ -861,3 +839,10 @@ class iOSDriver(object):
         except Exception as e:
             raise e
 
+    @staticmethod
+    def iosSeekBar(fromX,fromY,toX,toY):
+        try:
+            log_info("iosSeekBar-driver_appium")
+            iOSDriver.swipe1(int(fromX), int(fromY), int(toX),int(toY),200)
+        except Exception as e:
+            raise e
