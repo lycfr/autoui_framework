@@ -222,6 +222,18 @@ class AndroidDriver(object):
             raise e
 
     @staticmethod
+    def getUrl(url):
+        '''
+        :param x:
+        :param y:
+        :param duration:
+        :return:
+        '''
+
+        Var.appinstance.get(url)
+
+
+    @staticmethod
     def press(x, y, duration=2):
         '''
         :param x:
@@ -346,6 +358,8 @@ class AndroidDriver(object):
         '''
         try:
             element.clear()
+            time.sleep(2)
+            log_info("输入对应的文本")
             element.send_keys(text)
         except Exception as e:
             raise e
@@ -527,6 +541,7 @@ class iOSDriver(object):
             Var.appinstance.get_screenshot_as_file(image_name)
         except Exception as e:
             raise e
+
 
     @staticmethod
     def background_app():
@@ -726,6 +741,22 @@ class iOSDriver(object):
             raise e
 
     @staticmethod
+    def get_texts(elements):
+        '''
+        android
+        :param element:
+        :return:
+        '''
+        texts = list()
+        try:
+            for ele in elements:
+                text = ele.text
+                texts.append(text)
+            return texts
+        except Exception as e:
+            raise e
+
+    @staticmethod
     def wait_for_elements_by_id(id, timeout=10, interval=1):
         '''
         :param id:
@@ -813,31 +844,6 @@ class iOSDriver(object):
         if "WEBVIEW" in self._current_context:
             Var.appinstance.switch_to.window(self._current_window)
             logging.info(Var.appinstance.page_source)
-
-
-    @staticmethod
-    def get_page_source():
-        try:
-            page_source = Var.appinstance.page_source
-            return page_source
-        except Exception as e:
-            raise e
-
-    @staticmethod
-    def get_texts(elements):
-        '''
-        android
-        :param element:
-        :return:
-        '''
-        texts = list()
-        try:
-            for ele in elements:
-                text = ele.text
-                texts.append(text)
-            return texts
-        except Exception as e:
-            raise e
 
     @staticmethod
     def iosSeekBar(fromX,fromY,toX,toY):
