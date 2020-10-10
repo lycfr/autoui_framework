@@ -27,6 +27,7 @@ class ActionExecutor(object):
         """
         获取页面元素
         :return:
+        :return:
         """
         # parms = action.parms
         return AppDriverBase.get_page_source()
@@ -825,7 +826,7 @@ class ActionExecutor(object):
     def __action_findallNum(self, action):
         import re
         result = re.sub("\D","",action.parms)
-        return result
+        return int(result)
 
 
     def __action_addlist(self, action):
