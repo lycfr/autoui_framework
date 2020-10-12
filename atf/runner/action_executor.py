@@ -469,7 +469,41 @@ class ActionExecutor(object):
                 return False
             return check
         else:
-            raise TypeError('click missing 1 required positional argument: element')
+            raise TypeError('check missing 1 required positional argument: element')
+
+    def __action_getAttribute(self, action):
+        """
+
+        """
+        parms = action.parms
+        list_params = parms.split(',')
+        if len(list_params):
+
+            if list_params[0].startswith("\""):
+                list_params[0] = list_params[0].strip("\"")
+            if list_params[0].startswith("\'"):
+                list_params[0] = list_params[0].strip("\'")
+            if len(list_params) == 1:
+                getAttribute = AppDriverBase.getOneAttribute(key=list_params[0], timeout=Var.timeout,
+                                                             interval=Var.interval,
+                                                             index=0, name='class')
+            elif len(list_params) == 2:
+                getAttribute = AppDriverBase.getOneAttribute(key=list_params[0], timeout=Var.timeout, interval=Var.interval,
+                                            index=0,name=str(list_params[2]))
+
+            elif len(list_params) == 3:
+                getAttribute = AppDriverBase.getOneAttribute(key=list_params[0], timeout=Var.timeout, interval=Var.interval,
+                                            index=int(list_params[1]),name=str(list_params[2]))
+            else:
+                raise TypeError('getAttribute takes 2 positional arguments but {} was given'.format(len(list_params)))
+
+            if not getAttribute:
+                log_info("Can't find element {}".format(list_params[0]))
+                return ''
+            return getAttribute
+        else:
+            raise TypeError('getAttribute missing 1 required positional argument: element')
+
 
 
 
@@ -635,6 +669,9 @@ class ActionExecutor(object):
 
         elif action.key == 'check':
             result = self.__action_check(action)
+
+        elif action.key == 'getAttribute':
+            result = self.__action_getAttribute(action)
         elif action.key == '$.getVar':
             if Var.global_var:
                 if action.parms[0] in Var.global_var:

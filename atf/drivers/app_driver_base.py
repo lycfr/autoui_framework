@@ -230,15 +230,6 @@ class AppDriverBase(object):
         '''
         appdriver.swipe1(from_x, from_y, to_x, to_y, duration)
 
-    @staticmethod
-    def move_to(x, y):
-        '''
-        :param x:
-        :param y:
-        :return:
-        '''
-        appdriver.move_to(x, y)
-
 
     @staticmethod
     def click(key, timeout=10, interval=1, index=0):
@@ -269,6 +260,20 @@ class AppDriverBase(object):
             return False
         return True
 
+    @staticmethod
+    def getOneAttribute(key, timeout=10, interval=1, index=0, name='class'):
+        '''
+        key=list_params[0], timeout=Var.timeout, interval=Var.interval,
+                                            index=int(list_params[1]),name=list_params[2]
+        :param key:
+        :param timeout:
+        :param interval:
+        :param index:
+        :return:
+        '''
+        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index)
+        getOneAttribute = appdriver.getOneAttribute(element,name)
+        return getOneAttribute
 
     @staticmethod
     def input(key, text='', timeout=10, interval=1, index=0, clear=True):

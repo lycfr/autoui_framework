@@ -377,6 +377,18 @@ class AndroidDriver(object):
             raise e
 
     @staticmethod
+    def getOneAttribute(element,name):
+        '''
+        :param element:
+        :return:
+        '''
+        try:
+            getOneAttribute = element.get_attribute(name)
+            return getOneAttribute
+        except Exception as e:
+            raise e
+
+    @staticmethod
     def get_texts(elements):
         '''
         android
@@ -741,6 +753,18 @@ class iOSDriver(object):
             raise e
 
     @staticmethod
+    def getOneAttribute(element,name):
+        '''
+        :param element:
+        :return:
+        '''
+        try:
+            getOneAttribute = element.get_attribute(name)
+            return getOneAttribute
+        except Exception as e:
+            raise e
+
+    @staticmethod
     def get_texts(elements):
         '''
         android
@@ -764,6 +788,7 @@ class iOSDriver(object):
         '''
         try:
             elements = Var.appinstance.find_elements_by_id(id)
+            print(elements)
             return elements
         except Exception as e:
             raise e

@@ -15,6 +15,7 @@
         "swipeToEle",
         "click",
         "check",
+        "getAttribute",
         "getElements",
         "input",
         "sleep",
