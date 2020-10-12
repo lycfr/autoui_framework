@@ -788,7 +788,6 @@ class iOSDriver(object):
         '''
         try:
             elements = Var.appinstance.find_elements_by_id(id)
-            print(elements)
             return elements
         except Exception as e:
             raise e
