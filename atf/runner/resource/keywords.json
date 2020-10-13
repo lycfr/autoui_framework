@@ -26,6 +26,7 @@
         "$.getVar",
         "$.setVar",
         "$.getOne",
+        "$.getEles",
         "if",
         "elif",
         "else",
