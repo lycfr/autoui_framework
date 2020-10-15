@@ -83,8 +83,8 @@ class Project(object):
             if configK == 'retry_count':
                 Var.retry_count = configV
 
-            else:
-                Var.retry_count = 0
+            # else:
+            #     Var.retry_count = 0
 
         if "appdriver" in self.__config.keys():
             log_info("******************* appdriver 初始化 *******************")
