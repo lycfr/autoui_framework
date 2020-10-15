@@ -30,7 +30,9 @@ def retry_method():  # n为重试次数,不包括必要的第一次执行
                     num += 1
                     func(*args, **kwargs)
                     return
-                except AssertionError:
+                # except AssertionError:
+                except Exception as e:
+                    log_info('Retry_method Exception {}'.format(e))
                     log_info('Retry_method AssertionError')
                     if num <= n:
                         trace = sys.exc_info()
