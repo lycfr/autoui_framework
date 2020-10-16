@@ -293,7 +293,7 @@ class Project(object):
         :return:
         """
 
-        status = 'SUCCESS' if Var.Pass == 1 else status = 'FAIL'
+        status = 'SUCCESS' if Var.Pass == 1 else 'FAIL'
 
         return 'QA环境商城支付UI自动化测试通知 \n' \
                '时间: ' + str(time.strftime("%Y-%m-%d %H:%M:%S")) + "\n" + \
