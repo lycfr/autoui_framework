@@ -8,7 +8,6 @@ import inspect
 import unittest
 
 from atf.utils.message_untils import MessageUtils
-
 from atf.commons.logging import *
 from atf.drivers.app_driver_base import AppDriverBase
 from atf.drivers.web_driver_base import WebDriverBase
@@ -20,7 +19,6 @@ from atf.utils.testcase_utils import TestCaseUtils
 from atf.utils.web_server_utils import WebServerUtils
 from atf.utils.yaml_utils import analytical_file, Dict
 from atf.commons.variable_global import Var
-
 from atf.commons.logging import log_info
 from atf.utils.scp_untils import scpFileToRemoteNode
 
@@ -174,6 +172,10 @@ class Project(object):
         log_info('******************* analytical config *******************')
         for configK, configV in self.__config.items():
             log_info('{}: {}'.format(configK, configV))
+
+            if configK == 'testcase' and 'TestShopWechatPay' in str(configV):
+                   Var.isShopWechatPay = True
+
         log_info('******************* analytical testcase *******************')
         testcase = TestCaseUtils()
         self.__testcase = testcase.testcase_path(Var.ROOT, Var.testcase)
@@ -248,11 +250,19 @@ class Project(object):
 
         log_info('******************* ui task over *******************')
 
-        message_params = {}
-        message_params['content'] = self.create_message_body(ReportPath)
-        MessageUtils().send_message_result(message_params)
 
-        MessageUtils().send_message_markdown(message_params)
+
+        if Var.isShopWechatPay == True:
+            message_params = {}
+            message_params['content'] = self.create_shoppay_message_body(ReportPath)
+            MessageUtils().send_shoppay_message_markdown(message_params)
+        else:
+
+            message_params = {}
+            message_params['content'] = self.create_message_body(ReportPath)
+            MessageUtils().send_message_result(message_params)
+            MessageUtils().send_message_markdown(message_params)
+
 
 
 
@@ -261,8 +271,7 @@ class Project(object):
         创建提测消息体
         :return:
         """
-
-        return '\n> ' \
+        return '客户端UI自动化测试通知 \n> ' \
                        '时间: ' + str(time.strftime("%Y-%m-%d %H:%M:%S")) + "\n" + \
                        '版本: ' + str(Var.apk_version) + "\n" + \
                        '平台: ' + str(Var.platformName.lower()) + "\n" + \
@@ -274,3 +283,22 @@ class Project(object):
                        '错误用例: ' + str(Var.Error)  + "\n" + \
                        '跳过用例: ' + str(Var.skipped)  + "\n" + \
                        '报告地址: ' + str(ReportPath)   + "\n"
+
+
+
+    def create_shoppay_message_body(self, ReportPath):
+        """
+        创建提测消息体
+        :return:
+        """
+
+        status = 'SUCCESS' if Var.Pass == 1 else status = 'FAIL'
+
+        return 'QA环境商城支付UI自动化测试通知 \n' \
+               '时间: ' + str(time.strftime("%Y-%m-%d %H:%M:%S")) + "\n" + \
+               '版本: ' + str(Var.apk_version) + "\n" + \
+               '平台: ' + str(Var.platformName.lower()) + "\n" + \
+               '环境: ' + str(Var.testenv) + "\n" + \
+               '持续时间: ' + str(Var.duration) + "\n" + \
+               '测试结果: ' + status + "\n" + \
+               '报告地址: ' + str(ReportPath) + "\n"
