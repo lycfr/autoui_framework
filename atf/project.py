@@ -175,6 +175,7 @@ class Project(object):
 
             if configK == 'testcase' and 'TestShopWechatPay' in str(configV):
                    Var.isShopWechatPay = True
+                   log_info('******************* TestShopWechatPay testcase *******************')
 
         log_info('******************* analytical testcase *******************')
         testcase = TestCaseUtils()
