@@ -482,7 +482,7 @@ class ActionExecutor(object):
                                                              index=0, name='class')
             elif len(list_params) == 2:
                 getAttribute = AppDriverBase.getOneAttribute(key=list_params[0], timeout=Var.timeout, interval=Var.interval,
-                                            index=0,name=str(list_params[2]))
+                                            index=0,name=str(list_params[1]))
 
             elif len(list_params) == 3:
                 getAttribute = AppDriverBase.getOneAttribute(key=list_params[0], timeout=Var.timeout, interval=Var.interval,
