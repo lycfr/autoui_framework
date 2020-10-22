@@ -592,7 +592,9 @@ class ActionExecutor(object):
         :param element:
         :return:
         """
+
         if element not in Var.extensions_var['images_file'].keys():
+            Var.appinstance.save_screenshot(Var.file)
             return False
         time.sleep(5)
         img_file = Var.extensions_var['images_file'][element]
@@ -603,6 +605,7 @@ class ActionExecutor(object):
             return img_info
         else:
             if israise:
+                #进行截图再报错
                 raise Exception("Can't find element {}".format(element))
             else:
                 return None
