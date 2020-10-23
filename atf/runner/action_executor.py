@@ -592,7 +592,6 @@ class ActionExecutor(object):
         :param element:
         :return:
         """
-        print("Var.extensions_var['images_file'].keys():{}".format(Var.extensions_var['images_file'].keys()))
         if element not in Var.extensions_var['images_file'].keys():
             Var.appinstance.save_screenshot(Var.file)
             return False
