@@ -364,11 +364,13 @@ class ActionExecutor(object):
         """
         parms = action.parms
         if len(parms):
+            print("获取到对应的参数为:{}".format(parms[0]))
             elements = AppDriverBase.get_eles(key=parms[0], timeout=Var.timeout, interval=Var.interval)
             if not elements:
                 raise Exception("Can't find element {}".format(parms[0]))
         else:
             raise TypeError('getEles missing 1 required positional argument: elements')
+        print("获取到对应到eles:{}".format(elements))
         return elements
 
 
@@ -849,7 +851,7 @@ class ActionExecutor(object):
             log_info('没有对应参数：{}'.format(action.parms))
 
     def __action_listlen(self, action):
-        listparam = literal_eval(action.parms)
+        listparam = list(action.parms)
         result = len(listparam)
         return result
 
