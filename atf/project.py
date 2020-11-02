@@ -272,7 +272,7 @@ class Project(object):
         创建提测消息体
         :return:
         """
-        return '\n> ' \
+        return '客户端UI自动化测试通知\n> ' \
                        '时间: ' + str(time.strftime("%Y-%m-%d %H:%M:%S")) + "\n" + \
                        '版本: ' + str(Var.apk_version) + "\n" + \
                        '平台: ' + str(Var.platformName.lower()) + "\n" + \
