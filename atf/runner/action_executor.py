@@ -182,6 +182,31 @@ class ActionExecutor(object):
             else:
                 raise TypeError('press missing Element:{}'.format(parms[0]))
 
+    def __action_executeScript(self, action):
+
+        parms = action.parms
+
+        if len(parms):
+            img_info = self.__ocr_analysis(action.action, parms[0], True)
+            if not isinstance(img_info, bool):
+                Var.ocrimg = img_info['ocrimg']
+                x = img_info['x']
+                y = img_info['y']
+                AppDriverBase.tap(x, y)
+            elif len(parms) == 2:
+                element = AppDriverBase.find_elements_by_key(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0)
+                AppDriverBase.executeScript(parms[1],element)
+
+            elif len(parms) == 3:
+                element = AppDriverBase.find_elements_by_key(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1])
+                AppDriverBase.executeScript(parms[2],element)
+        else:
+            raise TypeError('click missing 1 required positional argument: element')
+
+
+
+
+
     def __action_swipeToEle(self, action):
         """
         行为执行：swipeToEle
@@ -482,7 +507,7 @@ class ActionExecutor(object):
                                                              index=0, name='class')
             elif len(list_params) == 2:
                 getAttribute = AppDriverBase.getOneAttribute(key=list_params[0], timeout=Var.timeout, interval=Var.interval,
-                                            index=0,name=str(list_params[2]))
+                                            index=0,name=str(list_params[1]))
 
             elif len(list_params) == 3:
                 getAttribute = AppDriverBase.getOneAttribute(key=list_params[0], timeout=Var.timeout, interval=Var.interval,
@@ -592,7 +617,9 @@ class ActionExecutor(object):
         :param element:
         :return:
         """
+        print("Var.extensions_var:",Var.extensions_var)
         if element not in Var.extensions_var['images_file'].keys():
+            Var.appinstance.save_screenshot(Var.file)
             return False
         time.sleep(5)
         img_file = Var.extensions_var['images_file'][element]
@@ -603,6 +630,7 @@ class ActionExecutor(object):
             return img_info
         else:
             if israise:
+                #进行截图再报错
                 raise Exception("Can't find element {}".format(element))
             else:
                 return None
@@ -1041,6 +1069,9 @@ class ActionExecutor(object):
 
         elif action.key == 'closeApp':
             result = self.__action_stop_app(action)
+
+        elif action.key == 'executeScript':
+            result = self.__action_executeScript(action)
 
         elif action.key == 'tap':
             result = self.__action_tap(action)

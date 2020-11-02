@@ -230,7 +230,6 @@ class AppDriverBase(object):
         '''
         appdriver.swipe1(from_x, from_y, to_x, to_y, duration)
 
-
     @staticmethod
     def click(key, timeout=10, interval=1, index=0):
         '''
@@ -243,8 +242,23 @@ class AppDriverBase(object):
         element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index)
         if not element:
             raise Exception("Can't find element {}".format(key))
-        log_info("click:{},{}".format(key,index))
+        log_info("click:{},{}".format(key, index))
         element.click()
+
+
+    @staticmethod
+    def executeScript(direction, ele):
+        '''
+        :param element:
+        :param timeout:
+        :param interval:
+        :param index:
+        :return:
+        '''
+        if not ele:
+            raise Exception("Can't find element {}".format(ele))
+        appdriver.executeScript(direction, ele)
+
 
     @staticmethod
     def check(key, timeout=10, interval=1, index=0):

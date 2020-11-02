@@ -30,6 +30,7 @@ class OpencvUtils(object):
             imgname = self.matchimage.split(os.sep)[-1]
             file_path = os.path.join(ocrimg, '{}_{}'.format(self.action, imgname))
             Var.appinstance.save_screenshot(file_path)
+            Var.appinstance.save_screenshot(Var.file)
             self.baseimage = file_path
             return self.baseimage
         except Exception as e:

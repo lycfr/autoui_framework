@@ -878,3 +878,10 @@ class iOSDriver(object):
             iOSDriver.swipe1(int(fromX), int(fromY), int(toX),int(toY),200)
         except Exception as e:
             raise e
+
+    @staticmethod
+    def executeScript(direction, ele):
+        try:
+            Var.appinstance.execute_script("mobile:swipe", {"direction": direction, 'element': ele, "duration": 1})
+        except Exception as e:
+            raise e
