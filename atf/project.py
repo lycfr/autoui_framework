@@ -272,7 +272,7 @@ class Project(object):
         创建提测消息体
         :return:
         """
-        return '客户端UI自动化测试通知\n> ' \
+        return '客户端UI自动化测试通知,请相关同事关注\n> ' \
                        '时间: ' + str(time.strftime("%Y-%m-%d %H:%M:%S")) + "\n" + \
                        '版本: ' + str(Var.apk_version) + "\n" + \
                        '平台: ' + str(Var.platformName.lower()) + "\n" + \
@@ -292,10 +292,8 @@ class Project(object):
         创建提测消息体
         :return:
         """
-
         status = 'SUCCESS' if Var.Pass == 1 else 'FAIL'
-
-        return 'QA环境商城支付UI自动化测试通知 \n' \
+        return 'QA环境商城支付UI自动化测试通知,请相关同事关注 \n> ' \
                '时间: ' + str(time.strftime("%Y-%m-%d %H:%M:%S")) + "\n" + \
                '平台: ' + str(Var.platformName.lower()) + "\n" + \
                '环境: ' + str(Var.testenv) + "\n" + \
