@@ -13,6 +13,7 @@
         "adb",
         "swipe",
         "swipeToEle",
+        "swipeCompare",
         "executeScript",
         "click",
         "check",

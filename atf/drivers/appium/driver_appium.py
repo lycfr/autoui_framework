@@ -885,3 +885,23 @@ class iOSDriver(object):
             Var.appinstance.execute_script("mobile:swipe", {"direction": direction, 'element': ele, "duration": 1})
         except Exception as e:
             raise e
+
+    @staticmethod
+    def adb_shell(cmd):
+        '''
+        :param cmd:
+        :return:
+        '''
+        try:
+            Var.appinstance.swipe(int(from_x), int(from_y), int(to_x), int(to_y), 200)
+            log_info('adb对应命令为: {}'.format(cmd))
+            if cmd.startswith('shell'):
+                cmd = ["adb", "-s", Var.udid, "shell", "{}".format(cmd.lstrip('shell').strip())]
+                pipe = subprocess.Popen(cmd, stdin=subprocess.PIPE,
+                                        stdout=subprocess.PIPE)
+                out = pipe.communicate()
+            else:
+                cmd = ["adb", "-s", Var.udid, "{}".format(cmd)]
+                os.system(' '.join(cmd))
+        except:
+            raise Exception(traceback.format_exc())

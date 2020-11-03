@@ -286,6 +286,7 @@ class ActionExecutor(object):
         :return:
         """
         parms = action.parms
+        print(" __action_swipe：",parms)
         if parms is None:
             raise TypeError('swipe missing 4 required positional argument: from_x, from_y, to_x, to_y')
         if parms[0] == 'up':
@@ -673,6 +674,10 @@ class ActionExecutor(object):
 
         elif action.key == 'split':
             result = self.__action_split(action)
+
+        elif action.key == 'swipeCompare':
+            result = self.__action_swipeCompare(action)
+
         elif action.key == 'addlist':
             result = self.__action_addlist(action)
 
@@ -822,6 +827,62 @@ class ActionExecutor(object):
         else:
             raise KeyError('The {} keyword is undefined!'.format(action.step))
 
+    def __action_swipeCompare(self, action):
+        """
+        页面滑动前后比较
+        """
+        compare_image = CompareImage()
+        file1 = AppDriverBase.screenshot()
+        # self.__action_swipe(action)
+        parms = action.parms.split(',')
+
+        if parms is None:
+            raise TypeError('swipe missing 4 required positional argument: from_x, from_y, to_x, to_y')
+        if parms[0] == 'up':
+            if len(parms) == 2:
+                n = int(parms[1])
+            else:
+                n = 1
+            log_info("向上滑动{}次".format(n))
+            for i in range(n):
+                AppDriverBase.swipe_up()
+        elif parms[0] == 'down':
+            if len(parms) == 2:
+                n = int(parms[1])
+            else:
+                n = 1
+            log_info("向下滑动{}次".format(n))
+            for i in range(n):
+                AppDriverBase.swipe_down()
+        elif parms[0] == 'left':
+            if len(parms) == 2:
+                n = int(parms[1])
+            else:
+                n = 1
+            log_info("向左滑动{}次".format(n))
+            for i in range(n):
+                AppDriverBase.swipe_left()
+        elif parms[0] == 'right':
+            if len(parms) == 2:
+                n = int(parms[1])
+            else:
+                n = 1
+            log_info("向右滑动{}次".format(n))
+            for i in range(n):
+                AppDriverBase.swipe_right()
+        elif len(parms) == 4:
+            AppDriverBase.swipe1(float(action.parms[0]), float (action.parms[1]), float(action.parms[2]), float(action.parms[3]))
+        elif len(parms) == 5:
+            AppDriverBase.swipe1(float(action.parms[0]), float(action.parms[1]), float(action.parms[2]), float(action.parms[3]), int(action.parms[4]))
+        else:
+            raise TypeError('swipe takes 1 positional argument but {} were giver'.format(len(action.action)))
+
+        file2 = AppDriverBase.screenshot()
+        result = compare_image.compare_image(file1, file2)
+        if float(result) > 0.85:
+            return False
+        else:
+            return True
 
 
     def __action_split(self,action):
