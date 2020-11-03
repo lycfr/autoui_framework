@@ -893,7 +893,6 @@ class iOSDriver(object):
         :return:
         '''
         try:
-            Var.appinstance.swipe(int(from_x), int(from_y), int(to_x), int(to_y), 200)
             log_info('adb对应命令为: {}'.format(cmd))
             if cmd.startswith('shell'):
                 cmd = ["adb", "-s", Var.udid, "shell", "{}".format(cmd.lstrip('shell').strip())]
