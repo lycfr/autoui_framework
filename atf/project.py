@@ -22,7 +22,7 @@ from atf.commons.variable_global import Var
 from atf.commons.logging import log_info
 from atf.utils.scp_untils import scpFileToRemoteNode
 from atf.__about__ import atf_version
-
+from atf.utils.upload_untils import UploadUtils
 
 class Project(object):
 
@@ -265,7 +265,7 @@ class Project(object):
             MessageUtils().send_message_result(message_params)
             MessageUtils().send_message_markdown(message_params)
 
-
+        UploadUtils.post_result_info(ReportPath)
 
 
     def create_message_body(self,ReportPath):
