@@ -21,6 +21,7 @@ from atf.utils.yaml_utils import analytical_file, Dict
 from atf.commons.variable_global import Var
 from atf.commons.logging import log_info
 from atf.utils.scp_untils import scpFileToRemoteNode
+from atf.__about__ import atf_version
 
 
 class Project(object):
@@ -302,3 +303,8 @@ class Project(object):
                '报告地址: ' + str(ReportPath) + "\n"
 
 
+
+
+    @staticmethod
+    def get_version():
+        return atf_version
