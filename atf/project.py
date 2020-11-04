@@ -300,3 +300,5 @@ class Project(object):
                '持续时间: ' + str(Var.duration) + "\n" + \
                '测试结果: ' + status + "\n" + \
                '报告地址: ' + str(ReportPath) + "\n"
+
+
