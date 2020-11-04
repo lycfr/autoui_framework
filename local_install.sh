@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-pip3 uninstall atf -y
+pip3.8 uninstall atf -y
 
-python3 setup.py bdist_egg
+python3.8 setup.py bdist_egg
 
 cd dist && easy_install *.egg
