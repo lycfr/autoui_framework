@@ -27,7 +27,7 @@ class UploadUtils(object):
             params['type'] = 'ui'
             params['env'] = Var.testenv
             params['version'] = Var.apk_version
-            params['duration'] = str(Var.duration)
+            params['duration'] = str(Var.duration).replace("s","")
             params['all'] = str(Var.Total)
             params['successes'] = str(Var.Pass)
             params['failures'] = str(Var.Failure)
