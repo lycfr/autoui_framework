@@ -40,7 +40,7 @@ easy_install *.egg
 # pip安装cd 
 
 ```
-pip install git+http://gitlab.igetcool.com/qa/autoui_framework#egg=atf
+pip3 install git+http://gitlab.igetcool.com/qa/autoui_framework#egg=atf
 ```
 
 # 参考

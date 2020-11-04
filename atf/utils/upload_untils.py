@@ -19,6 +19,7 @@ class UploadUtils(object):
         上传本次测试数据
         :return:
         """
+        log_info('******************* post result to qacenter *******************')
         try:
             params = {}
             params['project'] = 'igetcool'
