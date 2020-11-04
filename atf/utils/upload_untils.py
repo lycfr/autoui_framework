@@ -23,7 +23,7 @@ class UploadUtils(object):
         try:
             params = {}
             params['project'] = 'igetcool'
-            params['context'] = Var.platformName
+            params['context'] = str(Var.platformName).capitalize()
             params['type'] = 'ui'
             params['env'] = Var.testenv
             params['version'] = Var.apk_version
