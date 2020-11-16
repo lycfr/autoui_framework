@@ -659,6 +659,8 @@ class ActionExecutor(object):
 
         elif action.key == 'listlen':
             result = self.__action_listlen(action)
+        elif action.key == 'listStr':
+            result = self.__action_listStr(action)
 
         elif action.key == 'random':
             result = self.__action_random(action)
@@ -914,6 +916,9 @@ class ActionExecutor(object):
         result = len(listparam)
         return result
 
+    def __action_listStr(self, action):
+        str4 = "".join(action.parms)
+        return str4
 
     def __action_oneInList(self, action):
         parms = action.parms

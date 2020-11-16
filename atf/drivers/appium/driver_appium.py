@@ -201,6 +201,12 @@ class AndroidDriver(object):
         except Exception as e:
             raise e
 
+    @staticmethod
+    def executeScript(direction, ele):
+        try:
+            Var.appinstance.execute_script("mobile:swipe", {"direction": direction, 'element': ele, "duration": 1})
+        except Exception as e:
+            raise e
 
     @staticmethod
     def double_tap(x, y):

@@ -60,7 +60,7 @@ class RunCase(TestCase):
         if Var.restart and not self.skip:
             AppDriverBase.launch_app(None)
 
-    @retry_method()
+    # @retry_method()
     def testCase(self):
         if self.skip:
             self.skipTest('skip')

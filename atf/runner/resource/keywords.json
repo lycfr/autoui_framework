@@ -50,6 +50,7 @@
         "compareTime",
         "addlist",
         "listlen",
+        "listStr",
         "findallNum",
         "random",
         "getPageSource"
