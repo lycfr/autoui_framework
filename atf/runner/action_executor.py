@@ -953,7 +953,10 @@ class ActionExecutor(object):
     def __action_findallNum(self, action):
         import re
         result = re.sub("\D","",action.parms)
-        return int(result)
+        if '' == result:
+            return None
+        else:
+            return int(result)
 
 
     def __action_addlist(self, action):
