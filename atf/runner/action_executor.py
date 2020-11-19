@@ -659,6 +659,7 @@ class ActionExecutor(object):
 
         elif action.key == 'listlen':
             result = self.__action_listlen(action)
+
         elif action.key == 'listStr':
             result = self.__action_listStr(action)
 
@@ -703,6 +704,7 @@ class ActionExecutor(object):
 
         elif action.key == 'getAttribute':
             result = self.__action_getAttribute(action)
+
         elif action.key == '$.getVar':
             if Var.global_var:
                 if action.parms[0] in Var.global_var:
@@ -917,7 +919,11 @@ class ActionExecutor(object):
         return result
 
     def __action_listStr(self, action):
-        str4 = "".join(action.parms)
+        import ast
+        params = ast.literal_eval(action.parms)
+        str4 = ''.join(params)
+        print(str4)
+        print(type(str4))
         return str4
 
     def __action_oneInList(self, action):
