@@ -53,6 +53,7 @@
         "listStr",
         "findallNum",
         "random",
-        "getPageSource"
+        "getPageSource",
+        "getXY"
     ]
 }

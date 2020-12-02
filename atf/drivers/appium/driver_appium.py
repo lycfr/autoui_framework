@@ -893,6 +893,13 @@ class iOSDriver(object):
             raise e
 
     @staticmethod
+    def executeTap(x, y):
+        try:
+            Var.appinstance.execute_script("mobile:tap", {'x': x, 'y': y, 'duration': 500})
+        except Exception as e:
+            raise e
+
+    @staticmethod
     def adb_shell(cmd):
         '''
         :param cmd:

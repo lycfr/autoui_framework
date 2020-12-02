@@ -158,6 +158,7 @@ class AppDriverBase(object):
         '''
         appdriver.tap(x, y)
 
+
     @staticmethod
     def double_tap(x, y):
         '''
@@ -259,6 +260,16 @@ class AppDriverBase(object):
             raise Exception("Can't find element {}".format(ele))
         appdriver.executeScript(direction, ele)
 
+    @staticmethod
+    def executeTap(x,y):
+        '''
+        :param element:
+        :param timeout:
+        :param interval:
+        :param index:
+        :return:
+        '''
+        appdriver.executeTap(x,y)
 
     @staticmethod
     def check(key, timeout=10, interval=1, index=0):

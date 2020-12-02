@@ -143,16 +143,34 @@ class ActionExecutor(object):
         else:
             raise TypeError('tap missing 2 required positional argument: x, y')
 
+    def __action_getXY(self, action):
+        parms = action.parms
+        print('parms',parms)
+        print(type(parms))
+        element = AppDriverBase.find_elements_by_key(key=parms, timeout=Var.timeout, interval=Var.interval,
+                                                         index=0)
+        x = element.location.get('x')
+        y = element.location.get('y')
+        height = element.size.get('height')
+        width = element.size.get('width')
+        end_x = (x + width) / 2 + x
+        end_y = (y + height) / 2 + y
+        enddict = {'x':end_x,'y':end_y}
+        print("enddict:",enddict)
+        print(type(enddict))
+        return enddict
+
     def __action_doubleTap(self, action):
         """
-        行为执行：doubleTap
+        行为执行：doubleTap获取元素的坐标并进行点击
         :param action:
         :return:
         """
-        if len(action.parms) == 2:
-            AppDriverBase.double_tap(float(action.parms[0]), float(action.parms[-1]))
-        else:
-            raise TypeError('doubleTap missing 2 required positional argument: x, y')
+        parms = action.parms
+        print('doubleTap',parms)
+
+        AppDriverBase.executeTap(parms[0]['x'],parms[0]['y'])
+
 
     def __action_press(self, action):
         """
@@ -695,6 +713,9 @@ class ActionExecutor(object):
 
         elif action.key == 'isContain':
             result = self.__action_isContain(action)
+
+        elif action.key == 'getXY':
+            result = self.__action_getXY(action)
 
         elif action.key == 'getElements':
             result = self.__action_getElements(action)
