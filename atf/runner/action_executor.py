@@ -171,6 +171,16 @@ class ActionExecutor(object):
 
         AppDriverBase.executeTap(parms[0]['x'],parms[0]['y'])
 
+    def __action_XYclick(self, action):
+        """
+        行为执行：doubleTap获取元素的坐标并进行点击
+        :param action:
+        :return:
+        """
+        parms = action.parms
+        print('XYclick', parms)
+
+        AppDriverBase.XYclick(parms[0]['x'], parms[0]['y'])
 
     def __action_press(self, action):
         """
@@ -398,8 +408,10 @@ class ActionExecutor(object):
         :return:
         """
         parms = action.parms
+        print("__action_click",action)
         if len(parms):
             img_info = self.__ocr_analysis(action.action, parms[0], True)
+            print("img_info",img_info)
             if not isinstance(img_info, bool):
                 Var.ocrimg = img_info['ocrimg']
                 x = img_info['x']
@@ -562,12 +574,10 @@ class ActionExecutor(object):
 
     def __action_isContain(self,action):
         pagesource = AppDriverBase.get_page_source()
+        log_info(pagesource)
         str = action.parms.strip("\'")
-        if str in pagesource:
-            return True
-        else:
-            return False
-
+        print(str)
+        return str in pagesource
 
 
     def __action_ifcheck(self, action):
@@ -928,7 +938,10 @@ class ActionExecutor(object):
             elif len(listparams) == 3:
                 splits = s1.split(listparams[1])
                 if len(splits) >= int(listparams[2]):
-                    return splits[int(listparams[2])]
+                    end = splits[int(listparams[2])]
+                    #去除字符串两端空格
+                    endStr = end.strip()
+                    return endStr
                 else:
                     log_info('数组越界：{}'.format(splits))
         else:
@@ -1195,7 +1208,8 @@ class ActionExecutor(object):
 
         elif action.key == 'click':
             result = self.__action_click(action)
-
+        elif action.key == 'XYclick':
+            result = self.__action_XYclick(action)
         elif action.key == 'check':
             result = self.__action_check(action)
 

@@ -272,6 +272,19 @@ class AppDriverBase(object):
         appdriver.executeTap(x,y)
 
     @staticmethod
+    def XYclick(x, y):
+        '''
+        :param element:
+        :param timeout:
+        :param interval:
+        :param index:
+        :return:
+        '''
+        app_screenshot_eles_steps(None, Var.tmp_file, Var.file, zoom=1.0)
+        appdriver.XYclick(x, y)
+
+
+    @staticmethod
     def check(key, timeout=10, interval=1, index=0):
         '''
         :param key:

@@ -54,6 +54,7 @@
         "findallNum",
         "random",
         "getPageSource",
-        "getXY"
+        "getXY",
+        "XYclick"
     ]
 }
