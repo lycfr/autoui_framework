@@ -573,8 +573,9 @@ class ActionExecutor(object):
             raise TypeError('input missing 2 required positional argument: element, text')
 
     def __action_isContain(self,action):
+        app_screenshot_steps(None, Var.tmp_file, Var.file, zoom=1.0)
         pagesource = AppDriverBase.get_page_source()
-        log_info(pagesource)
+        # log_info(pagesource)
         str = action.parms.strip("\'")
         print(str)
         return str in pagesource
