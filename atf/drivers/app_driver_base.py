@@ -415,9 +415,13 @@ class AppDriverBase(object):
                 dict['element_type'] = 'name'
         else:
             pagesource = appdriver.get_page_source()
-            if 'tc icon certificate close' in pagesource:
-                oneelement = 'tc icon certificate close'
+            oneelement = 'tc icon certificate close'
+            oneelement1 = 'close AD'
+            if oneelement in pagesource:
                 eles = appdriver.wait_for_elements_by_name(name=oneelement, timeout=timeout, interval=interval)
+                eles[0].click()
+            if oneelement1 in pagesource:
+                eles = appdriver.wait_for_elements_by_name(name=oneelement1, timeout=timeout, interval=interval)
                 eles[0].click()
             if re.match(r'XCUIElementType', key):
                 dict['element_type'] = 'classname'
