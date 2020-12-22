@@ -155,7 +155,7 @@ class ActionExecutor(object):
         width = element.size.get('width')
         end_x = (x + width) / 2 + x
         end_y = (y + height) / 2 + y
-        enddict = {'x':end_x,'y':end_y}
+        enddict = {'x':x,'y':y}
         print("enddict:",enddict)
         print(type(enddict))
         return enddict

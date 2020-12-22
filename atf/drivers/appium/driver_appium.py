@@ -873,6 +873,7 @@ class iOSDriver(object):
         if self._current_context != Var.appinstance.context:
             Var.appinstance.switch_to.context(self._current_context)
 
+
         if "WEBVIEW" in self._current_context:
             Var.appinstance.switch_to.window(self._current_window)
             logging.info(Var.appinstance.page_source)
