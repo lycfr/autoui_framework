@@ -125,11 +125,11 @@ class AppDriverBase(object):
         only appium
         :return:
         '''
-        element1 = AppDriverBase.find_elements_by_key(key=ele1,timeout=10, interval=1, index=0)
+        element1 = AppDriverBase.find_elements_by_key(key=ele1,timeout=10, interval=1, index=0,flag=False)
         if not element1:
             raise Exception("Can't find element {}".format(ele1))
 
-        element2 = AppDriverBase.find_elements_by_key(key=ele2, timeout=10, interval=1, index=0)
+        element2 = AppDriverBase.find_elements_by_key(key=ele2, timeout=10, interval=1, index=0,flag=False)
         if not element2:
             raise Exception("Can't find element {}".format(ele2))
         fromX = element1.location.get('x')
@@ -232,7 +232,7 @@ class AppDriverBase(object):
         appdriver.swipe1(from_x, from_y, to_x, to_y, duration)
 
     @staticmethod
-    def click(key, timeout=10, interval=1, index=0):
+    def click(key, timeout=10, interval=1, index=0,flag=False):
         '''
         :param element:
         :param timeout:
@@ -240,18 +240,17 @@ class AppDriverBase(object):
         :param index:
         :return:
         '''
-        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index)
+        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index,flag=flag)
         if not element:
             raise Exception("Can't find element {}".format(key))
         log_info("click:{},{}".format(key, index))
         element.click()
         # 进行截图Var.file
-        if Var.ocrimg is not None:
-            cv2.imwrite(Var.file, Var.ocrimg)
-            Var.ocrimg = None
-        else:
-            app_screenshot_steps(elements[index], Var.tmp_file, Var.file, zoom=1.0)
-
+        # if Var.ocrimg is None:
+        #     app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0,flag=False)
+        # else:
+        #     cv2.imwrite(Var.file, Var.ocrimg)
+        #     Var.ocrimg = None
 
     @staticmethod
     def executeScript(direction, ele):
@@ -299,7 +298,12 @@ class AppDriverBase(object):
         :param index:
         :return:
         '''
-        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index)
+        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index,flag=False)
+        # if Var.ocrimg == None:
+        #     app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0, flag=False)
+        # else:
+        #     cv2.imwrite(Var.file, Var.ocrimg)
+        #     Var.ocrimg = None
         if not element:
             return False
         return True
@@ -315,8 +319,14 @@ class AppDriverBase(object):
         :param index:
         :return:
         '''
-        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index)
+        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index,flag=False)
         getOneAttribute = appdriver.getOneAttribute(element,name)
+        # 进行截图Var.file
+        # if Var.ocrimg is None:
+        #     app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0, flag=False)
+        # else:
+        #     cv2.imwrite(Var.file, Var.ocrimg)
+        #     Var.ocrimg = None
         return getOneAttribute
 
     @staticmethod
@@ -329,10 +339,16 @@ class AppDriverBase(object):
         :param clear:
         :return:
         '''
-        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index)
+        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index,flag=False)
         if not element:
             raise Exception("Can't find element {}".format(key))
         appdriver.input(element, text)
+        # 进行截图Var.file
+        # if Var.ocrimg is None:
+        #     app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0, flag=False)
+        # else:
+        #     cv2.imwrite(Var.file, Var.ocrimg)
+        #     Var.ocrimg = None
 
     @staticmethod
     def get_text(key, timeout=10, interval=1, index=0):
@@ -343,10 +359,16 @@ class AppDriverBase(object):
         :param index:
         :return:
         '''
-        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index)
+        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index,flag=False)
         if not element:
             raise Exception("Can't find element {}".format(key))
         text = appdriver.get_text(element)
+        # 进行截图Var.file
+        # if Var.ocrimg is None:
+        #     app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0, flag=False)
+        # else:
+        #     cv2.imwrite(Var.file, Var.ocrimg)
+        #     Var.ocrimg = None
         return text
 
     @staticmethod
@@ -362,6 +384,12 @@ class AppDriverBase(object):
         if not elements:
             raise Exception("Can't find element {}".format(key))
         textlist = appdriver.get_texts(elements)
+        # 进行截图Var.file
+        # if Var.ocrimg is None:
+        #     app_screenshot_steps(elements, Var.tmp_file, Var.file, zoom=1.0, flag=False)
+        # else:
+        #     cv2.imwrite(Var.file, Var.ocrimg)
+        #     Var.ocrimg = None
         return textlist
 
     @staticmethod
@@ -373,7 +401,7 @@ class AppDriverBase(object):
         :param index:
         :return:
         '''
-        elements = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=None)
+        elements = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=None,flag=False)
         if not elements:
             raise Exception("Can't find element {}".format(key))
         return elements
@@ -392,12 +420,13 @@ class AppDriverBase(object):
 
 
     @staticmethod
-    def find_elements_by_key(key, timeout=10, interval=1, index=None):
+    def find_elements_by_key(key, timeout=10, interval=1, index=None,flag=False):
         '''
         :param key:
         :param timeout:
         :param interval:
-        :param index:
+        :param index:list对应下标
+        :param flag:False；不标记元素截图
         :return:
         '''
         if not timeout:
@@ -408,8 +437,10 @@ class AppDriverBase(object):
             'element': key,
             'timeout': timeout,
             'interval': interval,
-            'index': index
+            'index': index,
+            'flag':flag
         }
+
         if Var.platformName.lower() == 'android':
             if re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.\w]+:id/\S+', key):
                 dict['element_type'] = 'id'
@@ -450,7 +481,10 @@ class AppDriverBase(object):
         timeout = elements_info['timeout']
         interval = elements_info['interval']
         index = elements_info['index']
-
+        if elements_info['flag'] == None:
+            flag = False
+        else:
+            flag = elements_info['flag']
         if element_type == 'name':
             elements = appdriver.wait_for_elements_by_name(name=element, timeout=timeout, interval=interval)
         elif element_type == 'id':
@@ -473,11 +507,11 @@ class AppDriverBase(object):
             _error_count = 0
             if elements_info['index'] != None:
                 # 进行截图Var.file
-                # if Var.ocrimg is not None:
-                #     cv2.imwrite(Var.file, Var.ocrimg)
-                #     Var.ocrimg = None
-                # else:
-                #     app_screenshot_steps(elements[index], Var.tmp_file, Var.file, zoom=1.0)
+                if Var.ocrimg == None:
+                    app_screenshot_steps(elements, Var.tmp_file, Var.file, zoom=1.0, flag=flag)
+                else:
+                    cv2.imwrite(Var.file, Var.ocrimg)
+                    Var.ocrimg = None
                 return elements[index]
             else:
                 log_info('index==None时进行操作')
@@ -486,7 +520,7 @@ class AppDriverBase(object):
                     cv2.imwrite(Var.file, Var.ocrimg)
                     Var.ocrimg = None
                 else:
-                    app_screenshot_eles_steps(elements, Var.tmp_file, Var.file, zoom=1.0)
+                    app_screenshot_eles_steps(elements, Var.tmp_file, Var.file, zoom=1.0,flag=flag)
                 return elements
         except Exception as e:
             # 如果次数太多，就退出异常逻辑，直接报错
@@ -508,7 +542,7 @@ class AppDriverBase(object):
                         time.sleep(1)
                         # 继续寻找原来的正常控件
                         return AppDriverBase.wait_for_elements_by_key(elements_info)
-            app_screenshot_eles_steps(None, Var.tmp_file, Var.file, zoom=1.0)
+            app_screenshot_eles_steps(None, Var.tmp_file, Var.file, zoom=1.0,flag=flag)
             # 如果黑名单也没有，就报错
             log_info("black list no one found")
             return None

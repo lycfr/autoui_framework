@@ -87,10 +87,11 @@ def yaml_steps(respath):
     return steps_list
 
 
-def app_screenshot_steps(element,filepath,redFilepath,zoom=1.0):
-    if element is None:
+def app_screenshot_steps(element,filepath,redFilepath,zoom=1.0,flag=False):
+    # return Var.appinstance.save_screenshot(redFilepath)
+    if (element is None) or (flag==False):
         return Var.appinstance.save_screenshot(redFilepath)
-    else:
+    elif flag:
         # 标注元素位置
         print(Var.appinstance)
         Var.appinstance.get_screenshot_as_file(filepath)
@@ -107,8 +108,8 @@ def app_screenshot_steps(element,filepath,redFilepath,zoom=1.0):
             os.remove(filepath)
         return file
 
-def app_screenshot_eles_steps(elements,filepath,redFilepath,zoom=1.0):
-    if elements is None:
+def app_screenshot_eles_steps(elements,filepath,redFilepath,zoom=1.0,flag=False):
+    if (elements is None) or (flag==False):
         return Var.appinstance.save_screenshot(redFilepath)
     else:
         # 标注元素位置

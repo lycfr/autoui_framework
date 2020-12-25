@@ -418,10 +418,14 @@ class ActionExecutor(object):
                 y = img_info['y']
                 AppDriverBase.tap(x, y)
             elif len(parms) == 1:
-                AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0)
+                AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0,flag=False)
             elif len(parms) == 2:
-                AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1])
-
+                if type(parms[1]) == int:
+                    AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1],flag=False)
+                else:
+                    AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0,flag=parms[1])
+            elif len(parms) == 3:
+                AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1],flag=parms[2])
         else:
             raise TypeError('click missing 1 required positional argument: element')
 
