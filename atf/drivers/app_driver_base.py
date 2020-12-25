@@ -420,7 +420,7 @@ class AppDriverBase(object):
                 if one in pagesource:
                     eles = appdriver.wait_for_elements_by_name(name=one, timeout=timeout, interval=interval)
                     eles[0].click()
-            
+
             if re.match(r'XCUIElementType', key):
                 dict['element_type'] = 'classname'
             elif re.match(r'//XCUIElementType', key):
