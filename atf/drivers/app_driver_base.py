@@ -245,13 +245,12 @@ class AppDriverBase(object):
             raise Exception("Can't find element {}".format(key))
         log_info("click:{},{}".format(key, index))
         element.click()
-        time.sleep(2)
         # 进行截图Var.file
         if Var.ocrimg is not None:
             cv2.imwrite(Var.file, Var.ocrimg)
             Var.ocrimg = None
         else:
-            app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0)
+            app_screenshot_steps(elements[index], Var.tmp_file, Var.file, zoom=1.0)
 
 
     @staticmethod
@@ -412,11 +411,11 @@ class AppDriverBase(object):
             'index': index
         }
         if Var.platformName.lower() == 'android':
-            if ':id' in key:
+            if re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.\w]+:id/\S+', key):
                 dict['element_type'] = 'id'
             elif re.match(r'android\.[a-zA-Z]+[\.(a-zA-Z)]+', key) or re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+', key):
                 dict['element_type'] = 'classname'
-            elif ('//*[@' in key) or ('//*[contains(@' in key) or ('//' in key):
+            elif re.match('//\*\[@\S+=\S+\]', key) or re.match('//[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+\[\d+\]', key) or re.match('//*[contains(@\S,)]', key):
                 dict['element_type'] = 'xpath'
             else:
                 dict['element_type'] = 'name'
