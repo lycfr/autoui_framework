@@ -467,11 +467,11 @@ class AppDriverBase(object):
             _error_count = 0
             if elements_info['index'] != None:
                 # 进行截图Var.file
-                if Var.ocrimg is not None:
-                    cv2.imwrite(Var.file, Var.ocrimg)
-                    Var.ocrimg = None
-                else:
-                    app_screenshot_steps(elements[index], Var.tmp_file, Var.file, zoom=1.0)
+                # if Var.ocrimg is not None:
+                #     cv2.imwrite(Var.file, Var.ocrimg)
+                #     Var.ocrimg = None
+                # else:
+                #     app_screenshot_steps(elements[index], Var.tmp_file, Var.file, zoom=1.0)
                 return elements[index]
             else:
                 # 截图
