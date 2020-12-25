@@ -412,11 +412,11 @@ class AppDriverBase(object):
             'index': index
         }
         if Var.platformName.lower() == 'android':
-            if re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.\w]+:id/\S+', key):
+            if ':id' in key:
                 dict['element_type'] = 'id'
             elif re.match(r'android\.[a-zA-Z]+[\.(a-zA-Z)]+', key) or re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+', key):
                 dict['element_type'] = 'classname'
-            elif re.match('//\*\[@\S+=\S+\]', key) or re.match('//[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+\[\d+\]', key) or re.match('//*[contains(@\S,)]', key):
+            elif ('//*[@' in key) or ('//*[contains(@' in key) or re.match('//[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+\[\d+\]', key):
                 dict['element_type'] = 'xpath'
             else:
                 dict['element_type'] = 'name'
