@@ -245,6 +245,13 @@ class AppDriverBase(object):
             raise Exception("Can't find element {}".format(key))
         log_info("click:{},{}".format(key, index))
         element.click()
+        time.sleep(2)
+        # 进行截图Var.file
+        if Var.ocrimg is not None:
+            cv2.imwrite(Var.file, Var.ocrimg)
+            Var.ocrimg = None
+        else:
+            app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0)
 
 
     @staticmethod
@@ -474,6 +481,7 @@ class AppDriverBase(object):
                 #     app_screenshot_steps(elements[index], Var.tmp_file, Var.file, zoom=1.0)
                 return elements[index]
             else:
+                log_info('index==None时进行操作')
                 # 截图
                 if Var.ocrimg is not None:
                     cv2.imwrite(Var.file, Var.ocrimg)

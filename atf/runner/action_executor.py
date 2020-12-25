@@ -421,6 +421,7 @@ class ActionExecutor(object):
                 AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0)
             elif len(parms) == 2:
                 AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1])
+
         else:
             raise TypeError('click missing 1 required positional argument: element')
 
