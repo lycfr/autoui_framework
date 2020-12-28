@@ -412,7 +412,22 @@ class ActionExecutor(object):
         parms = action.parms
         print("__action_click",action)
         if len(parms):
-            if '.png' in parms[0]:
+            if '.png' not in action:
+
+                if len(parms) == 1:
+                    AppDriverBase.click1(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0, flag=False)
+                elif len(parms) == 2:
+                    if type(parms[1]) == int:
+                        AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1],
+                                            flag=False)
+                    else:
+                        AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0,
+                                            flag=parms[1])
+                elif len(parms) == 3:
+                    AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1],
+                                        flag=parms[2])
+
+            else:
                 img_info = self.__ocr_analysis(action.action, parms[0], True)
             # print("img_info",img_info)
             # if not isinstance(img_info, bool):
@@ -420,15 +435,7 @@ class ActionExecutor(object):
                 x = img_info['x']
                 y = img_info['y']
                 AppDriverBase.tap(x, y)
-            elif len(parms) == 1:
-                AppDriverBase.click1(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0,flag=False)
-            elif len(parms) == 2:
-                if type(parms[1]) == int:
-                    AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1],flag=False)
-                else:
-                    AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0,flag=parms[1])
-            elif len(parms) == 3:
-                AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1],flag=parms[2])
+
         else:
             raise TypeError('click missing 1 required positional argument: element')
 
