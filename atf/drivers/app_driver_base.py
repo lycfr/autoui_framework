@@ -257,7 +257,7 @@ class AppDriverBase(object):
         :param index:
         :return:
         '''
-        element = AppDriverBase.find_element_by_key1(key=key, timeout=timeout, interval=interval, index=0,
+        element = AppDriverBase.find_element_by_key1_click(key=key, timeout=timeout, interval=interval, index=0,
                                                       flag=flag)
         element.click()
         log_info("click:{},{}".format(key, index))
@@ -564,7 +564,7 @@ class AppDriverBase(object):
             return None
 
     @staticmethod
-    def find_element_by_key1(key, timeout=10, interval=1, index=0, flag=False):
+    def find_element_by_key1_click(key, timeout=10, interval=1, index=0, flag=False):
         '''
         :param key:
         :param timeout:
@@ -597,10 +597,10 @@ class AppDriverBase(object):
             else:
                 dict['element_type'] = 'name'
         log_info("dict:{}".format(dict))
-        return AppDriverBase.wait_for_element_by_key1(dict)
+        return AppDriverBase.wait_for_element_by_key1_click(dict)
 
     @staticmethod
-    def wait_for_element_by_key1(elements_info):
+    def wait_for_element_by_key1_click(elements_info):
         '''
         :param elements_info:
         :return:
@@ -612,36 +612,27 @@ class AppDriverBase(object):
         timeout = elements_info['timeout']
         interval = elements_info['interval']
         index = elements_info['index']
-        if elements_info['flag'] == None:
-            flag = False
-        else:
-            flag = elements_info['flag']
+        # if elements_info['flag'] == None:
+        #     flag = False
+        # else:
+        #     flag = elements_info['flag']
+        flag = False
         if element_type == 'name':
-            elements = appdriver.wait_for_element_by_name(name=element, timeout=timeout, interval=interval)
+            element = appdriver.wait_for_element_by_name(name=element, timeout=timeout, interval=interval)
         elif element_type == 'id':
-            elements = appdriver.wait_for_element_by_id(id=element, timeout=timeout, interval=interval)
+            element = appdriver.wait_for_element_by_id(id=element, timeout=timeout, interval=interval)
         elif element_type == 'xpath':
-            elements = appdriver.wait_for_element_by_xpath(xpath=element, timeout=timeout, interval=interval)
+            element = appdriver.wait_for_element_by_xpath(xpath=element, timeout=timeout, interval=interval)
         elif element_type == 'classname':
-            elements = appdriver.wait_for_element_by_classname(classname=element, timeout=timeout, interval=interval)
+            element = appdriver.wait_for_element_by_classname(classname=element, timeout=timeout, interval=interval)
         else:
-            elements = None
-
-        # log_info('查找到对应元素列表为: {}'.format(elements))
+            element = None
 
         try:
-            # if len(elements) <= int(index):
-            #     log_error('elements exists, but cannot find index({}) position'.format(index), False)
-            #     raise Exception('list index out of range, index:{}'.format(index))
+            print("tryyyyyy")
             # 如果成功，清空错误计数
             _error_count = 0
-            if elements_info['index'] != None:
-
-                return elements[index]
-            else:
-                log_info('index==None时进行操作')
-
-                return elements
+            return element
         except Exception as e:
             # 如果次数太多，就退出异常逻辑，直接报错
             if _error_count > _error_max:

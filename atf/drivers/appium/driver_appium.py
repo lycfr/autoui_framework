@@ -937,7 +937,7 @@ class iOSDriver(object):
         :param xpath:
         :return:
         '''
-
+        log_info("wait_for_element_by_xpath")
         element = Var.appinstance.find_element_by_xpath(xpath)
         log_info("element:{}".format(element))
         log_info(Var.appinstance.current_context)
