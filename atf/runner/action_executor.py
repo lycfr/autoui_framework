@@ -412,9 +412,10 @@ class ActionExecutor(object):
         parms = action.parms
         print("__action_click",action)
         if len(parms):
-            img_info = self.__ocr_analysis(action.action, parms[0], True)
-            print("img_info",img_info)
-            if not isinstance(img_info, bool):
+            if '.png' in parms[0]:
+                img_info = self.__ocr_analysis(action.action, parms[0], True)
+            # print("img_info",img_info)
+            # if not isinstance(img_info, bool):
                 Var.ocrimg = img_info['ocrimg']
                 x = img_info['x']
                 y = img_info['y']
