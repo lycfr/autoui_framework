@@ -131,6 +131,8 @@ class ActionExecutor(object):
         AppDriverBase.adb_shell("shell input keyevent 66")
         time.sleep(3)
         AppDriverBase.adb_shell('shell ime set io.appium.settings/.UnicodeIME')
+        AppDriverBase.screenshot()
+
 
     def __action_tap(self, action):
         """
