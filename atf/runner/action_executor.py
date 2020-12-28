@@ -420,7 +420,7 @@ class ActionExecutor(object):
                 y = img_info['y']
                 AppDriverBase.tap(x, y)
             elif len(parms) == 1:
-                AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0,flag=False)
+                AppDriverBase.click1(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0,flag=False)
             elif len(parms) == 2:
                 if type(parms[1]) == int:
                     AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1],flag=False)

@@ -241,14 +241,29 @@ class AppDriverBase(object):
         :param index:
         :return:
         '''
-        element = AppDriverBase.find_elements_by_key1(key=key, timeout=timeout, interval=interval, index=index,flag=flag)
+        element = AppDriverBase.find_elements_by_key(key=key, timeout=timeout, interval=interval, index=index,flag=flag)
         if not element:
             raise Exception("Can't find element {}".format(key))
         log_info("click:{},{}".format(key, index))
         element.click()
+
+
+    @staticmethod
+    def click1(key, timeout=10, interval=1, index=0, flag=False):
+        '''
+        :param element:
+        :param timeout:
+        :param interval:
+        :param index:
+        :return:
+        '''
+        element = AppDriverBase.find_element_by_key1(key=key, timeout=timeout, interval=interval, index=0,
+                                                      flag=flag)
+        element.click()
+        log_info("click:{},{}".format(key, index))
         # 进行截图Var.file
         if Var.ocrimg is None:
-            app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0,flag=False)
+            app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0, flag=False)
         else:
             cv2.imwrite(Var.file, Var.ocrimg)
             Var.ocrimg = None
@@ -549,7 +564,7 @@ class AppDriverBase(object):
             return None
 
     @staticmethod
-    def find_elements_by_key1(key, timeout=10, interval=1, index=None, flag=False):
+    def find_element_by_key1(key, timeout=10, interval=1, index=0, flag=False):
         '''
         :param key:
         :param timeout:
@@ -582,10 +597,10 @@ class AppDriverBase(object):
             else:
                 dict['element_type'] = 'name'
 
-        return AppDriverBase.wait_for_elements_by_key1(dict)
+        return AppDriverBase.wait_for_element_by_key1(dict)
 
     @staticmethod
-    def wait_for_elements_by_key1(elements_info):
+    def wait_for_element_by_key1(elements_info):
         '''
         :param elements_info:
         :return:
@@ -602,14 +617,13 @@ class AppDriverBase(object):
         else:
             flag = elements_info['flag']
         if element_type == 'name':
-            elements = appdriver.wait_for_elements_by_name(name=element, timeout=timeout, interval=interval)
+            elements = appdriver.wait_for_element_by_name(name=element, timeout=timeout, interval=interval)
         elif element_type == 'id':
-            elements = appdriver.wait_for_elements_by_id(id=element, timeout=timeout, interval=interval)
+            elements = appdriver.wait_for_element_by_id(id=element, timeout=timeout, interval=interval)
         elif element_type == 'xpath':
-
-            elements = appdriver.wait_for_elements_by_xpath(xpath=element, timeout=timeout, interval=interval)
+            elements = appdriver.wait_for_element_by_xpath(xpath=element, timeout=timeout, interval=interval)
         elif element_type == 'classname':
-            elements = appdriver.wait_for_elements_by_classname(classname=element, timeout=timeout, interval=interval)
+            elements = appdriver.wait_for_element_by_classname(classname=element, timeout=timeout, interval=interval)
         else:
             elements = None
 
