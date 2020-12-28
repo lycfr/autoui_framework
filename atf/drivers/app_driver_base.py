@@ -596,7 +596,7 @@ class AppDriverBase(object):
                 dict['element_type'] = 'xpath'
             else:
                 dict['element_type'] = 'name'
-
+        log_info("dict:{}".format(dict))
         return AppDriverBase.wait_for_element_by_key1(dict)
 
     @staticmethod

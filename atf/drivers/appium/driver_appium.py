@@ -937,11 +937,12 @@ class iOSDriver(object):
         :param xpath:
         :return:
         '''
-        try:
-            element = Var.appinstance.find_element_by_xpath(xpath)
-            return element
-        except Exception as e:
-            raise e
+
+        element = Var.appinstance.find_element_by_xpath(xpath)
+        log_info("element:{}".format(element))
+        log_info(Var.appinstance.current_context)
+        return element
+
 
     @staticmethod
     def wait_for_element_by_classname(classname, timeout=10, interval=1):
