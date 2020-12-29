@@ -471,8 +471,59 @@ class AndroidDriver(object):
         except Exception as e:
             raise e
 
+    @staticmethod
+    def wait_for_element_by_id(id, timeout=10, interval=1):
+        '''
+        :param id:
+        :return:
+        '''
+        try:
+            elements = Var.appinstance.find_element_by_id(id)
+            return elements
+        except Exception as e:
+            raise e
 
+    @staticmethod
+    def wait_for_element_by_name(name, timeout=10, interval=1):
+        '''
+        :param name:
+        :return:
+        '''
+        try:
+            Var.appinstance.implicitly_wait(int(timeout) / 2)
+            element = Var.appinstance.find_element_by_accessibility_id(name)
+            if not element:
+                element = Var.appinstance.find_element_by_android_uiautomator(
+                    'new UiSelector().text("{}")'.format(name))
+            Var.appinstance.implicitly_wait(timeout)
+            return element
 
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def wait_for_element_by_xpath(xpath, timeout=10, interval=1):
+        '''
+        :param xpath:
+        :return:
+        '''
+        try:
+            element = Var.appinstance.find_element_by_xpath(xpath)
+            return element
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def wait_for_element_by_classname(classname, timeout=10, interval=1):
+        '''
+        :param classname:
+        :return:
+        '''
+        try:
+            element = Var.appinstance.find_element_by_class_name(classname)
+            return element
+        except Exception as e:
+            raise e
 
 
     @staticmethod
@@ -851,6 +902,57 @@ class iOSDriver(object):
         try:
             elements = Var.appinstance.find_elements_by_class_name(classname)
             return elements
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def wait_for_element_by_id(id, timeout=10, interval=1):
+        '''
+        :param id:
+        :return:
+        '''
+        try:
+            element = Var.appinstance.find_element_by_id(id)
+            return element
+
+        except Exception as e:
+
+            raise e
+
+    @staticmethod
+    def wait_for_element_by_name(name, timeout=10, interval=1):
+        '''
+        :param name:
+        :return:
+        '''
+        try:
+            element = Var.appinstance.find_element_by_accessibility_id(name)
+            return element
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def wait_for_element_by_xpath(xpath, timeout=10, interval=1):
+        '''
+        :param xpath:
+        :return:
+        '''
+        log_info("wait_for_element_by_xpath")
+        element = Var.appinstance.find_element_by_xpath(xpath)
+        log_info("element:{}".format(element))
+        log_info(Var.appinstance.current_context)
+        return element
+
+
+    @staticmethod
+    def wait_for_element_by_classname(classname, timeout=10, interval=1):
+        '''
+        :param classname:
+        :return:
+        '''
+        try:
+            element = Var.appinstance.find_element_by_class_name(classname)
+            return element
         except Exception as e:
             raise e
 

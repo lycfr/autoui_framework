@@ -245,12 +245,27 @@ class AppDriverBase(object):
             raise Exception("Can't find element {}".format(key))
         log_info("click:{},{}".format(key, index))
         element.click()
+
+
+    @staticmethod
+    def click1(key, timeout=10, interval=1, index=0, flag=False):
+        '''
+        :param element:
+        :param timeout:
+        :param interval:
+        :param index:
+        :return:
+        '''
+        element = AppDriverBase.find_element_by_key1_click(key=key, timeout=timeout, interval=interval, index=0,
+                                                      flag=flag)
+        element.click()
+        log_info("click:{},{}".format(key, index))
         # 进行截图Var.file
-        # if Var.ocrimg is None:
-        #     app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0,flag=False)
-        # else:
-        #     cv2.imwrite(Var.file, Var.ocrimg)
-        #     Var.ocrimg = None
+        if Var.ocrimg is None:
+            app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0, flag=False)
+        else:
+            cv2.imwrite(Var.file, Var.ocrimg)
+            Var.ocrimg = None
 
     @staticmethod
     def executeScript(direction, ele):
@@ -343,7 +358,7 @@ class AppDriverBase(object):
         if not element:
             raise Exception("Can't find element {}".format(key))
         appdriver.input(element, text)
-        # 进行截图Var.file
+        # 进行截图Var.file--操作完成后进行截图
         # if Var.ocrimg is None:
         #     app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0, flag=False)
         # else:
@@ -515,13 +530,108 @@ class AppDriverBase(object):
                 return elements[index]
             else:
                 log_info('index==None时进行操作')
-                # 截图
+                #截图
                 if Var.ocrimg is not None:
                     cv2.imwrite(Var.file, Var.ocrimg)
                     Var.ocrimg = None
                 else:
                     app_screenshot_eles_steps(elements, Var.tmp_file, Var.file, zoom=1.0,flag=flag)
                 return elements
+        except Exception as e:
+            # 如果次数太多，就退出异常逻辑，直接报错
+            if _error_count > _error_max:
+                raise e
+            # 记录一直异常的次数
+            _error_count += 1
+            # 对黑名单里的弹框进行处理
+            if Var.black_list:
+                for i in Var.black_list:
+                    # w = re.split('[(,)]', i)
+                    inBrackets = i[12:-1]
+                    douIndex = inBrackets.find(",")
+                    byBlack = inBrackets[:douIndex]
+                    eleBlack = inBrackets[(douIndex + 1):]
+                    elements = appdriver.black_for_elements(byBlack,eleBlack)
+                    if len(elements) > 0:
+                        elements[0].click()
+                        time.sleep(1)
+                        # 继续寻找原来的正常控件
+                        return AppDriverBase.wait_for_elements_by_key(elements_info)
+            app_screenshot_eles_steps(None, Var.tmp_file, Var.file, zoom=1.0,flag=flag)
+            # 如果黑名单也没有，就报错
+            log_info("black list no one found")
+            return None
+
+    @staticmethod
+    def find_element_by_key1_click(key, timeout=10, interval=1, index=0, flag=False):
+        '''
+        :param key:
+        :param timeout:
+        :param interval:
+        :param index:list对应下标
+        :param flag:False；不标记元素截图
+        :return:
+        '''
+        if not timeout:
+            timeout = 10
+        if not interval:
+            interval = 1
+        dict = {
+            'element': key,
+            'timeout': timeout,
+            'interval': interval,
+            'index': index,
+            'flag': flag
+        }
+
+        if Var.platformName.lower() == 'android':
+            if re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.\w]+:id/\S+', key):
+                dict['element_type'] = 'id'
+            elif re.match(r'android\.[a-zA-Z]+[\.(a-zA-Z)]+', key) or re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+',
+                                                                               key):
+                dict['element_type'] = 'classname'
+            elif re.match('//\*\[@\S+=\S+\]', key) or re.match('//[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+\[\d+\]',
+                                                               key) or re.match('//*[contains(@\S,)]', key):
+                dict['element_type'] = 'xpath'
+            else:
+                dict['element_type'] = 'name'
+        log_info("dict:{}".format(dict))
+        return AppDriverBase.wait_for_element_by_key1_click(dict)
+
+    @staticmethod
+    def wait_for_element_by_key1_click(elements_info):
+        '''
+        :param elements_info:
+        :return:
+        '''
+        _error_max = 10
+        _error_count = 0
+        element_type = elements_info['element_type']
+        element = elements_info['element']
+        timeout = elements_info['timeout']
+        interval = elements_info['interval']
+        index = elements_info['index']
+        # if elements_info['flag'] == None:
+        #     flag = False
+        # else:
+        #     flag = elements_info['flag']
+        flag = False
+        if element_type == 'name':
+            element = appdriver.wait_for_element_by_name(name=element, timeout=timeout, interval=interval)
+        elif element_type == 'id':
+            element = appdriver.wait_for_element_by_id(id=element, timeout=timeout, interval=interval)
+        elif element_type == 'xpath':
+            element = appdriver.wait_for_element_by_xpath(xpath=element, timeout=timeout, interval=interval)
+        elif element_type == 'classname':
+            element = appdriver.wait_for_element_by_classname(classname=element, timeout=timeout, interval=interval)
+        else:
+            element = None
+
+        try:
+            print("tryyyyyy")
+            # 如果成功，清空错误计数
+            _error_count = 0
+            return element
         except Exception as e:
             # 如果次数太多，就退出异常逻辑，直接报错
             if _error_count > _error_max:
