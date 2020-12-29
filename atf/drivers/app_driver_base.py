@@ -87,7 +87,6 @@ class AppDriverBase(object):
         only appium
         :return:
         '''
-        time.sleep(2)
         tempimage = "temp_pic_{}.png".format(int(time.time()))
         image_name = os.path.join(Var.snapshot_dir, tempimage)
         # image_name = Var.ROOT + '/temp/pic_{}.png'.format(int(time.time()))
