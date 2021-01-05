@@ -363,13 +363,37 @@ class AndroidDriver(object):
         :return:
         '''
         try:
-            element.clear()
-            time.sleep(2)
             log_info("输入对应的文本")
             element.send_keys(text)
+            # for i in str(text):
+            #     time.sleep(1)
+            #     cmd = 'adb -s {} shell input text {}'.format(Var.udid, i)
+            #     print("input cmd {}".format(cmd))
+            #     subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1,
+            #                      close_fds=True)
         except Exception as e:
             raise e
 
+    @staticmethod
+    def numInput(num):
+        '''
+        :param element:
+        :param text:
+        :param clear:
+        :param hide_keyboard:
+        :return:
+        '''
+        try:
+            log_info("输入对应的num")
+            for i in str(num):
+                time.sleep(1)
+                cmd = 'adb -s {} shell input text {}'.format(Var.udid, i)
+                print("input cmd {}".format(cmd))
+                subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1,
+                                 close_fds=True)
+                time.sleep(1)
+        except Exception as e:
+            raise e
     @staticmethod
     def get_text(element):
         '''
@@ -478,9 +502,15 @@ class AndroidDriver(object):
         :return:
         '''
         try:
-            elements = Var.appinstance.find_element_by_id(id)
-            return elements
+            t1 = time.time()
+            element = Var.appinstance.find_element_by_id(id)
+            t2 = time.time()
+            print(t2 - t1)
+            return element
         except Exception as e:
+            tempimage = "temp_by_xpath_{}.png".format(int(time.time()))
+            image_name = os.path.join(Var.snapshot_dir, tempimage)
+            Var.appinstance.get_screenshot_as_file(image_name)
             raise e
 
     @staticmethod
@@ -499,6 +529,9 @@ class AndroidDriver(object):
             return element
 
         except Exception as e:
+            tempimage = "temp_by_xpath_{}.png".format(int(time.time()))
+            image_name = os.path.join(Var.snapshot_dir, tempimage)
+            Var.appinstance.get_screenshot_as_file(image_name)
             raise e
 
     @staticmethod
@@ -508,9 +541,15 @@ class AndroidDriver(object):
         :return:
         '''
         try:
+            t1 = time.time()
             element = Var.appinstance.find_element_by_xpath(xpath)
+            t2 = time.time()
+            print(t2 - t1)
             return element
         except Exception as e:
+            tempimage = "temp_by_xpath_{}.png".format(int(time.time()))
+            image_name = os.path.join(Var.snapshot_dir, tempimage)
+            Var.appinstance.get_screenshot_as_file(image_name)
             raise e
 
     @staticmethod
@@ -523,6 +562,9 @@ class AndroidDriver(object):
             element = Var.appinstance.find_element_by_class_name(classname)
             return element
         except Exception as e:
+            tempimage = "temp_by_xpath_{}.png".format(int(time.time()))
+            image_name = os.path.join(Var.snapshot_dir, tempimage)
+            Var.appinstance.get_screenshot_as_file(image_name)
             raise e
 
 
@@ -792,8 +834,9 @@ class iOSDriver(object):
         try:
             # if hide_keyboard:
             #     iOSDriver.hide_keyboard1()
-            element.clear()
+            # element.clear()
             element.send_keys(text)
+
         except Exception as e:
             raise e
 

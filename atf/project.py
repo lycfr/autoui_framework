@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import glob
 import os
 import sys
 import time
@@ -160,9 +161,16 @@ class Project(object):
             report_time = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
             report_child = "{}_{}".format(Var.web_driver.lower(), report_time)
 
+
+        # deleReportPath = os.path.join(os.getcwd(), deleReport)
+        # if os.path.exists(deleReportPath):
+        #     os.remove(deleReport)
         # 生成报告地址
         Var.report = os.path.join(Var.ROOT, "Report", report_child)
-        log_info('Report Path is {}'.format(os.getcwd() + Var.report))
+        print(Var.report)
+        print(os.getcwd())
+        ReportPath = os.path.join(os.getcwd(), Var.report)
+        log_info('Report Path is {}'.format(ReportPath))
         if not os.path.exists(Var.report):
             os.makedirs(Var.report)
             os.makedirs(os.path.join(Var.report, 'resource'))

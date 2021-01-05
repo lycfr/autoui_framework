@@ -415,7 +415,7 @@ class ActionExecutor(object):
             if '.png' not in action:
 
                 if len(parms) == 1:
-                    AppDriverBase.click1(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0, flag=False)
+                    AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0, flag=False)
                 elif len(parms) == 2:
                     if type(parms[1]) == int:
                         AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=parms[1],
@@ -571,6 +571,16 @@ class ActionExecutor(object):
 
 
 
+    def __action_numInput(self, action):
+        """
+        行为执行：input
+        :param action:
+        :return:
+        """
+        parms = action.parms
+        AppDriverBase.numInput(text=parms[0])
+
+
     def __action_input(self, action):
         """
         行为执行：input
@@ -586,7 +596,6 @@ class ActionExecutor(object):
                              index=parms[2])
         else:
             raise TypeError('input missing 2 required positional argument: element, text')
-
     def __action_isContain(self,action):
         app_screenshot_steps(None, Var.tmp_file, Var.file, zoom=1.0)
         pagesource = AppDriverBase.get_page_source()
@@ -1231,6 +1240,8 @@ class ActionExecutor(object):
 
         elif action.key == 'input':
             result = self.__action_input(action)
+        elif action.key == 'numInput':
+            result = self.__action_numInput(action)
 
         elif action.key == 'sleep':
             result = self.__action_sleep(action)

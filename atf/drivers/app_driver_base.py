@@ -358,12 +358,18 @@ class AppDriverBase(object):
         if not element:
             raise Exception("Can't find element {}".format(key))
         appdriver.input(element, text)
-        # 进行截图Var.file--操作完成后进行截图
-        # if Var.ocrimg is None:
-        #     app_screenshot_steps(element, Var.tmp_file, Var.file, zoom=1.0, flag=False)
-        # else:
-        #     cv2.imwrite(Var.file, Var.ocrimg)
-        #     Var.ocrimg = None
+
+    @staticmethod
+    def numInput(text):
+        '''
+        :param text:
+        :param timeout:
+        :param interval:
+        :param index:
+        :param clear:
+        :return:
+        '''
+        appdriver.numInput(text)
 
     @staticmethod
     def get_text(key, timeout=10, interval=1, index=0):

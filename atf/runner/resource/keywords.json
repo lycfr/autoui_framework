@@ -55,6 +55,7 @@
         "random",
         "getPageSource",
         "getXY",
-        "XYclick"
+        "XYclick",
+        "numInput"
     ]
 }
