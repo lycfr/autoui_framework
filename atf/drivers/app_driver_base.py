@@ -464,19 +464,19 @@ class AppDriverBase(object):
 
         if Var.platformName.lower() == 'android':
             pagesource = appdriver.get_page_source()
-            oneelement_list = ['com.dedao.juvenile:id/iv_close', 'com.dedao.juvenile:id/ivClose','com.dedao.juvenile:id/upgrade_button','允许', '始终允许','稍后','关闭']
+            oneelement_list = ['com.dedao.juvenile:id/iv_close','com.dedao.juvenile:id/upgrade_button','允许', '始终允许','稍后','关闭']
             for one in oneelement_list:
                 if one in pagesource:
-                    eles = appdriver.wait_for_elements_by_id(name=one, timeout=timeout, interval=interval)
-                    eles[0].click()
+                    ele = appdriver.wait_for_element_by_id(one, timeout=timeout, interval=interval)
+                    ele.click()
             oneeleXpath_list = ['允许', '始终允许', '稍后', '关闭']
 
             for oneXpath in oneeleXpath_list:
                 if oneXpath in pagesource:
                     oneXpath_text = "//*[@text='" + oneXpath + "']"
                     print(oneXpath_text)
-                    eles = appdriver.wait_for_elements_by_xpath(name=oneXpath_text, timeout=timeout, interval=interval)
-                    eles[0].click()
+                    ele = appdriver.wait_for_element_by_xpath(oneXpath_text, timeout=timeout, interval=interval)
+                    ele.click()
             if re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.\w]+:id/\S+', key):
                 dict['element_type'] = 'id'
             elif re.match(r'android\.[a-zA-Z]+[\.(a-zA-Z)]+', key) or re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+', key):
