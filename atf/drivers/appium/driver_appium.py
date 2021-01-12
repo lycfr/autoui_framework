@@ -388,12 +388,13 @@ class AndroidDriver(object):
             for i in str(num):
                 time.sleep(1)
                 cmd = 'adb -s {} shell input text {}'.format(Var.udid, i)
-                print("input cmd {}".format(cmd))
+                log_info("input cmd {}".format(cmd))
                 subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1,
                                  close_fds=True)
                 time.sleep(1)
         except Exception as e:
             raise e
+
     @staticmethod
     def get_text(element):
         '''
