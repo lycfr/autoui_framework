@@ -412,7 +412,7 @@ class ActionExecutor(object):
         parms = action.parms
         print("__action_click",action)
         if len(parms):
-            if '.png' not in action:
+            if '.png' not in str(action):
 
                 if len(parms) == 1:
                     AppDriverBase.click(key=parms[0], timeout=Var.timeout, interval=Var.interval, index=0, flag=False)
@@ -434,6 +434,8 @@ class ActionExecutor(object):
                 Var.ocrimg = img_info['ocrimg']
                 x = img_info['x']
                 y = img_info['y']
+                print(x)
+                print(y)
                 AppDriverBase.tap(x, y)
 
         else:
@@ -579,6 +581,7 @@ class ActionExecutor(object):
         """
         parms = action.parms
         AppDriverBase.numInput(text=parms[0])
+
 
 
     def __action_input(self, action):

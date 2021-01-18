@@ -674,13 +674,16 @@ class iOSDriver(object):
         :return:
         '''
         try:
+
             width = Var.appinstance.get_window_size()['width']
             height = Var.appinstance.get_window_size()['height']
             if x <= 1.0:
                 x = x * width
             if y <= 1.0:
                 y = y * height
-            Var.appinstance.tap([(int(x), int(y))])
+            # TouchAction(Var.appinstance).tap(x=int(x/4), y=int(y/5)).perform()
+            Var.appinstance.execute_script("mobile:tap", {'x': int(x/4), 'y': int(y/5), 'duration': 500})
+            # Var.appinstance.tap([(int(x), int(y))])
         except Exception as e:
             raise e
 

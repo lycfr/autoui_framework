@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-import cv2
+import cv2.cv2
 import numpy as np
 
 from atf.commons.logging import log_info
