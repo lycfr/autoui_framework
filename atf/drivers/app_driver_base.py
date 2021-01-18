@@ -477,6 +477,7 @@ class AppDriverBase(object):
             #         print(oneXpath_text)
             #         ele = appdriver.wait_for_element_by_xpath(oneXpath_text, timeout=timeout, interval=interval)
             #         ele.click()
+            print(key)
             if re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.\w]+:id/\S+', key):
                 dict['element_type'] = 'id'
             elif re.match(r'android\.[a-zA-Z]+[\.(a-zA-Z)]+', key) or re.match(r'[a-zA-Z]+\.[a-zA-Z]+[\.(a-zA-Z)]+', key):
@@ -485,6 +486,7 @@ class AppDriverBase(object):
                 dict['element_type'] = 'xpath'
             else:
                 dict['element_type'] = 'name'
+            print(dict['element_type'])
         else:
             pagesource = appdriver.get_page_source()
             oneelement_list = ['tc icon certificate close','close AD','以后再说']
@@ -510,6 +512,7 @@ class AppDriverBase(object):
         :param elements_info:
         :return:
         '''
+        print(elements_info)
         _error_max = 10
         _error_count = 0
         element_type = elements_info['element_type']
@@ -521,12 +524,12 @@ class AppDriverBase(object):
             flag = False
         else:
             flag = elements_info['flag']
+        print(element_type)
         if element_type == 'name':
             elements = appdriver.wait_for_elements_by_name(name=element, timeout=timeout, interval=interval)
         elif element_type == 'id':
             elements = appdriver.wait_for_elements_by_id(id=element, timeout=timeout, interval=interval)
         elif element_type == 'xpath':
-
             elements = appdriver.wait_for_elements_by_xpath(xpath=element, timeout=timeout, interval=interval)
         elif element_type == 'classname':
             elements = appdriver.wait_for_elements_by_classname(classname=element, timeout=timeout, interval=interval)
