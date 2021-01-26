@@ -255,7 +255,7 @@ class ActionExecutor(object):
                 eleCheck = self.__check_ele(params[0])
                 if (eleCheck == False) and (i < params[1]):
                     #下滑查找
-                    AppDriverBase.swipe1(float(0.5), float(0.75), float(0.5), float(0.55))
+                    AppDriverBase.swipe1(float(0.5), float(0.75), float(0.5), float(0.65))
                     i += 1
                     flag = True
                     log_info("向下滑动了多少次：{}".format(i))
@@ -269,13 +269,13 @@ class ActionExecutor(object):
                 eleCheck = self.__check_ele(params[0])
                 if (eleCheck == False) and (i < params[1]):
                     #下滑查找
-                    AppDriverBase.swipe1(float(0.5), float(0.75), float(0.5), float(0.55))
+                    AppDriverBase.swipe1(float(0.5), float(0.75), float(0.5), float(0.65))
                     i += 1
                     flag = True
                     log_info("向下滑动了多少次：{}".format(i))
                 elif (eleCheck == False) and (params[1] <= i < j):
                     #上滑查找
-                    AppDriverBase.swipe1(float(0.5), float(0.55), float(0.5), float(0.75))
+                    AppDriverBase.swipe1(float(0.5), float(0.65), float(0.5), float(0.75))
                     i += 1
                     flag = True
                     log_info("向上滑动了多少次：{}".format(i))
@@ -861,7 +861,7 @@ class ActionExecutor(object):
                 elif parms[0] == 'swipe':
                     AppDriverBase.swipeSeekBar(parms[1])
                 else:
-                     AppDriverBase.iosSeekBar(parms[0],parms[1])
+                     AppDriverBase.SeekBar000(parms[0],parms[1])
 
         else:
             log_info('没有对应参数：{}'.format(action.parms))

@@ -3,4 +3,4 @@
 # -*- coding: utf-8 -*-
 
 
-atf_version = '0.0.6'
+atf_version = '0.0.7'

@@ -120,7 +120,7 @@ class AppDriverBase(object):
         appdriver.swipeSeekBar(x)
 
     @staticmethod
-    def iosSeekBar(ele1,ele2):
+    def SeekBar000(ele1,ele2):
         '''
         only appium
         :return:
@@ -136,9 +136,9 @@ class AppDriverBase(object):
         fromY = element1.location.get('y')
         toX = element2.location.get('x')
         toY = element2.location.get('y')
-        log_info("iosSeekBar:{},{}".format(ele1, ele2))
+        log_info("SeekBar000:{},{}".format(ele1, ele2))
 
-        appdriver.iosSeekBar(fromX,fromY,toX,toY)
+        appdriver.SeekBar000(fromX,fromY,toX,toY)
 
 
     @staticmethod

@@ -142,6 +142,13 @@ class AndroidDriver(object):
 
         except Exception as e:
             raise e
+    @staticmethod
+    def SeekBar000(fromX, fromY, toX, toY):
+        try:
+            log_info("SeekBar000-driver_appium")
+            Var.appinstance.swipe1(int(fromX), int(fromY), int(toX), int(toY), 200)
+        except Exception as e:
+            raise e
 
     @staticmethod
     def tapSeekBar(index=''):
@@ -1028,7 +1035,7 @@ class iOSDriver(object):
             logging.info(Var.appinstance.page_source)
 
     @staticmethod
-    def iosSeekBar(fromX,fromY,toX,toY):
+    def SeekBar000(fromX,fromY,toX,toY):
         try:
             log_info("iosSeekBar-driver_appium")
             iOSDriver.swipe1(int(fromX), int(fromY), int(toX),int(toY),200)
