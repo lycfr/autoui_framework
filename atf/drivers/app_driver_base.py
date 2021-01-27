@@ -489,7 +489,7 @@ class AppDriverBase(object):
             print(dict['element_type'])
         else:
             pagesource = appdriver.get_page_source()
-            oneelement_list = ['tc icon certificate close','close AD','以后再说']
+            oneelement_list = ['tc icon certificate close','listen icon sheet close','close AD','以后再说']
             for one in oneelement_list:
                 if one in pagesource:
                     eles = appdriver.wait_for_elements_by_name(name=one, timeout=timeout, interval=interval)
