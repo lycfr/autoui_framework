@@ -146,6 +146,8 @@ class AndroidDriver(object):
     def SeekBar000(fromX, fromY, toX, toY):
         try:
             log_info("SeekBar000-driver_appium")
+            log_info("Var.appinstance:{}")
+            log_info(Var.appinstance)
             Var.appinstance.swipe1(int(fromX), int(fromY), int(toX), int(toY), 200)
         except Exception as e:
             raise e
