@@ -138,7 +138,7 @@ class AndroidDriver(object):
                 Var.appinstance.tap([(index,ey)],500)      #用tap方法横向点击某按钮，ex+400,ey不变
             elif 'y' in index:
                 # driver.swipe(ex, ey, ex + 400, ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
-                Var.appinstance.swipe1(ex, ey, ex + 400, ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
+                Var.appinstance.swipe(ex, ey, ex + 400, ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
 
         except Exception as e:
             raise e
@@ -148,7 +148,7 @@ class AndroidDriver(object):
             log_info("SeekBar000-driver_appium")
             log_info("Var.appinstance:{}")
             log_info(Var.appinstance)
-            Var.appinstance.swipe1(int(fromX), int(fromY), int(toX), int(toY), 200)
+            Var.appinstance.swipe(int(fromX), int(fromY), int(toX), int(toY), 200)
         except Exception as e:
             raise e
 
@@ -174,7 +174,7 @@ class AndroidDriver(object):
             ex = e.location.get('x')  # 获取元素初始横坐标
             ey = e.location.get('y')  # 获取元素初始纵坐标
             # driver.swipe(ex, ey, ex + 400, ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
-            Var.appinstance.swipe1(ex, ey, ex + int(index), ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
+            Var.appinstance.swipe(ex, ey, ex + int(index), ey, 500)  # 用swipe方法横向拖动某按钮， ey纵坐标不变
         except Exception as e:
             raise e
 
