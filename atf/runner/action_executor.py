@@ -748,6 +748,8 @@ class ActionExecutor(object):
 
         elif action.key == 'compareList':
             result = self.__action_compareList(action)
+        elif action.key == 'lenStr':
+            result = self.__action_lenStr(action)
 
         elif action.key == 'isContain':
             result = self.__action_isContain(action)
@@ -1053,7 +1055,9 @@ class ActionExecutor(object):
         endtime = str(date.strftime('%M:%S'))
         return endtime
 
-
+    def __action_lenStr(self, action):
+        parms = action.parms
+        return len(parms)
 
     def __action_compareList(self, action):
         """
