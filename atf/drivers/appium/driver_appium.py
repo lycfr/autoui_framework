@@ -373,6 +373,7 @@ class AndroidDriver(object):
         '''
         try:
             log_info("输入对应的文本")
+            element.clear()
             element.send_keys(text)
             # for i in str(text):
             #     time.sleep(1)
@@ -847,7 +848,7 @@ class iOSDriver(object):
         try:
             # if hide_keyboard:
             #     iOSDriver.hide_keyboard1()
-            # element.clear()
+            element.clear()
             element.send_keys(text)
 
         except Exception as e:
