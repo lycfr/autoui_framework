@@ -118,7 +118,7 @@ class AppServerUtils(object):
             self.stop_server()
             if self.appdriver == 'appium':
                 self.pipe = subprocess.Popen('appium -a {} -p {} --session-override --log-level info'.format('172.30.109.115', self.port), stdout=subprocess.PIPE, shell=True)
-                log_info('Appium REST http interface listener started on {}:{}'.format('127.0.0.1', self.port))
+                log_info('Appium REST http interface listener started on {}:{}'.format('172.30.109.115', self.port))
                 if self.appmodule == 'debug':
                     thread = threading.Thread(target=self.__print_appium_log)
                     thread.start()

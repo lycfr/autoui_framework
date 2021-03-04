@@ -25,7 +25,7 @@ report_out_path = base_path + '/perfdog_service_output_{}'.format(get_current_ti
 logger.info('导出报告地址: {report_out_path}'.format(report_out_path=report_out_path))
 
 
-def check_port_in_use(port, host='127.0.0.1'):
+def check_port_in_use(port, host='172.30.109.115'):
     s = None
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
