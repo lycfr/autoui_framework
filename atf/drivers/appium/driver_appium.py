@@ -237,6 +237,18 @@ class AndroidDriver(object):
             raise e
 
     @staticmethod
+    def XYclick(x, y):
+        try:
+            print("XYclick-driver_appium_android")
+            print(type(x))
+            print(type(y))
+            end_x = int(x)
+            end_y = int(y)
+            TouchAction(Var.appinstance).tap(x=end_x,y=end_y).perform()
+        except Exception as e:
+            raise e
+
+    @staticmethod
     def getUrl(url):
         '''
         :param x:
